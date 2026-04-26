@@ -53,7 +53,9 @@ If `sessionStorage` is full (large files), the upload page truncates to 5,000 ca
 Each **case** object:
 ```js
 {
-  id, site, dept, commune, sex, ageMonths, regDate, breastfeeding, vaccinated,
+  id, site, dept, commune, sex, ageMonths, regDate,
+  typeIntervention,   // 'Communautaire' | 'Institutionnel' | null — from Enregistrement col O
+  breastfeeding, vaccinated,
   pns: { admDate, exitDate, outcome, losdays, admWeight, exitWeight, weightGainG,
          visitCount, origine, admOedema, admPT, admMUAC, suppRec, suppDel } | null,
   pta: { /* same fields */ } | null,
@@ -65,29 +67,33 @@ Each **case** object:
 
 ### Episode vs Case
 
-Most render functions work on a flat **episodes** array (one entry per program enrollment per case), produced by `getFilteredEpisodes(cases, range)` in `analytics.js`. A few functions that need cross-program data per child (trajectory flow, care pathway, visit counts) take the raw `cases` array directly and do their own date-range filtering.
+Most render functions work on a flat **episodes** array (one entry per program enrollment per case), produced by `getFilteredEpisodes(cases, filters)` in `analytics.js`. `filters` is `{ range, site, typeIntervention }` from `getFilters()`. A few functions that need cross-program data per child (trajectory flow, care pathway, visit counts) take the raw `cases` array + `filters` directly and do their own filtering.
 
 ### JS files
 
 - **`js/parser.js`** — Parses raw CommCare `.xlsx` workbooks. Entry point: `parseFiles(fileList)` → returns `{ meta, cases, suppMonthly, dqReport }`. Handles multi-file merging (deduplicates by `formid`). Expected sheets: `Enregistrement`, `Visite PNS`, `Visite PTA`, `Visite USN`, `Exeat PNS`, `Exeat PTA`, `Exeat USN`, `Dictionnaire`. Cases keyed by `form.case.@case_id`.
-- **`js/analytics.js`** — All rendering logic for the three analytics pages. Shared via `<script src="js/analytics.js">` on each page. Key render functions (all guard with `if (!el) return`):
+- **`js/analytics.js`** — All rendering logic for the three analytics pages. Shared via `<script src="js/analytics.js">` on each page. Key functions:
+  - `getFilters()` → `{ range, site, typeIntervention }` — reads all three filter controls from the date-bar
+  - `populateSiteFilter(cases)` — populates `#filter-site` dropdown from case data; called in `init()`
+  - `getFilteredEpisodes(cases, filters)` — returns flat episodes array filtered by range + site + typeIntervention
   - `renderSummaryStats(episodes)` — stat cards (analytics.html only)
   - `renderEnrollmentTrend(episodes)` — admissions by month bar chart
   - `renderCohortOutcomes(episodes)` — stacked outcome bars by cohort month
   - `renderProgramFlow(episodes)` — admission origins
-  - `renderSuppGap(suppMonthly, range)` — supplement gap chart
-  - `renderLOS(episodes)` — length of stay distribution
+  - `renderSuppGap(suppMonthly, range)` — supplement gap chart (date range only; not site-filterable since suppMonthly is pre-aggregated)
+  - `renderLOS(episodes)` — LOS distribution by program + avg-LOS-by-site table (shown when >1 site)
   - `renderGeographic(episodes)` — admissions by site
   - `renderOutcomesTable(episodes)` — outcomes summary table with recovery rate
   - `renderPTChart(episodes)` — P/T nutritional status at admission
-  - `renderWeightGainChart(episodes)` — weight gain at discharge distribution
+  - `renderWeightGainChart(episodes)` — weight gain distribution + breakdown by sex and age group
   - `renderPatientProfiles(episodes)` — age group distribution
   - `renderBreastfeedingVax(episodes)` — breastfeeding & vaccination status
   - `renderSitePerformance(episodes)` — site performance table
-  - `renderCarePathway(cases, range)` — program combination bar chart + visit count distribution
-  - `renderTrajectoryFlow(cases, range)` — ordered patient trajectory paths with final outcome, grouped by starting program
-  - `renderDataQuality(dqReport, episodes)` — missing/implausible value cards
-  - `exportCSV(rows, filename)` / `episodesToCSV(episodes)` / `sitePerformanceToCSV(episodes)` — CSV export helpers. `render()` wires `#export-btn`, `#outcomes-export-btn`, and `#site-export-btn` to these after each render.
+  - `renderCarePathway(cases, filters)` — program combination bar chart + visit count distribution
+  - `renderTrajectoryFlow(cases, filters)` — ordered patient trajectory paths with final outcome, grouped by starting program
+  - `renderDataQuality(dqReport, episodes)` — missing/implausible value cards + outlier LOS and visit count cards
+  - `generateReport(dashData, filters, episodes)` — opens a new printable HTML tab with summary stats, outcomes, site performance, and DQ summary
+  - `exportCSV(rows, filename)` / `episodesToCSV(episodes)` / `sitePerformanceToCSV(episodes)` — CSV export. `render()` wires `#export-btn`, `#outcomes-export-btn`, `#site-export-btn`, and `#report-btn` after each render.
 - **`js/data.js`** — Synthetic demo/fallback data (not used when real CommCare data is loaded).
 - **`js/shared.js`** — `buildNav(activeId)` (4-link nav), `programTag`, `progressBar`, `renderBarChart`.
 
@@ -138,7 +144,8 @@ Key layout classes:
 - `.two-col` — two-column responsive grid (collapses to 1 col on mobile)
 - `.card` — white card with shadow; `.card-title`, `.card-subtitle`, `.card-header-row`
 - `.stat-grid` / `.stat-card` — summary stat cards at top of overview page
-- `.date-bar` — sticky toolbar (`position:sticky; top:0`). Was previously `top:52px` which caused a gap when the nav scrolled away — fixed to `top:0`.
+- `.date-bar` — sticky toolbar (`position:sticky; top:0`). Contains: quick-date buttons, date inputs, site filter (`#filter-site`), type filter (`#filter-type`), data meta, report button (`#report-btn`), export CSV button (`#export-btn`).
+- `.filter-select` — dark-themed `<select>` for use inside `.date-bar`
 - `.nav` — top nav bar (`position:sticky; top:0; height:52px`). Injected into `#nav-container` via JS. Note: `.nav` is sticky within `#nav-container` which is only as tall as the nav itself, so in practice the nav scrolls away on long pages.
 - `.data-table` — styled table used for outcomes and site performance
 - `.dq-grid-inner` / `.dq-card` — data quality grid cards

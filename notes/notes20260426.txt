@@ -1,0 +1,10 @@
+- Add **site filter** at top; allow viewing **data by site**.  
+- Add filters for **type of intervention** (community vs institutional), **sex**, **age**, **date**.  
+- Build **comparison tool** to compare sites, programs, or variables.  
+- On profiles/results pages, show **length of stay** and **# visits** by **site** and **program** (USN/PTA/PNS).  
+- Track **weight gain at discharge** by sex/age.  
+- Link all tables using **formid/uuid**; pull sex/site from *enregistrement* sheet.  
+- Handle repeated‑measures structure for visits.  
+- **Flag abnormal cases**: out‑of‑standard LOS/visits, missing discharges, odd program sequences.  
+- Add ability to **download reports**.  
+- Possibly add a **dynamic analysis tool** for on‑the‑fly exploration.

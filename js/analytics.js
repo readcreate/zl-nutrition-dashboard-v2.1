@@ -22,10 +22,14 @@ function getDateRange() {
 function getFilters() {
   const siteEl = document.getElementById('filter-site');
   const typeEl = document.getElementById('filter-type');
+  const sexEl  = document.getElementById('filter-sex');
+  const ageEl  = document.getElementById('filter-age');
   return {
     range: getDateRange(),
     site: siteEl ? siteEl.value : '',
     typeIntervention: typeEl ? typeEl.value : '',
+    sex: sexEl ? sexEl.value : '',
+    ageGroup: ageEl ? ageEl.value : '',
   };
 }
 
@@ -49,11 +53,18 @@ function inRange(dateStr, range) {
 // Returns flat list of episodes (one per program enrollment per case) filtered by date range.
 
 function getFilteredEpisodes(cases, filters) {
-  const { range, site, typeIntervention } = filters;
+  const { range, site, typeIntervention, sex, ageGroup } = filters;
+  let ageMin = null, ageMax = null;
+  if (ageGroup) {
+    if (ageGroup === '60+') { ageMin = 60; ageMax = 9999; }
+    else { const [a, b] = ageGroup.split('-').map(Number); ageMin = a; ageMax = b; }
+  }
   const episodes = [];
   for (const c of cases) {
     if (site && c.site !== site) continue;
     if (typeIntervention && c.typeIntervention !== typeIntervention) continue;
+    if (sex && c.sex !== sex) continue;
+    if (ageMin !== null && (c.ageMonths === null || c.ageMonths < ageMin || c.ageMonths > ageMax)) continue;
     for (const prog of ['pns', 'pta', 'usn']) {
       const ep = c[prog];
       if (!ep) continue;
@@ -230,6 +241,8 @@ function renderCohortOutcomes(episodes) {
 }
 
 // ── PROGRAMME FLOW (ORIGINE) ──
+
+const LOS_TARGETS = { USN: 21, PTA: 84, PNS: 112 };
 
 const ORIGINE_LABELS = {
   'NC':     'NC — Nouveau cas / New case',
@@ -784,12 +797,19 @@ function renderSitePerformance(episodes) {
 function renderCarePathway(cases, filters) {
   const pathEl   = document.getElementById('pathway-chart');
   const visitsEl = document.getElementById('visits-chart');
-  const { range, site, typeIntervention } = filters;
+  const { range, site, typeIntervention, sex, ageGroup } = filters;
+  let ageMin = null, ageMax = null;
+  if (ageGroup) {
+    if (ageGroup === '60+') { ageMin = 60; ageMax = 9999; }
+    else { const [a, b] = ageGroup.split('-').map(Number); ageMin = a; ageMax = b; }
+  }
 
   // Filter cases where at least one episode is in range
   const filteredCases = cases.filter(c => {
     if (site && c.site !== site) return false;
     if (typeIntervention && c.typeIntervention !== typeIntervention) return false;
+    if (sex && c.sex !== sex) return false;
+    if (ageMin !== null && (c.ageMonths === null || c.ageMonths < ageMin || c.ageMonths > ageMax)) return false;
     for (const prog of ['pns','pta','usn']) {
       const ep = c[prog];
       if (!ep) continue;
@@ -884,11 +904,18 @@ function renderCarePathway(cases, filters) {
 function renderTrajectoryFlow(cases, filters) {
   const el = document.getElementById('trajectory-chart');
   if (!el) return;
-  const { range, site, typeIntervention } = filters;
+  const { range, site, typeIntervention, sex, ageGroup } = filters;
+  let ageMin = null, ageMax = null;
+  if (ageGroup) {
+    if (ageGroup === '60+') { ageMin = 60; ageMax = 9999; }
+    else { const [a, b] = ageGroup.split('-').map(Number); ageMin = a; ageMax = b; }
+  }
 
   const filteredCases = cases.filter(c => {
     if (site && c.site !== site) return false;
     if (typeIntervention && c.typeIntervention !== typeIntervention) return false;
+    if (sex && c.sex !== sex) return false;
+    if (ageMin !== null && (c.ageMonths === null || c.ageMonths < ageMin || c.ageMonths > ageMax)) return false;
     for (const prog of ['pns','pta','usn']) {
       const ep = c[prog];
       if (!ep) continue;
@@ -1029,10 +1056,16 @@ function renderDataQuality(dqReport, episodes) {
   const implausibleWtTotal = (dqReport.implausibleWeight.PNS || 0) + (dqReport.implausibleWeight.PTA || 0) + (dqReport.implausibleWeight.USN || 0);
   const implausibleMUACTotal = (dqReport.implausibleMUAC.PNS || 0) + (dqReport.implausibleMUAC.PTA || 0) + (dqReport.implausibleMUAC.USN || 0);
 
-  // Outlier thresholds per program (days): USN ~14-day target, PTA ~8wk, PNS ~12wk
-  const LOS_TARGETS = { USN: 21, PTA: 84, PNS: 112 };
   const losOutliers = episodes.filter(ep => ep.losdays !== null && LOS_TARGETS[ep.program] && ep.losdays > LOS_TARGETS[ep.program]);
   const visitOutliers = episodes.filter(ep => (ep.visitCount || 0) > 12);
+
+  // Active cases overdue for discharge (still enrolled but past target LOS)
+  const today = new Date();
+  const missingDischarge = episodes.filter(ep => {
+    if (ep.outcome !== null || !ep.admDate) return false;
+    const daysSince = Math.round((today - new Date(ep.admDate + 'T00:00:00')) / 86400000);
+    return LOS_TARGETS[ep.program] && daysSince > LOS_TARGETS[ep.program];
+  });
 
   el.innerHTML = `
     <div class="dq-grid-inner">
@@ -1046,6 +1079,7 @@ function renderDataQuality(dqReport, episodes) {
       ${dqCard('PB / MUAC aberrant', 'Implausible MUAC (< 5 or > 30 cm)', implausibleMUACTotal, n, false)}
       ${dqCard('Durée séjour > cible', 'LOS exceeds target (USN>21j, PTA>84j, PNS>112j)', losOutliers.length, episodes.length, false)}
       ${dqCard('Visites > 12', 'More than 12 visits before discharge', visitOutliers.length, episodes.length, true)}
+      ${dqCard('Sortie manquante / overdue', 'Active but enrolled past target LOS — possible missing discharge', missingDischarge.length, episodes.length, false)}
     </div>
     <div style="margin-top:18px;">
       <div style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;">
@@ -1286,6 +1320,8 @@ function initDateControls() {
 
   document.getElementById('filter-site')?.addEventListener('change', render);
   document.getElementById('filter-type')?.addEventListener('change', render);
+  document.getElementById('filter-sex')?.addEventListener('change', render);
+  document.getElementById('filter-age')?.addEventListener('change', render);
 }
 
 // ── MAIN RENDER ──
