@@ -1,0 +1,33 @@
+notes on the dashboard: 
+
+[08:22, 4/22/2026] Anshul Kumar: found in community or institution?
+site - need to see different data by site
+[08:25, 4/22/2026] Anshul Kumar: need site filter at the top
+[08:26, 4/22/2026] Anshul Kumar: USN is worst, always institutional type
+[08:27, 4/22/2026] Anshul Kumar: enrigtrement col O type d'intervention -> need to filter for this in app
+[08:28, 4/22/2026] Anshul Kumar: study zl did: less loss to follow up in situations where ZL went to community
+[08:29, 4/22/2026] Anshul Kumar: benjaminel hypothesis: if kid v malnourished, will miss visit; going to hospital is burden. when zl goes to community -> better result.
+[08:30, 4/22/2026] Anshul Kumar: comparison tool -> compare different sites, different anythings
+
+site, type (community vs institutiaonal), date
+
+download report
+[08:38, 4/22/2026] Anshul Kumar: right now on overview page of dashboard, we have admission origins. col O is different.
+[08:39, 4/22/2026] Anshul Kumar: zl has two sites in one commune. samark is one commune and identified in one site. if hospital -> institutional; if community -> community.
+[08:42, 4/22/2026] Anshul Kumar: on profils and resultats page, should look at length of stay (duree sejour moy) and # visits. so we should look at duration of stay by both site and program (usn vs pta vs pns). each program has a fixed desired LOS and #visits. ideally children cured after this set duration/visits. parents give supplements at home to kids. 
+
+sometimes you give supplement for one child but all will eat
+[08:42, 4/22/2026] Anshul Kumar: mentioned nourimamba - see notes from before.
+[08:43, 4/22/2026] Anshul Kumar: nourimamba might be peanut butter
+[08:49, 4/22/2026] Anshul Kumar: for weight gain at discharge, need look by sex and age of child. so we need a) compare sex/ages, b) filter at top for sex/age
+
+enregistrement -> formid is unique. same child identified in each table in excel file, by uuid. 
+
+repeated measures data style - Visite sheets have multiple lines per patient. each line is one visit. but we have to get the sex from col G sexe of the enregistrement sheet. similarly, get the site from enregistrement sheet and then use formid to link to the outcomes in the visit and exeat sheets. exeat means end of program form that's filled out to let child go (discharge form).
+[08:57, 4/22/2026] Anshul Kumar: flag children going out of standard LOS and #visit
+
+children that didn't come to visits for some visits -> facility is supposed to but sometimes forgets to discharge to loss to follow up
+[08:57, 4/22/2026] Anshul Kumar: if we identify children, can go back to nurses and see if they forgot to put data in system. can flag the 8 kids who went PNS->USN->PTA->Gueri and see if there's a documentation error.
+[08:59, 4/22/2026] Anshul Kumar: dr. jeune -> let's meet with key staff and do a demo using real data. then staff will let us know feedback. there might be too much here. need to choose only the key information we need.
+
+maybe add a dynamic analysis tool on the fly

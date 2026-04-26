@@ -77,6 +77,14 @@ function decodePT(val, lookup) {
   return map[s] || s;
 }
 
+function normalizeTypeIntervention(val) {
+  if (!val) return null;
+  const s = val.toLowerCase();
+  if (s.includes('communaut')) return 'Communautaire';
+  if (s.includes('instit') || s.includes('hospit') || s.includes('facility')) return 'Institutionnel';
+  return val;
+}
+
 function normalizeOutcome(raw) {
   if (!raw) return null;
   const s = raw.toLowerCase();
@@ -372,14 +380,15 @@ function buildDashboardData(sheetSets, fileNames) {
     cases.push({
       id,
       regDate:      reg ? dateStr(parseDate(norm(reg["Date d'enregistrement"]))) : null,
-      site:         reg ? norm(reg['Sites'])       : null,
-      dept:         reg ? norm(reg['Departement']) : null,
-      commune:      reg ? norm(reg['Commune'])     : null,
-      section:      reg ? norm(reg['Section'])     : null,
-      sex:          reg ? norm(reg['Sexe'])        : null,
+      site:             reg ? norm(reg['Sites'])       : null,
+      dept:             reg ? norm(reg['Departement']) : null,
+      commune:          reg ? norm(reg['Commune'])     : null,
+      section:          reg ? norm(reg['Section'])     : null,
+      sex:              reg ? norm(reg['Sexe'])        : null,
       ageMonths,
-      breastfeeding: reg ? norm(reg["Type d'allaitement"]) : null,
-      vaccinated:    reg ? norm(reg['Enfant Completement Vaccine']) : null,
+      typeIntervention: reg ? normalizeTypeIntervention(norm(reg["Type d'intervention"])) : null,
+      breastfeeding:    reg ? norm(reg["Type d'allaitement"]) : null,
+      vaccinated:       reg ? norm(reg['Enfant Completement Vaccine']) : null,
       pns,
       pta,
       usn,

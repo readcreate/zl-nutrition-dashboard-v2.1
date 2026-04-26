@@ -19,6 +19,24 @@ function getDateRange() {
   };
 }
 
+function getFilters() {
+  const siteEl = document.getElementById('filter-site');
+  const typeEl = document.getElementById('filter-type');
+  return {
+    range: getDateRange(),
+    site: siteEl ? siteEl.value : '',
+    typeIntervention: typeEl ? typeEl.value : '',
+  };
+}
+
+function populateSiteFilter(cases) {
+  const sel = document.getElementById('filter-site');
+  if (!sel) return;
+  const sites = [...new Set(cases.map(c => c.site).filter(Boolean))].sort();
+  sel.innerHTML = `<option value="">Tous sites / All sites</option>` +
+    sites.map(s => `<option value="${s}">${s}</option>`).join('');
+}
+
 function inRange(dateStr, range) {
   if (!dateStr) return true;
   const d = new Date(dateStr + 'T00:00:00');
@@ -30,38 +48,42 @@ function inRange(dateStr, range) {
 // ── EPISODE EXTRACTION ──
 // Returns flat list of episodes (one per program enrollment per case) filtered by date range.
 
-function getFilteredEpisodes(cases, range) {
+function getFilteredEpisodes(cases, filters) {
+  const { range, site, typeIntervention } = filters;
   const episodes = [];
   for (const c of cases) {
+    if (site && c.site !== site) continue;
+    if (typeIntervention && c.typeIntervention !== typeIntervention) continue;
     for (const prog of ['pns', 'pta', 'usn']) {
       const ep = c[prog];
       if (!ep) continue;
       const dateRef = ep.admDate || c.regDate;
       if (!inRange(dateRef, range)) continue;
       episodes.push({
-        program:     prog.toUpperCase(),
-        caseId:      c.id,
-        site:        c.site,
-        dept:        c.dept,
-        commune:     c.commune,
-        sex:         c.sex,
-        ageMonths:   c.ageMonths,
-        breastfeeding: c.breastfeeding,
-        vaccinated:  c.vaccinated,
-        admDate:     ep.admDate,
-        exitDate:    ep.exitDate,
-        outcome:     ep.outcome,
-        losdays:     ep.losdays,
-        admWeight:   ep.admWeight,
-        exitWeight:  ep.exitWeight,
-        weightGainG: ep.weightGainG,
-        visitCount:  ep.visitCount,
-        origine:     ep.origine,
-        admOedema:   ep.admOedema,
-        admPT:       ep.admPT,
-        admMUAC:     ep.admMUAC,
-        suppRec:     ep.suppRec,
-        suppDel:     ep.suppDel,
+        program:          prog.toUpperCase(),
+        caseId:           c.id,
+        site:             c.site,
+        dept:             c.dept,
+        commune:          c.commune,
+        sex:              c.sex,
+        ageMonths:        c.ageMonths,
+        typeIntervention: c.typeIntervention,
+        breastfeeding:    c.breastfeeding,
+        vaccinated:       c.vaccinated,
+        admDate:          ep.admDate,
+        exitDate:         ep.exitDate,
+        outcome:          ep.outcome,
+        losdays:          ep.losdays,
+        admWeight:        ep.admWeight,
+        exitWeight:       ep.exitWeight,
+        weightGainG:      ep.weightGainG,
+        visitCount:       ep.visitCount,
+        origine:          ep.origine,
+        admOedema:        ep.admOedema,
+        admPT:            ep.admPT,
+        admMUAC:          ep.admMUAC,
+        suppRec:          ep.suppRec,
+        suppDel:          ep.suppDel,
       });
     }
   }
@@ -343,6 +365,40 @@ function renderLOS(episodes) {
         }).join('')}
       </div>`;
   }
+
+  // Site breakdown: avg LOS per site per program
+  const sites = [...new Set(withLOS.map(e => e.site).filter(Boolean))].sort();
+  if (sites.length > 1) {
+    const avgLOSCell = (s, prog) => {
+      const ep = withLOS.filter(e => e.site === s && e.program === prog);
+      if (!ep.length) return '<td style="text-align:right;padding:4px 8px;color:var(--gray-300);">—</td>';
+      const avg = Math.round(ep.reduce((sum, e) => sum + e.losdays, 0) / ep.length);
+      return `<td style="text-align:right;padding:4px 8px;font-family:var(--mono);color:var(--gray-600);">${avg}j</td>`;
+    };
+    html += `
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--gray-100);">
+        <div style="font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;">
+          Durée moy. par site · Avg LOS by site
+        </div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:11px;">
+            <thead><tr>
+              <th style="text-align:left;padding:4px 8px;color:var(--gray-400);font-weight:600;font-size:10px;border-bottom:1px solid var(--gray-200);">Site</th>
+              <th style="text-align:right;padding:4px 8px;color:var(--pih-red);font-weight:700;font-size:10px;border-bottom:1px solid var(--gray-200);">USN</th>
+              <th style="text-align:right;padding:4px 8px;color:var(--blue);font-weight:700;font-size:10px;border-bottom:1px solid var(--gray-200);">PTA</th>
+              <th style="text-align:right;padding:4px 8px;color:var(--green);font-weight:700;font-size:10px;border-bottom:1px solid var(--gray-200);">PNS</th>
+            </tr></thead>
+            <tbody>
+              ${sites.map(s => `<tr>
+                <td style="padding:4px 8px;font-weight:600;color:var(--gray-700);font-size:11px;">${s}</td>
+                ${avgLOSCell(s,'USN')}${avgLOSCell(s,'PTA')}${avgLOSCell(s,'PNS')}
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+  }
+
   el.innerHTML = html;
 }
 
@@ -481,7 +537,7 @@ function renderWeightGainChart(episodes) {
     cured.filter(e => e.weightGainG >= b.min && e.weightGainG <= b.max).length
   ), 1);
 
-  el.innerHTML = buckets.map(b => {
+  const distHtml = buckets.map(b => {
     const count = cured.filter(e => e.weightGainG >= b.min && e.weightGainG <= b.max).length;
     return `
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
@@ -492,6 +548,51 @@ function renderWeightGainChart(episodes) {
         <div style="width:28px;font-size:12px;font-weight:700;color:var(--gray-700);text-align:right;">${count}</div>
       </div>`;
   }).join('');
+
+  // Breakdown by sex
+  const sexRows = [
+    { key: 'M', label: 'M', color: 'var(--blue)' },
+    { key: 'F', label: 'F', color: 'var(--pih-red)' },
+  ].map(g => {
+    const ep = cured.filter(e => e.sex === g.key);
+    if (!ep.length) return '';
+    const avg = Math.round(ep.reduce((s, e) => s + e.weightGainG, 0) / ep.length);
+    const maxG = Math.max(...cured.map(e => e.weightGainG), 1);
+    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+      <div style="width:14px;font-size:11px;font-weight:700;color:${g.color};text-align:right;">${g.label}</div>
+      <div style="flex:1;background:var(--gray-100);border-radius:2px;height:14px;overflow:hidden;">
+        <div style="width:${avg/maxG*100}%;height:100%;background:${g.color};opacity:0.75;border-radius:2px;"></div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--gray-700);min-width:60px;text-align:right;">${avg}g <span style="font-weight:400;color:var(--gray-400);">(n=${ep.length})</span></div>
+    </div>`;
+  }).join('');
+
+  // Breakdown by age group
+  const maxAvgAge = Math.max(...AGE_GROUPS.map(g => {
+    const ep = cured.filter(e => e.ageMonths !== null && e.ageMonths >= g.min && e.ageMonths <= g.max);
+    return ep.length ? ep.reduce((s, e) => s + e.weightGainG, 0) / ep.length : 0;
+  }), 1);
+
+  const ageRows = AGE_GROUPS.map(g => {
+    const ep = cured.filter(e => e.ageMonths !== null && e.ageMonths >= g.min && e.ageMonths <= g.max);
+    if (!ep.length) return '';
+    const avg = Math.round(ep.reduce((s, e) => s + e.weightGainG, 0) / ep.length);
+    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+      <div style="width:70px;font-size:10px;color:var(--gray-400);text-align:right;">${g.label}</div>
+      <div style="flex:1;background:var(--gray-100);border-radius:2px;height:14px;overflow:hidden;">
+        <div style="width:${avg/maxAvgAge*100}%;height:100%;background:var(--yellow);opacity:0.75;border-radius:2px;"></div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--gray-700);min-width:60px;text-align:right;">${avg}g <span style="font-weight:400;color:var(--gray-400);">(n=${ep.length})</span></div>
+    </div>`;
+  }).join('');
+
+  const breakdownHtml = (sexRows || ageRows) ? `
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--gray-100);">
+      ${sexRows ? `<div style="font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Gain moy. par sexe · Avg gain by sex</div>${sexRows}` : ''}
+      ${ageRows ? `<div style="font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.07em;margin:10px 0 6px;">Gain moy. par âge · Avg gain by age</div>${ageRows}` : ''}
+    </div>` : '';
+
+  el.innerHTML = distHtml + breakdownHtml;
 }
 
 // ── PATIENT PROFILES ──
@@ -680,12 +781,15 @@ function renderSitePerformance(episodes) {
 
 // ── CARE PATHWAY ──
 
-function renderCarePathway(cases, range) {
+function renderCarePathway(cases, filters) {
   const pathEl   = document.getElementById('pathway-chart');
   const visitsEl = document.getElementById('visits-chart');
+  const { range, site, typeIntervention } = filters;
 
   // Filter cases where at least one episode is in range
   const filteredCases = cases.filter(c => {
+    if (site && c.site !== site) return false;
+    if (typeIntervention && c.typeIntervention !== typeIntervention) return false;
     for (const prog of ['pns','pta','usn']) {
       const ep = c[prog];
       if (!ep) continue;
@@ -777,11 +881,14 @@ function renderCarePathway(cases, range) {
 
 // ── TRAJECTORY FLOW ──
 
-function renderTrajectoryFlow(cases, range) {
+function renderTrajectoryFlow(cases, filters) {
   const el = document.getElementById('trajectory-chart');
   if (!el) return;
+  const { range, site, typeIntervention } = filters;
 
   const filteredCases = cases.filter(c => {
+    if (site && c.site !== site) return false;
+    if (typeIntervention && c.typeIntervention !== typeIntervention) return false;
     for (const prog of ['pns','pta','usn']) {
       const ep = c[prog];
       if (!ep) continue;
@@ -922,6 +1029,11 @@ function renderDataQuality(dqReport, episodes) {
   const implausibleWtTotal = (dqReport.implausibleWeight.PNS || 0) + (dqReport.implausibleWeight.PTA || 0) + (dqReport.implausibleWeight.USN || 0);
   const implausibleMUACTotal = (dqReport.implausibleMUAC.PNS || 0) + (dqReport.implausibleMUAC.PTA || 0) + (dqReport.implausibleMUAC.USN || 0);
 
+  // Outlier thresholds per program (days): USN ~14-day target, PTA ~8wk, PNS ~12wk
+  const LOS_TARGETS = { USN: 21, PTA: 84, PNS: 112 };
+  const losOutliers = episodes.filter(ep => ep.losdays !== null && LOS_TARGETS[ep.program] && ep.losdays > LOS_TARGETS[ep.program]);
+  const visitOutliers = episodes.filter(ep => (ep.visitCount || 0) > 12);
+
   el.innerHTML = `
     <div class="dq-grid-inner">
       ${dqCard('Sans fiche d\'enregistrement', 'No registration record', dqReport.noRegistration, n, false)}
@@ -932,6 +1044,8 @@ function renderDataQuality(dqReport, episodes) {
       ${dqCard('Date d\'admission manquante', 'Missing admission date', missingAdmTotal, n, false)}
       ${dqCard('Poids aberrant', 'Implausible weight (< 0.5 or > 50 kg)', implausibleWtTotal, n, false)}
       ${dqCard('PB / MUAC aberrant', 'Implausible MUAC (< 5 or > 30 cm)', implausibleMUACTotal, n, false)}
+      ${dqCard('Durée séjour > cible', 'LOS exceeds target (USN>21j, PTA>84j, PNS>112j)', losOutliers.length, episodes.length, false)}
+      ${dqCard('Visites > 12', 'More than 12 visits before discharge', visitOutliers.length, episodes.length, true)}
     </div>
     <div style="margin-top:18px;">
       <div style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;">
@@ -979,6 +1093,7 @@ function episodesToCSV(episodes) {
   return episodes.map(ep => ({
     programme:            ep.program,
     site:                 ep.site || '',
+    type_intervention:    ep.typeIntervention || '',
     departement:          ep.dept || '',
     commune:              ep.commune || '',
     sexe:                 ep.sex || '',
@@ -1027,6 +1142,114 @@ function sitePerformanceToCSV(episodes) {
   });
 }
 
+// ── REPORT GENERATION ──
+
+function generateReport(dashData, filters, episodes) {
+  const { range, site, typeIntervention } = filters;
+  const now = new Date();
+
+  const total     = episodes.length;
+  const exited    = episodes.filter(e => e.outcome !== null);
+  const recovered = exited.filter(e => e.outcome === 'Guéri').length;
+  const defaulted = exited.filter(e => e.outcome === 'Abandon').length;
+  const deceased  = exited.filter(e => e.outcome === 'Décédé').length;
+  const losVals   = episodes.filter(e => e.losdays !== null).map(e => e.losdays);
+  const avgLOS    = losVals.length ? Math.round(losVals.reduce((a,b)=>a+b,0)/losVals.length) : null;
+  const recoveryRate = exited.length > 0 ? Math.round(recovered/exited.length*100) : null;
+
+  const filterDesc = [
+    range.start ? `Du ${range.start.toLocaleDateString('fr-FR')}` : '',
+    range.end   ? `au ${range.end.toLocaleDateString('fr-FR')}` : '',
+    site ? `Site: ${site}` : '',
+    typeIntervention ? `Type: ${typeIntervention}` : '',
+  ].filter(Boolean).join(' · ') || 'Toute la période / All time';
+
+  const outRows = ['PNS','PTA','USN'].map(prog => {
+    const ep = episodes.filter(e => e.program === prog);
+    if (!ep.length) return '';
+    const ex  = ep.filter(e => e.outcome !== null);
+    const rec = ep.filter(e => e.outcome === 'Guéri').length;
+    const def = ep.filter(e => e.outcome === 'Abandon').length;
+    const tra = ep.filter(e => e.outcome === 'Transféré').length;
+    const dec = ep.filter(e => e.outcome === 'Décédé').length;
+    const act = ep.filter(e => e.outcome === null).length;
+    const rr  = ex.length > 0 ? Math.round(rec/ex.length*100) : null;
+    return `<tr><td><strong>${prog}</strong></td><td>${ep.length}</td>
+      <td style="color:#1a7a4a;">${rec}</td><td style="color:#d4820a;">${def}</td>
+      <td style="color:#1a5fa8;">${tra}</td><td style="color:#C8102E;">${dec}</td>
+      <td>${act}</td><td><strong>${rr !== null ? rr+'%' : '—'}</strong></td></tr>`;
+  }).join('');
+
+  const sites = [...new Set(episodes.map(e => e.site).filter(Boolean))].sort();
+  const siteRows = sites.map(s => {
+    const ep  = episodes.filter(e => e.site === s);
+    const ex  = ep.filter(e => e.outcome !== null);
+    const rec = ep.filter(e => e.outcome === 'Guéri').length;
+    const def = ep.filter(e => e.outcome === 'Abandon').length;
+    const los = ep.filter(e => e.losdays !== null).map(e => e.losdays);
+    const avg = los.length ? Math.round(los.reduce((a,b)=>a+b,0)/los.length) : null;
+    const rr  = ex.length > 0 ? Math.round(rec/ex.length*100) : null;
+    const dr  = ex.length > 0 ? Math.round(def/ex.length*100) : null;
+    return `<tr><td><strong>${s}</strong></td><td>${ep.length}</td>
+      <td style="color:#1a7a4a;">${rr !== null ? rr+'%' : '—'}</td>
+      <td style="color:#d4820a;">${dr !== null ? dr+'%' : '—'}</td>
+      <td>${avg !== null ? avg+' j' : '—'}</td></tr>`;
+  }).join('');
+
+  const dq = dashData.dqReport;
+  const pct = (v, d) => d > 0 ? Math.round(v/d*100) : 0;
+
+  const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+<title>PIH Nutrition — Rapport</title>
+<style>
+  body{font-family:Arial,sans-serif;font-size:12px;color:#2e2822;margin:0;padding:32px;}
+  h1{font-size:20px;color:#C8102E;margin:0 0 4px;}
+  .meta{font-size:11px;color:#9e958a;margin-bottom:24px;}
+  h2{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:#9e958a;margin:22px 0 10px;border-top:1px solid #e2ddd7;padding-top:14px;}
+  .stat-row{display:flex;gap:16px;margin-bottom:4px;flex-wrap:wrap;}
+  .stat{background:#f8f8f7;border-left:4px solid #C8102E;border-radius:6px;padding:10px 14px;min-width:110px;}
+  .stat-val{font-size:22px;font-weight:700;}
+  .stat-lbl{font-size:10px;color:#9e958a;margin-top:2px;}
+  table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:4px;}
+  th{background:#f0ede9;padding:7px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#9e958a;border-bottom:2px solid #e2ddd7;}
+  td{padding:6px 10px;border-bottom:1px solid #f0ede9;}
+  .footer{margin-top:28px;font-size:10px;color:#c8c1b8;border-top:1px solid #e2ddd7;padding-top:10px;}
+  @media print{button{display:none!important;}}
+</style></head><body>
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+  <div>
+    <h1>PIH Nutrition — Rapport</h1>
+    <div class="meta">${filterDesc} &nbsp;·&nbsp; Généré le ${now.toLocaleDateString('fr-FR')} à ${now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</div>
+  </div>
+  <button onclick="window.print()" style="padding:7px 18px;background:#C8102E;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;">⎙ Imprimer</button>
+</div>
+<div class="stat-row">
+  <div class="stat"><div class="stat-val">${total}</div><div class="stat-lbl">Admissions totales</div></div>
+  <div class="stat"><div class="stat-val" style="color:#1a7a4a;">${recoveryRate !== null ? recoveryRate+'%' : '—'}</div><div class="stat-lbl">Taux de guérison</div></div>
+  <div class="stat"><div class="stat-val" style="color:#d4820a;">${exited.length > 0 ? Math.round(defaulted/exited.length*100)+'%' : '—'}</div><div class="stat-lbl">Taux d'abandon</div></div>
+  <div class="stat"><div class="stat-val" style="color:#C8102E;">${exited.length > 0 ? Math.round(deceased/exited.length*100)+'%' : '—'}</div><div class="stat-lbl">Létalité</div></div>
+  <div class="stat"><div class="stat-val">${avgLOS !== null ? avgLOS+' j' : '—'}</div><div class="stat-lbl">Durée séjour moy.</div></div>
+</div>
+<h2>Résultats par programme / Outcomes by program</h2>
+<table><thead><tr><th>Programme</th><th>Total</th><th>Guéri</th><th>Abandon</th><th>Transféré</th><th>Décédé</th><th>Actif</th><th>Taux guérison</th></tr></thead>
+<tbody>${outRows}</tbody></table>
+${sites.length > 0 ? `<h2>Performance par site / Site performance</h2>
+<table><thead><tr><th>Site</th><th>Total adm.</th><th>Taux guérison</th><th>Taux abandon</th><th>Durée séjour moy.</th></tr></thead>
+<tbody>${siteRows}</tbody></table>` : ''}
+<h2>Qualité des données / Data quality (ensemble des données)</h2>
+<table><thead><tr><th>Indicateur</th><th>N</th><th>% des cas</th></tr></thead><tbody>
+  <tr><td>Sans fiche d'enregistrement</td><td>${dq.noRegistration}</td><td>${pct(dq.noRegistration,dq.totalCases)}%</td></tr>
+  <tr><td>Site manquant</td><td>${dq.missingSite}</td><td>${pct(dq.missingSite,dq.totalCases)}%</td></tr>
+  <tr><td>Sexe manquant</td><td>${dq.missingSex}</td><td>${pct(dq.missingSex,dq.totalCases)}%</td></tr>
+  <tr><td>Âge manquant</td><td>${dq.missingAge}</td><td>${pct(dq.missingAge,dq.totalCases)}%</td></tr>
+</tbody></table>
+<div class="footer">PIH Nutrition Dashboard &nbsp;·&nbsp; ${dashData.meta.files.join(', ')} &nbsp;·&nbsp; ${dq.totalCases} cas au total</div>
+</body></html>`;
+
+  const w = window.open('', '_blank');
+  if (w) { w.document.write(html); w.document.close(); }
+}
+
 // ── DATE RANGE CONTROLS ──
 
 function setDateRange(startStr, endStr) {
@@ -1060,6 +1283,9 @@ function initDateControls() {
       }
     });
   });
+
+  document.getElementById('filter-site')?.addEventListener('change', render);
+  document.getElementById('filter-type')?.addEventListener('change', render);
 }
 
 // ── MAIN RENDER ──
@@ -1068,14 +1294,14 @@ let _dashData = null;
 
 function render() {
   if (!_dashData) return;
-  const range    = getDateRange();
-  const episodes = getFilteredEpisodes(_dashData.cases, range);
+  const filters  = getFilters();
+  const episodes = getFilteredEpisodes(_dashData.cases, filters);
 
   renderSummaryStats(episodes);
   renderEnrollmentTrend(episodes);
   renderCohortOutcomes(episodes);
   renderProgramFlow(episodes);
-  renderSuppGap(_dashData.suppMonthly, range);
+  renderSuppGap(_dashData.suppMonthly, filters.range);
   renderLOS(episodes);
   renderGeographic(episodes);
   renderOutcomesTable(episodes);
@@ -1084,11 +1310,10 @@ function render() {
   renderPatientProfiles(episodes);
   renderBreastfeedingVax(episodes);
   renderSitePerformance(episodes);
-  renderCarePathway(_dashData.cases, range);
-  renderTrajectoryFlow(_dashData.cases, range);
+  renderCarePathway(_dashData.cases, filters);
+  renderTrajectoryFlow(_dashData.cases, filters);
   renderDataQuality(_dashData.dqReport, episodes);
 
-  // Wire export buttons
   const exportBtn = document.getElementById('export-btn');
   if (exportBtn) exportBtn.onclick = () => exportCSV(episodesToCSV(episodes), 'pih_nutrition_export.csv');
 
@@ -1097,6 +1322,9 @@ function render() {
 
   const siteExport = document.getElementById('site-export-btn');
   if (siteExport) siteExport.onclick = () => exportCSV(sitePerformanceToCSV(episodes), 'pih_performance_sites.csv');
+
+  const reportBtn = document.getElementById('report-btn');
+  if (reportBtn) reportBtn.onclick = () => generateReport(_dashData, filters, episodes);
 }
 
 // ── INIT ──
@@ -1122,6 +1350,7 @@ function init() {
   document.getElementById('analytics-content').style.display = 'block';
 
   initDateControls();
+  populateSiteFilter(_dashData.cases);
 
   // Default: "All time"
   const allBtn = document.querySelector('.date-quick-btn[data-days="all"]');
