@@ -48,7 +48,6 @@
       <option value="24-59">24–59 mois</option>
       <option value="60+">≥ 60 mois</option>
     </select>
-    <div id="data-meta" class="date-bar-meta"></div>
     <button class="export-btn" id="report-btn" title="Télécharger le rapport / Download report">⬇ Rapport</button>
     <button class="export-btn" id="export-btn" title="Exporter les données filtrées en CSV / Export filtered data as CSV">
       ↓ Export CSV
@@ -147,6 +146,23 @@
       <div class="card-title">Répartition géographique / Geographic breakdown</div>
       <div class="card-subtitle">Admissions par site · Admissions by site</div>
       <div id="geo-chart" style="margin-top:14px;"></div>
+    </div>
+
+  </div>
+
+  <!-- ROW 5: VISIT TRAJECTORY + VISIT GAPS -->
+  <div class="two-col" style="margin-bottom:20px;">
+
+    <div class="card">
+      <div class="card-title">Trajectoire par visite / Visit trajectory</div>
+      <div class="card-subtitle">Poids et MUAC moyens par numéro de visite · Avg weight and MUAC by visit number</div>
+      <div id="visit-trajectory-chart" style="margin-top:14px;"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Intervalles entre visites / Visit gaps</div>
+      <div class="card-subtitle">Distribution des jours entre visites consécutives · Days between consecutive visits</div>
+      <div id="visit-gaps-chart" style="margin-top:14px;"></div>
     </div>
 
   </div>

@@ -95,6 +95,7 @@ function getFilteredEpisodes(cases, filters) {
         admMUAC:          ep.admMUAC,
         suppRec:          ep.suppRec,
         suppDel:          ep.suppDel,
+        visits:           ep.visits || [],
       });
     }
   }
@@ -1103,6 +1104,148 @@ function renderDataQuality(dqReport, episodes) {
     </div>`;
 }
 
+// ── VISIT TRAJECTORY (weight + MUAC by visit number) ──
+
+function renderVisitTrajectory(episodes) {
+  const el = document.getElementById('visit-trajectory-chart');
+  if (!el) return;
+
+  const colors = { USN: 'var(--pih-red)', PTA: 'var(--blue)', PNS: 'var(--green)' };
+  let html = '';
+
+  for (const prog of ['USN', 'PTA', 'PNS']) {
+    const ep = episodes.filter(e => e.program === prog && e.visits && e.visits.length > 0);
+    if (ep.length === 0) continue;
+
+    const allVisits = ep.flatMap(e => e.visits);
+    const maxVisit  = Math.max(...allVisits.map(v => v.visitNum));
+
+    const rows = [];
+    for (let vn = 1; vn <= Math.min(maxVisit, 12); vn++) {
+      const vsAt   = allVisits.filter(v => v.visitNum === vn);
+      if (vsAt.length < 3) break;
+      const weights = vsAt.filter(v => v.weight !== null).map(v => v.weight);
+      const muacs   = vsAt.filter(v => v.muac   !== null).map(v => v.muac);
+      rows.push({
+        vn,
+        n:         vsAt.length,
+        avgWeight: weights.length ? weights.reduce((a,b)=>a+b,0)/weights.length : null,
+        avgMUAC:   muacs.length   ? muacs.reduce((a,b)=>a+b,0)/muacs.length     : null,
+      });
+    }
+    if (rows.length === 0) continue;
+
+    const maxW = Math.max(...rows.map(r => r.avgWeight || 0), 1);
+    const maxM = Math.max(...rows.map(r => r.avgMUAC   || 0), 1);
+
+    html += `
+      <div style="margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;
+                    letter-spacing:0.06em;margin-bottom:8px;">
+          ${prog} <span style="font-weight:400;color:var(--gray-400);">(${ep.length} patients)</span>
+        </div>
+        <div style="display:grid;grid-template-columns:28px 1fr 1fr 28px;gap:3px 10px;align-items:center;">
+          <div style="font-size:10px;font-weight:600;color:var(--gray-400);">V#</div>
+          <div style="font-size:10px;font-weight:600;color:var(--gray-400);">Poids moy. / Avg weight</div>
+          <div style="font-size:10px;font-weight:600;color:var(--gray-400);">MUAC moy. / Avg MUAC</div>
+          <div style="font-size:10px;font-weight:600;color:var(--gray-400);text-align:right;">N</div>
+          ${rows.map(r => `
+            <div style="font-size:11px;font-weight:700;color:var(--gray-600);text-align:right;">${r.vn}</div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="flex:1;background:var(--gray-100);border-radius:2px;height:13px;overflow:hidden;">
+                <div style="width:${r.avgWeight ? r.avgWeight/maxW*100 : 0}%;height:100%;
+                            background:${colors[prog]};opacity:0.75;border-radius:2px;"></div>
+              </div>
+              <span style="font-family:var(--mono);font-size:10px;color:var(--gray-600);min-width:42px;">
+                ${r.avgWeight !== null ? r.avgWeight.toFixed(1)+' kg' : '—'}
+              </span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="flex:1;background:var(--gray-100);border-radius:2px;height:13px;overflow:hidden;">
+                <div style="width:${r.avgMUAC ? r.avgMUAC/maxM*100 : 0}%;height:100%;
+                            background:${colors[prog]};opacity:0.5;border-radius:2px;"></div>
+              </div>
+              <span style="font-family:var(--mono);font-size:10px;min-width:38px;
+                           color:${r.avgMUAC && r.avgMUAC >= 12.5 ? 'var(--green)' : 'var(--gray-600)'};
+                           font-weight:${r.avgMUAC && r.avgMUAC >= 12.5 ? '700' : '400'};">
+                ${r.avgMUAC !== null ? r.avgMUAC.toFixed(1)+' cm' : '—'}
+              </span>
+            </div>
+            <div style="font-size:10px;color:var(--gray-400);text-align:right;">${r.n}</div>
+          `).join('')}
+        </div>
+      </div>`;
+  }
+
+  el.innerHTML = html || noDataHtml('Données de visites non disponibles / No visit-level data available');
+}
+
+// ── VISIT GAP DISTRIBUTION ──
+
+function renderVisitGaps(episodes) {
+  const el = document.getElementById('visit-gaps-chart');
+  if (!el) return;
+
+  const colors  = { USN: 'var(--pih-red)', PTA: 'var(--blue)', PNS: 'var(--green)' };
+  const buckets = [
+    { label: '< 7 j',   min: 0,  max: 6,    flag: false },
+    { label: '7–14 j',  min: 7,  max: 14,   flag: false },
+    { label: '15–21 j', min: 15, max: 21,   flag: false },
+    { label: '22–30 j', min: 22, max: 30,   flag: false },
+    { label: '> 30 j',  min: 31, max: 9999, flag: true  },
+  ];
+
+  let html = '';
+
+  for (const prog of ['USN', 'PTA', 'PNS']) {
+    const ep = episodes.filter(e => e.program === prog && e.visits && e.visits.length > 1);
+    if (ep.length === 0) continue;
+
+    const gaps = [];
+    for (const e of ep) {
+      const sorted = [...e.visits].sort((a, b) => a.date < b.date ? -1 : 1);
+      for (let i = 1; i < sorted.length; i++) {
+        if (!sorted[i-1].date || !sorted[i].date) continue;
+        const gap = Math.round(
+          (new Date(sorted[i].date + 'T00:00:00') - new Date(sorted[i-1].date + 'T00:00:00')) / 86400000
+        );
+        if (gap >= 0) gaps.push(gap);
+      }
+    }
+    if (gaps.length === 0) continue;
+
+    const maxCount    = Math.max(...buckets.map(b => gaps.filter(g => g >= b.min && g <= b.max).length), 1);
+    const overdueCount = gaps.filter(g => g > 30).length;
+    const medGap = [...gaps].sort((a,b)=>a-b)[Math.floor(gaps.length/2)];
+
+    html += `
+      <div style="margin-bottom:18px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;
+                    letter-spacing:0.06em;margin-bottom:6px;">
+          ${prog}
+          <span style="font-weight:400;color:var(--gray-400);">${gaps.length} intervalles · médiane ${medGap}j</span>
+          ${overdueCount > 0 ? `<span style="margin-left:8px;font-size:10px;color:var(--pih-red);font-weight:700;">⚠ ${overdueCount} > 30j</span>` : ''}
+        </div>
+        ${buckets.map(b => {
+          const count = gaps.filter(g => g >= b.min && g <= b.max).length;
+          const color = b.flag ? 'var(--pih-red)' : colors[prog];
+          return `
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div style="width:52px;font-size:10px;color:var(--gray-400);text-align:right;">${b.label}</div>
+              <div style="flex:1;background:var(--gray-100);border-radius:2px;height:14px;overflow:hidden;">
+                <div style="width:${count/maxCount*100}%;height:100%;background:${color};
+                            opacity:0.8;border-radius:2px;"></div>
+              </div>
+              <div style="width:28px;font-size:11px;font-weight:700;text-align:right;
+                          color:${b.flag && count > 0 ? 'var(--pih-red)' : 'var(--gray-600)'};">${count}</div>
+            </div>`;
+        }).join('')}
+      </div>`;
+  }
+
+  el.innerHTML = html || noDataHtml('Données insuffisantes / Insufficient visit data');
+}
+
 // ── CSV EXPORT ──
 
 function exportCSV(rows, filename) {
@@ -1349,6 +1492,8 @@ function render() {
   renderCarePathway(_dashData.cases, filters);
   renderTrajectoryFlow(_dashData.cases, filters);
   renderDataQuality(_dashData.dqReport, episodes);
+  renderVisitTrajectory(episodes);
+  renderVisitGaps(episodes);
 
   const exportBtn = document.getElementById('export-btn');
   if (exportBtn) exportBtn.onclick = () => exportCSV(episodesToCSV(episodes), 'pih_nutrition_export.csv');
@@ -1374,14 +1519,17 @@ function init() {
     return;
   }
 
-  // Show data meta info in date bar
-  const { files, caseCount, programCounts, loadedAt } = _dashData.meta;
-  document.getElementById('data-meta').innerHTML = [
-    `<span>${files.join(', ')}</span>`,
-    `<span>${caseCount} cas</span>`,
-    `<span>PNS ${programCounts.PNS} · PTA ${programCounts.PTA} · USN ${programCounts.USN}</span>`,
-    `<span>chargé ${new Date(loadedAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>`,
-  ].join('<span style="opacity:0.3;margin:0 2px;">·</span>');
+  // Show data meta info in date bar (element may not exist if removed from layout)
+  const metaEl = document.getElementById('data-meta');
+  if (metaEl) {
+    const { files, caseCount, programCounts, loadedAt } = _dashData.meta;
+    metaEl.innerHTML = [
+      `<span>${files.join(', ')}</span>`,
+      `<span>${caseCount} cas</span>`,
+      `<span>PNS ${programCounts.PNS} · PTA ${programCounts.PTA} · USN ${programCounts.USN}</span>`,
+      `<span>chargé ${new Date(loadedAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>`,
+    ].join('<span style="opacity:0.3;margin:0 2px;">·</span>');
+  }
 
   document.getElementById('analytics-content').style.display = 'block';
 

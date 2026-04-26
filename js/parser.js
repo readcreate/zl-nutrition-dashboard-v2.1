@@ -161,6 +161,16 @@ function buildPNSEpisode(visits, exeat, lookup) {
     suppDel += parseNum(norm(v['Quantite de supplements livrees']))    || 0;
   }
 
+  const visitData = visits
+    .map(v => ({
+      date:   dateStr(parseDate(norm(v['Date de visite']))),
+      weight: parseNum(norm(v['Poids'])),
+      muac:   parseNum(norm(v['PB'])),
+    }))
+    .filter(v => v.date)
+    .sort((a, b) => (a.date < b.date ? -1 : 1))
+    .map((v, i) => ({ ...v, visitNum: i + 1 }));
+
   return {
     admDate:     dateStr(admDate),
     exitDate:    dateStr(exitDate),
@@ -177,6 +187,7 @@ function buildPNSEpisode(visits, exeat, lookup) {
     admMUAC:     parseNum(norm(admV['PB'])),
     suppRec:     Math.round(suppRec),
     suppDel:     Math.round(suppDel),
+    visits:      visitData,
   };
 }
 
@@ -203,6 +214,16 @@ function buildPTAEpisode(visits, exeat, lookup) {
     suppDel += parseNum(norm(v['Quantite de supplements livrees']))    || 0;
   }
 
+  const visitData = visits
+    .map(v => ({
+      date:   dateStr(parseDate(norm(v['Date de Visite']))),
+      weight: parseNum(norm(v['Poids'])),
+      muac:   parseNum(norm(v['MUAC'])),
+    }))
+    .filter(v => v.date)
+    .sort((a, b) => (a.date < b.date ? -1 : 1))
+    .map((v, i) => ({ ...v, visitNum: i + 1 }));
+
   return {
     admDate:     dateStr(admDate),
     exitDate:    dateStr(exitDate),
@@ -219,6 +240,7 @@ function buildPTAEpisode(visits, exeat, lookup) {
     admMUAC:     parseNum(norm(admV['MUAC'])),
     suppRec:     Math.round(suppRec),
     suppDel:     Math.round(suppDel),
+    visits:      visitData,
   };
 }
 
@@ -249,6 +271,16 @@ function buildUSNEpisode(visits, exeat, lookup) {
     suppDel += parseNum(norm(v['form.quantite_de_supplements_livrees']))    || 0;
   }
 
+  const visitData = visits
+    .map(v => ({
+      date:   dateStr(parseDate(norm(v['Date de visite']))),
+      weight: parseNum(norm(v['Poids'])),
+      muac:   parseNum(norm(v['Perimetre Bracial'])),
+    }))
+    .filter(v => v.date)
+    .sort((a, b) => (a.date < b.date ? -1 : 1))
+    .map((v, i) => ({ ...v, visitNum: i + 1 }));
+
   return {
     admDate:     dateStr(admDate),
     exitDate:    dateStr(exitDate),
@@ -265,6 +297,7 @@ function buildUSNEpisode(visits, exeat, lookup) {
     admMUAC:     parseNum(norm(admV['Perimetre Bracial'])),
     suppRec:     Math.round(suppRec),
     suppDel:     Math.round(suppDel),
+    visits:      visitData,
   };
 }
 
