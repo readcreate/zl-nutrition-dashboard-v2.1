@@ -59,6 +59,10 @@ function buildNav(activeId) {
         <span class="fr">Parcours & Qualité</span>
         <span class="en">Pathways & Quality</span>
       </a>
+      <a class="nav-link ${activeId === 'info' ? 'active' : ''}" href="info.html">
+        <span class="fr">À propos</span>
+        <span class="en">About</span>
+      </a>
     </div>
   </nav>`;
 }

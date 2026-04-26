@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PIH Nutrition — À propos / About</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .info-section { margin-bottom: 32px; }
+    .info-section h2 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--gray-400);
+      margin: 0 0 14px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .info-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin: 18px 0 6px 0;
+    }
+    .info-section h3 .page-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 10px;
+      background: var(--gray-100);
+      color: var(--gray-500);
+      margin-left: 8px;
+      vertical-align: middle;
+      font-family: var(--font);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 4px 0;
+    }
+    .feature-list li {
+      font-size: 13px;
+      color: var(--gray-600);
+      padding: 4px 0 4px 18px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .feature-list li::before {
+      content: '·';
+      position: absolute;
+      left: 6px;
+      color: var(--gray-300);
+      font-weight: 700;
+    }
+    .feature-list .fr { color: var(--gray-700); font-weight: 500; }
+    .feature-list .en { color: var(--gray-400); font-size: 12px; }
+    .meta-table { width: 100%; border-collapse: collapse; }
+    .meta-table td {
+      padding: 7px 10px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--gray-100);
+      vertical-align: top;
+    }
+    .meta-table td:first-child {
+      color: var(--gray-400);
+      width: 140px;
+      white-space: nowrap;
+      font-size: 12px;
+    }
+    .meta-table td:last-child { color: var(--gray-700); font-weight: 500; font-family: var(--mono); }
+    .no-data-note {
+      font-size: 13px;
+      color: var(--gray-400);
+      font-style: italic;
+      padding: 10px 0;
+    }
+    .prog-pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 8px;
+      border-radius: 10px;
+      margin-right: 4px;
+      font-family: var(--font);
+    }
+    .prog-pill.usn { background: #fde8ec; color: var(--pih-red); }
+    .prog-pill.pta { background: #e8f0fc; color: var(--blue); }
+    .prog-pill.pns { background: #e8f6ee; color: var(--green); }
+  </style>
+</head>
+<body>
+
+<div id="nav-container"></div>
+
+<div style="max-width:820px;margin:32px auto;padding:0 20px 60px;">
+
+  <!-- LOADED FILES -->
+  <div class="card info-section" id="files-section">
+    <h2>Données chargées / Loaded data</h2>
+    <div id="files-content"><p class="no-data-note">Aucune donnée chargée. · No data loaded. <a href="index.html">Charger →</a></p></div>
+  </div>
+
+  <!-- OVERVIEW PAGE -->
+  <div class="card info-section">
+    <h2>Fonctionnalités / Features</h2>
+
+    <h3>Vue d'ensemble / Overview <span class="page-tag">analytics.html</span></h3>
+    <ul class="feature-list">
+      <li><span class="fr">Cartes résumé</span> <span class="en">— total admissions, recovery rate, avg LOS, active cases</span></li>
+      <li><span class="fr">Résultats par programme</span> <span class="en">— outcomes table (guéri, abandon, transféré, décédé, actif) by program with recovery rate</span></li>
+      <li><span class="fr">Tendance des admissions</span> <span class="en">— new admissions by month, stacked by program</span></li>
+      <li><span class="fr">Analyse par cohorte</span> <span class="en">— stacked outcome bars by admission month</span></li>
+      <li><span class="fr">Origine des admissions</span> <span class="en">— where admitted children come from (referral source)</span></li>
+      <li><span class="fr">Écart de suppléments</span> <span class="en">— recommended vs. delivered therapeutic food per month</span></li>
+    </ul>
+
+    <h3>Profils & Résultats / Profiles &amp; Outcomes <span class="page-tag">profiles.html</span></h3>
+    <ul class="feature-list">
+      <li><span class="fr">Performance par site</span> <span class="en">— admissions, recovery rate, default rate, avg LOS, program mix per site</span></li>
+      <li><span class="fr">Statut nutritionnel à l'admission</span> <span class="en">— P/T z-score distribution at first visit</span></li>
+      <li><span class="fr">Gain de poids à la sortie</span> <span class="en">— total weight gain (g) for cured patients, with breakdown by sex and age group</span></li>
+      <li><span class="fr">Profils patients — âge &amp; sexe</span> <span class="en">— age group and sex distribution</span></li>
+      <li><span class="fr">Allaitement &amp; vaccination</span> <span class="en">— breastfeeding and vaccination status at registration</span></li>
+      <li><span class="fr">Durée de séjour</span> <span class="en">— LOS distribution by program; avg LOS by site when multiple sites present</span></li>
+      <li><span class="fr">Répartition géographique</span> <span class="en">— admissions by site</span></li>
+      <li><span class="fr">Trajectoire par visite</span> <span class="en">— avg weight (kg) and MUAC (cm) by visit number per program; MUAC highlighted green ≥12.5 cm</span></li>
+      <li><span class="fr">Intervalles entre visites</span> <span class="en">— histogram of days between consecutive visits; gaps >30 days flagged in red</span></li>
+    </ul>
+
+    <h3>Parcours & Qualité / Pathways &amp; Quality <span class="page-tag">pathways.html</span></h3>
+    <ul class="feature-list">
+      <li><span class="fr">Trajectoires patients</span> <span class="en">— ordered program sequence per child with final outcome, grouped by starting program</span></li>
+      <li><span class="fr">Parcours de soins</span> <span class="en">— program combination bar chart (which programs each child passed through)</span></li>
+      <li><span class="fr">Nombre de visites avant sortie</span> <span class="en">— visit count distribution by program</span></li>
+      <li><span class="fr">Qualité des données</span> <span class="en">— missing values, implausible values, LOS outliers, visit count outliers (>12), and cases past target LOS with no discharge recorded</span></li>
+    </ul>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="card info-section">
+    <h2>Filtres disponibles / Available filters</h2>
+    <ul class="feature-list">
+      <li><span class="fr">Période</span> <span class="en">— quick buttons (7j, 30j, 3 mois, 1 an, tout) or custom date range</span></li>
+      <li><span class="fr">Site</span> <span class="en">— populated from loaded data; filters all charts and tables</span></li>
+      <li><span class="fr">Type d'intervention</span> <span class="en">— Communautaire / Institutionnel</span></li>
+      <li><span class="fr">Sexe</span> <span class="en">— Masculin / Féminin</span></li>
+      <li><span class="fr">Groupe d'âge</span> <span class="en">— 0–5, 6–11, 12–23, 24–59, ≥60 mois</span></li>
+    </ul>
+  </div>
+
+  <!-- PROGRAMS -->
+  <div class="card info-section">
+    <h2>Programmes / Programs</h2>
+    <ul class="feature-list">
+      <li><span class="prog-pill usn">USN</span> <span class="fr">Unité de Stabilisation Nutritionnelle</span> <span class="en">— inpatient SAM; overdue threshold 7 days</span></li>
+      <li><span class="prog-pill pta">PTA</span> <span class="fr">Programme de Traitement Ambulatoire</span> <span class="en">— outpatient SAM; overdue threshold 14 days; LOS target ≤84 days</span></li>
+      <li><span class="prog-pill pns">PNS</span> <span class="fr">Programme Nutritionnel Supplémentaire</span> <span class="en">— MAM / preventive; overdue threshold 14 days; LOS target ≤112 days</span></li>
+    </ul>
+  </div>
+
+  <!-- EXPORTS -->
+  <div class="card info-section">
+    <h2>Export &amp; rapports / Export &amp; reports</h2>
+    <ul class="feature-list">
+      <li><span class="fr">↓ Export CSV</span> <span class="en">— exports all filtered episodes as a flat CSV file</span></li>
+      <li><span class="fr">↓ CSV (tableaux)</span> <span class="en">— per-table CSV export on outcomes and site performance tables</span></li>
+      <li><span class="fr">⬇ Rapport</span> <span class="en">— opens a printable summary report in a new tab (summary stats, outcomes, site performance, data quality)</span></li>
+    </ul>
+  </div>
+
+</div>
+
+<script src="js/shared.js"></script>
+<script>
+  document.getElementById('nav-container').innerHTML = buildNav('info');
+
+  // Populate loaded files section
+  (function() {
+    const raw = sessionStorage.getItem('pih_nutrition_data');
+    const el = document.getElementById('files-content');
+    if (!raw) return;
+    let d;
+    try { d = JSON.parse(raw); } catch(e) { return; }
+    const m = d.meta || {};
+    const files = (m.files || []);
+    const loadedAt = m.loadedAt ? new Date(m.loadedAt).toLocaleString('fr-FR') : '—';
+    const pc = m.programCounts || {};
+
+    const rows = [
+      ['Fichier(s) / File(s)', files.length ? files.join('<br>') : '—'],
+      ['Cas total / Total cases', (m.caseCount || 0).toLocaleString()],
+      ['USN', (pc.USN || 0).toLocaleString()],
+      ['PTA', (pc.PTA || 0).toLocaleString()],
+      ['PNS', (pc.PNS || 0).toLocaleString()],
+      ['Chargé le / Loaded at', loadedAt],
+    ];
+
+    el.innerHTML = `<table class="meta-table">${
+      rows.map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')
+    }</table>`;
+  })();
+</script>
+</body>
+</html>
