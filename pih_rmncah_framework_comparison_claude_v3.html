@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RMNCAH Landscape Assessment Frameworks — PIH Steering Committee</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --cream: #ede7d9;
+    --rust: #b84c2e;
+    --forest: #2d5a3d;
+    --gold: #c9922a;
+    --slate: #4a5568;
+    --muted: #8a8070;
+    --border: #c8bfb0;
+    --highlight: #fff3cd;
+    --card-bg: #fffdf8;
+
+    --saf: #2d5a3d;
+    --who: #1a3a5c;
+    --bna: #7b3a1e;
+    --rhfa: #3a4a2a;
+    --swot: #5a2d6e;
+    --pih5s: #b84c2e;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 12px,
+      rgba(255,255,255,0.03) 12px,
+      rgba(255,255,255,0.03) 13px
+    );
+    pointer-events: none;
+  }
+  .header-inner { max-width: 1100px; margin: 0 auto; position: relative; }
+  .org-line {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+  header h1 span { color: var(--gold); }
+  .header-sub {
+    font-size: 0.95rem;
+    color: #b0a898;
+    max-width: 640px;
+  }
+  .header-tags {
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+    margin-top: 1.25rem;
+  }
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    padding: 0.2rem 0.65rem;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.08);
+    color: #c0b8a8;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── NAV TABS ── */
+  nav {
+    background: var(--cream);
+    border-bottom: 2px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; gap: 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem 1.25rem;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    margin-bottom: -2px;
+  }
+  .nav-btn:hover { color: var(--ink); background: rgba(0,0,0,0.04); }
+  .nav-btn.active {
+    color: var(--rust);
+    border-bottom-color: var(--rust);
+    background: var(--paper);
+  }
+
+  /* ── MAIN ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  .view { display: none; }
+  .view.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    color: var(--ink);
+  }
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 1.75rem;
+    border-left: 3px solid var(--border);
+    padding-left: 0.75rem;
+  }
+
+  /* ── OVERVIEW CARDS ── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+  .framework-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--card-accent, #999);
+    border-radius: 2px;
+    padding: 1.4rem;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .framework-card:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+  }
+  .card-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--card-accent, #999);
+    margin-bottom: 0.4rem;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    line-height: 1.3;
+  }
+  .card-focus {
+    font-size: 0.85rem;
+    color: var(--slate);
+    margin-bottom: 0.9rem;
+  }
+  .card-pills {
+    display: flex; flex-wrap: wrap; gap: 0.35rem;
+  }
+  .pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.63rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    border: 1px solid currentColor;
+    opacity: 0.7;
+  }
+  .pill.pro { color: var(--forest); }
+  .pill.con { color: var(--rust); }
+
+  .pih-card {
+    --card-accent: var(--pih5s);
+    background: #fff8f0;
+    border: 1.5px dashed var(--pih5s);
+    border-top: 4px solid var(--pih5s);
+  }
+
+  /* ── DETAIL PANEL ── */
+  .detail-panel {
+    display: none;
+    margin-top: 1.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--panel-accent, #999);
+    border-radius: 2px;
+    padding: 1.75rem;
+    animation: fadeIn 0.25s ease;
+    position: relative;
+  }
+  .detail-panel.visible { display: block; }
+  .close-btn {
+    position: absolute; top: 1rem; right: 1rem;
+    background: none; border: 1px solid var(--border);
+    font-size: 0.8rem; padding: 0.2rem 0.5rem;
+    cursor: pointer; color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .close-btn:hover { background: var(--ink); color: var(--paper); }
+  .detail-panel h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+    padding-right: 3rem;
+  }
+  .detail-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  @media (max-width: 640px) { .detail-cols { grid-template-columns: 1fr; } }
+  .detail-section h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .detail-list {
+    list-style: none;
+    font-size: 0.88rem;
+  }
+  .detail-list li {
+    padding: 0.3rem 0 0.3rem 1.1rem;
+    position: relative;
+    color: var(--slate);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .detail-list li::before {
+    content: '→';
+    position: absolute; left: 0;
+    color: var(--panel-accent, #999);
+    font-size: 0.7rem;
+    top: 0.38rem;
+  }
+  .detail-list.cons li::before { content: '✕'; color: var(--rust); font-size: 0.65rem; }
+
+  /* ── COMPARISON TABLE ── */
+  .table-wrap { overflow-x: auto; margin-top: 0.5rem; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    min-width: 700px;
+  }
+  thead tr {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  thead th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.9rem 0.75rem;
+    text-align: left;
+    white-space: nowrap;
+  }
+  thead th:first-child { width: 160px; }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:nth-child(even) { background: var(--cream); }
+  tbody tr:hover { background: #fff3e0; }
+  tbody td {
+    padding: 0.7rem 0.75rem;
+    vertical-align: top;
+  }
+  tbody td:first-child {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .dot-score {
+    display: flex; gap: 3px; align-items: center;
+  }
+  .dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot.filled { background: var(--forest); }
+    .dot.half {
+    background: linear-gradient(90deg, var(--forest) 50%, #ddd 50%);
+  }
+  .dot.empty { background: #ddd; border: 1px solid #ccc; }
+  .badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  .badge.high { background: #d4edda; color: #1a5c2a; }
+  .badge.mod  { background: #fff3cd; color: #7a5800; }
+  .badge.low  { background: #f8d7da; color: #7a1a1a; }
+  .badge.vhigh { background: #c8e6c9; color: #1b5e20; font-weight: 600; }
+  .badge.vlow  { background: #ffcdd2; color: #b71c1c; }
+
+  /* ── 5S MAPPING ── */
+  .fives-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .s-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1.2rem;
+  }
+  .s-card-head {
+    display: flex; align-items: baseline; gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .s-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--rust);
+    line-height: 1;
+  }
+  .s-word {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .s-desc {
+    font-size: 0.82rem;
+    color: var(--slate);
+    margin-bottom: 0.75rem;
+  }
+  .s-frameworks {
+    display: flex; flex-wrap: wrap; gap: 0.3rem;
+  }
+  .s-fw {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.63rem;
+    padding: 0.12rem 0.45rem;
+    border-radius: 2px;
+    color: var(--paper);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── RECOMMENDATION ── */
+  .rec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 700px) { .rec-grid { grid-template-columns: 1fr; } }
+  .rec-option {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1.4rem;
+  }
+  .rec-option.featured {
+    background: #fff8f0;
+    border: 2px solid var(--rust);
+  }
+  .rec-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--rust);
+    line-height: 1;
+    margin-bottom: 0.2rem;
+  }
+  .rec-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .rec-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .rec-desc { font-size: 0.87rem; color: var(--slate); margin-bottom: 0.9rem; }
+  .rec-components {
+    font-size: 0.82rem;
+    background: rgba(0,0,0,0.03);
+    border-radius: 2px;
+    padding: 0.6rem 0.75rem;
+  }
+  .rec-components strong {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  /* ── VOTE PANEL ── */
+  .vote-box {
+    background: var(--card-bg);
+    border: 1.5px dashed var(--border);
+    border-radius: 2px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .vote-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  .vote-box p { font-size: 0.87rem; color: var(--slate); margin-bottom: 1rem; }
+  .vote-options {
+    display: flex; flex-wrap: wrap; gap: 0.65rem; margin-bottom: 1rem;
+  }
+  .vote-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.45rem 1rem;
+    border: 1.5px solid var(--border);
+    background: var(--paper);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .vote-btn:hover, .vote-btn.selected {
+    background: var(--rust);
+    color: var(--paper);
+    border-color: var(--rust);
+  }
+  .vote-result {
+    font-size: 0.85rem;
+    color: var(--forest);
+    display: none;
+    font-weight: 600;
+    background: #d4edda;
+    padding: 0.6rem 0.9rem;
+    border-radius: 2px;
+  }
+  .vote-result.visible { display: block; }
+
+  /* ── NOTES ── */
+  .notes-area {
+    width: 100%;
+    min-height: 120px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.9rem;
+    padding: 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: var(--card-bg);
+    resize: vertical;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+  .save-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.5rem 1.2rem;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+    transition: background 0.2s;
+  }
+  .save-btn:hover { background: var(--rust); }
+  .save-confirm {
+    display: inline-block;
+    margin-left: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--forest);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .save-confirm.show { opacity: 1; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--cream);
+    border-top: 1px solid var(--border);
+    padding: 1rem 2rem;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── 5-S LENS (heat-map) ── */
+  .lens-intro { margin-bottom: 1.5rem; }
+
+  /* Framework tiles */
+  .hm-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 0;
+  }
+  @media (max-width: 640px) { .hm-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .hm-fw-tile {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s, opacity 0.35s, border-color 0.25s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 160px;
+  }
+  .hm-fw-tile:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  .hm-fw-tile.dim { opacity: 0.28; transform: scale(0.97); }
+  .hm-fw-tile.lit { transform: translateY(-5px); box-shadow: 0 10px 32px rgba(0,0,0,0.18); }
+
+  /* The animated fill bar — grows from bottom */
+  .hmt-bar {
+    width: 100%;
+    height: 8px;
+    background: #e0ddd6;
+    transition: background 0.4s, height 0.5s cubic-bezier(0.34,1.56,0.64,1);
+    flex-shrink: 0;
+  }
+  .hmt-bar.strong  { background: #2d7a4a; height: 8px; }
+  .hmt-bar.partial { background: #c9922a; height: 8px; }
+  .hmt-bar.weak    { background: #ccc;    height: 8px; }
+
+  /* Big animated fill — the "glow" effect lives here */
+  .hm-fw-tile .hmt-fill {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    transition: height 0.5s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s;
+    opacity: 0.12;
+    pointer-events: none;
+    border-radius: 0 0 3px 3px;
+  }
+
+  .hmt-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 900;
+    margin: 0.75rem 0 0.1rem;
+    transition: color 0.3s;
+  }
+  .hmt-sublabel {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    padding: 0 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .hmt-score {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    margin-bottom: 0.75rem;
+    min-height: 1.4rem;
+    transition: all 0.3s;
+  }
+  .hmt-score.strong  { background: #d4edda; color: #1a5c2a; }
+  .hmt-score.partial { background: #fff3cd; color: #7a5800; }
+  .hmt-score.weak    { background: #f8d7da; color: #7a1a1a; }
+  .hmt-score.none    { background: transparent; color: transparent; }
+
+  /* Verdict bar */
+  .hm-verdict {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0.8rem 1.25rem;
+    margin: 0.75rem 0;
+    border-radius: 2px;
+    font-size: 0.9rem;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: background 0.4s;
+  }
+  .hm-verdict-icon {
+    font-size: 1.2rem;
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+  #hm-verdict-text { transition: opacity 0.2s; }
+  #hm-verdict-text strong { color: var(--gold); }
+
+  /* S buttons */
+  .hm-s-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
+    margin-top: 0;
+  }
+  @media (max-width: 640px) { .hm-s-row { grid-template-columns: repeat(3, 1fr); } }
+
+  .hm-s-btn {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    padding: 0.85rem 0.5rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .hm-s-btn:hover { border-color: var(--rust); background: #fff8f0; }
+  .hm-s-btn.active {
+    background: var(--rust);
+    border-color: var(--rust);
+    color: white;
+    box-shadow: 0 4px 16px rgba(184,76,46,0.35);
+    transform: translateY(-2px);
+  }
+  .hm-s-btn--dashed { border-style: dashed; }
+  .hm-s-btn--dashed.active { border-style: solid; }
+
+  .hm-s-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+  }
+  .hm-s-word {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.1;
+    text-align: center;
+  }
+  .hm-s-sub {
+    font-size: 0.68rem;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.3;
+  }
+  .hm-s-btn.active .hm-s-sub,
+  .hm-s-btn.active .hm-s-num { color: rgba(255,255,255,0.75); }
+
+  /* Detail drawer */
+  .hm-drawer {
+    display: none;
+    margin-top: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    border-left: 5px solid var(--rust);
+    animation: fadeIn 0.25s ease;
+  }
+  .hm-drawer.open { display: block; }
+  .hm-drawer-inner { padding: 1.4rem; }
+  .hm-drawer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.9rem;
+  }
+  .hm-drawer-fw {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.2rem;
+  }
+  .hm-drawer-s {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  .hm-drawer-coverage {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.65rem;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+  }
+  .hm-drawer-coverage.strong { background: #d4edda; color: #1a5c2a; }
+  .hm-drawer-coverage.partial { background: #fff3cd; color: #7a5800; }
+  .hm-drawer-coverage.weak { background: #f8d7da; color: #7a1a1a; }
+  .hm-drawer-body {
+    font-size: 0.9rem;
+    color: var(--slate);
+    line-height: 1.75;
+  }
+  .hm-close {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    border: 1px solid var(--border);
+    background: none;
+    padding: 0.2rem 0.5rem;
+    cursor: pointer;
+    border-radius: 2px;
+    color: var(--muted);
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .hm-close:hover { background: var(--ink); color: var(--paper); }
+
+  /* ── end responsive ── */
+  @media (max-width: 500px) {
+    .overview-grid { grid-template-columns: 1fr; }
+    .detail-cols { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="org-line">Partners in Health — RMNCAH Steering Committee</div>
+    <h1>Landscape Assessment<br><span>Framework</span> Comparison</h1>
+    <p class="header-sub">Five models + the PIH 5-S framework evaluated for multi-site maternal & child health gap assessment.</p>
+    <div class="header-tags">
+      <span class="tag">Multi-Site PIH</span>
+      <span class="tag">RMNCAH</span>
+      <span class="tag">June 2026</span>
+      <span class="tag">Steering Committee Decision Tool</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="switchView('overview', this)">Overview</button>
+    <button class="nav-btn" onclick="switchView('lens', this)">⭐ 5-S Lens</button>
+    <button class="nav-btn" onclick="switchView('compare', this)">Side-by-Side</button>
+    <button class="nav-btn" onclick="switchView('fives', this)">5-S Mapping</button>
+    <button class="nav-btn" onclick="switchView('recommend', this)">Recommendations</button>
+    <button class="nav-btn" onclick="switchView('notes', this)">Committee Notes</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ══ OVERVIEW ══ -->
+<div id="view-overview" class="view active">
+  <p class="section-title">Framework Profiles</p>
+  <p class="section-desc">Click any card for a full breakdown of domains, methods, strengths, and limitations.</p>
+
+  <div class="overview-grid">
+
+    <div class="framework-card" style="--card-accent: var(--saf)" onclick="toggleDetail('d-saf')">
+      <div class="card-label">Model 1 · SAF</div>
+      <div class="card-title">Situational Analysis Framework</div>
+      <div class="card-focus">Diagnoses service availability + readiness at facility and community levels. Originated in family planning assessment (Population Council, 1990s); now standard for RMNCAH.</div>
+      <div class="card-pills">
+        <span class="pill pro">Mixed methods</span>
+        <span class="pill pro">Cross-site comparability</span>
+        <span class="pill con">Snapshot only</span>
+        <span class="pill con">HMIS-dependent</span>
+      </div>
+    </div>
+
+    <div class="framework-card" style="--card-accent: var(--who)" onclick="toggleDetail('d-who')">
+      <div class="card-label">Model 2 · WHO Building Blocks</div>
+      <div class="card-title">WHO Health Systems Framework</div>
+      <div class="card-focus">Six-block systems lens: Service Delivery, Workforce, Information, Medicines, Financing, Governance. Introduced in WHO's 2007 "Everybody's Business." Aligns with SDGs and UHC index.</div>
+      <div class="card-pills">
+        <span class="pill pro">Systems-level root causes</span>
+        <span class="pill pro">MoH alignment</span>
+        <span class="pill con">High data demands</span>
+        <span class="pill con">Hard to operationalize</span>
+      </div>
+    </div>
+
+    <div class="framework-card" style="--card-accent: var(--bna)" onclick="toggleDetail('d-bna')">
+      <div class="card-label">Model 3 · BNA</div>
+      <div class="card-title">Bottleneck Analysis / Tanahashi Model</div>
+      <div class="card-focus">Coverage as a chain of sequential determinants (commodity availability → HR → access → utilization → effective coverage). UNICEF's core analytical method; strong equity lens.</div>
+      <div class="card-pills">
+        <span class="pill pro">Action-ready gaps</span>
+        <span class="pill pro">Continuum of care</span>
+        <span class="pill con">HMIS quality risk</span>
+        <span class="pill con">Skilled facilitation needed</span>
+      </div>
+    </div>
+
+    <div class="framework-card" style="--card-accent: var(--rhfa)" onclick="toggleDetail('d-rhfa')">
+      <div class="card-label">Model 4 · RHFA</div>
+      <div class="card-title">Rapid Health Facility Assessment</div>
+      <div class="card-focus">Structured checklist capturing observable facility inputs in 2–4 hours per site. Developed by WHO/UNICEF/MSH as a leaner alternative to full SPA surveys. CommCare-compatible.</div>
+      <div class="card-pills">
+        <span class="pill pro">Rapid &amp; low-cost</span>
+        <span class="pill pro">Trackable over time</span>
+        <span class="pill con">Input-focused only</span>
+        <span class="pill con">No community voice</span>
+      </div>
+    </div>
+
+    <div class="framework-card" style="--card-accent: var(--swot)" onclick="toggleDetail('d-swot')">
+      <div class="card-label">Model 5 · SWOT Participatory</div>
+      <div class="card-title">SWOT-Based Participatory Assessment</div>
+      <div class="card-focus">Community-centered analysis of Strengths, Weaknesses, Opportunities, Threats. Rooted in PAR, appreciative inquiry, and FGDs. Aligned with PIH's accompaniment philosophy.</div>
+      <div class="card-pills">
+        <span class="pill pro">Community voice</span>
+        <span class="pill pro">Weak-data settings</span>
+        <span class="pill con">Not quantitative</span>
+        <span class="pill con">Subjectivity risk</span>
+      </div>
+    </div>
+
+    <div class="framework-card pih-card" onclick="toggleDetail('d-pih5s')">
+      <div class="card-label">Mary's Proposal · PIH 5-S</div>
+      <div class="card-title">5-S Integrative Framework</div>
+      <div class="card-focus">Structure the landscape around <strong>Staff, Stuff, Space, Support Structure</strong> (+ a 5th S — proposed: <em>Systems</em> or <em>Sociocultural context</em>) and pull selectively from the five models. Lightweight, PIH-owned, adaptable.</div>
+      <div class="card-pills">
+        <span class="pill pro">PIH-owned framing</span>
+        <span class="pill pro">Best-of-all approaches</span>
+        <span class="pill con">Requires synthesis work</span>
+        <span class="pill con">Less externally validated</span>
+      </div>
+    </div>
+
+  </div><!-- /overview-grid -->
+
+  <!-- Detail panels -->
+  <div id="d-saf" class="detail-panel" style="--panel-accent: var(--saf)">
+    <button class="close-btn" onclick="closeDetail('d-saf')">close ✕</button>
+    <h3>Situational Analysis Framework (SAF)</h3>
+    <div class="detail-cols">
+      <div>
+        <div class="detail-section">
+          <h4>Key Domains</h4>
+          <ul class="detail-list">
+            <li>Service availability (which services, at which level, what hours)</li>
+            <li>Infrastructure readiness (space, water, electricity, sanitation)</li>
+            <li>Human resources (staffing, cadres, training, competency)</li>
+            <li>Commodities &amp; medicines (oxytocin, MgSO4, contraceptives, vaccines)</li>
+            <li>Clinical guidelines &amp; protocols availability</li>
+            <li>HMIS data quality &amp; record-keeping</li>
+            <li>Quality of care (direct observation, record review)</li>
+            <li>Demand &amp; utilization (exit interviews, community surveys)</li>
+          </ul>
+        </div>
+        <div class="detail-section" style="margin-top:1rem">
+          <h4>Data Collection Methods</h4>
+          <ul class="detail-list">
+            <li>Structured facility checklists &amp; inventories</li>
+            <li>Health worker interviews &amp; competency assessments</li>
+            <li>Client exit interviews</li>
+            <li>HMIS data review</li>
+            <li>Direct observation of service delivery</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="detail-section">
+          <h4>Strengths for PIH</h4>
+          <ul class="detail-list">
+            <li>Highly standardized; tools can be harmonized across all PIH countries</li>
+            <li>Validated instruments exist (DHS Service Provision Assessment tools)</li>
+            <li>Produces quantitative outputs aggregable across sites</li>
+            <li>Familiar to Ministries of Health — facilitates buy-in</li>
+            <li>Can be led by trained implementation committee members</li>
+          </ul>
+        </div>
+        <div class="detail-section" style="margin-top:1rem">
+          <h4>Limitations</h4>
+          <ul class="detail-list cons">
+            <li>Primarily facility-focused; underrepresents community dynamics</li>
+            <li>Requires moderate-to-high HMIS data availability</li>
+            <li>Resource-intensive if applied across many facilities</li>
+            <li>Snapshot in time; misses seasonal/cyclical variation</li>
+          </ul>
+        </div>
+        <div class="detail-section" style="margin-top:1rem">
+          <h4>Typical Outputs</h4>
+          <ul class="detail-list">
+            <li>Facility readiness scorecards by service area</li>
+            <li>Gap analysis tables by domain and site</li>
+            <li>SARA-style service availability &amp; readiness indices</li>
+            <li>Prioritized infrastructure, HR, and commodity gap lists</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="d-who" class="detail-panel" style="--panel-accent: var(--who)">
+    <button class="close-btn" onclick="closeDetail('d-who')">close ✕</button>
+    <h3>WHO Health Systems Building Blocks</h3>
+    <div class="detail-cols">
+      <div>
+        <div class="detail-section">
+          <h4>The Six Building Blocks</h4>
+          <ul class="detail-list">
+            <li><strong>1. Service Delivery</strong> — continuum of care coverage, quality, equity</li>
+            <li><strong>2. Health Workforce</strong> — density, skill mix, training, retention</li>
+            <li><strong>3. Health Information Systems</strong> — vital registration, HMIS quality, data use</li>
+            <li><strong>4. Essential Medicines &amp; Technologies</strong> — supply chain, cold chain, procurement</li>
+            <li><strong>5. Health Financing</strong> — expenditure, OOP burden, financial protection</li>
+            <li><strong>6. Leadership &amp; Governance</strong> — policy, accountability, partner coordination</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="detail-section">
+          <h4>Strengths for PIH</h4>
+          <ul class="detail-list">
+            <li>Comprehensive systems view beyond facility readiness</li>
+            <li>Universally applicable across PIH country contexts (Rwanda, Haiti, SL, Malawi, Liberia, and others)</li>
+            <li>Aligned with MoH planning cycles; findings directly relevant to governments</li>
+            <li>Identifies root causes rather than symptoms</li>
+            <li>Linked to global reporting (SDGs, UHC index, GFF)</li>
+          </ul>
+        </div>
+        <div class="detail-section" style="margin-top:1rem">
+          <h4>Limitations</h4>
+          <ul class="detail-list cons">
+            <li>Broad scope can feel diffuse without RMNCAH-specific indicators</li>
+            <li>Requires high-level data (national health accounts, workforce census)</li>
+            <li>Governance &amp; financing blocks need significant technical expertise</li>
+            <li>May be too macro for site-level committees without strong facilitation</li>
+            <li>Risk of findings too systemic for actionable program recommendations</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="d-bna" class="detail-panel" style="--panel-accent: var(--bna)">
+    <button class="close-btn" onclick="closeDetail('d-bna')">close ✕</button>
+    <h3>Bottleneck Analysis (BNA) / Tanahashi Model</h3>
+    <div class="detail-cols">
+      <div>
+        <div class="detail-section">
+          <h4>The 6 Determinants of Coverage</h4>
+          <ul class="detail-list">
+            <li><strong>1. Commodity availability</strong> — medicines, supplies, vaccines at point of care</li>
+            <li><strong>2. HR availability / geographic access</strong> — trained workers present, facility density</li>
+            <li><strong>3. Accessibility</strong> — geographic, financial, temporal access</li>
+            <li><strong>4. Initial utilization / acceptability</strong> — social norms, trust, male partner dynamics</li>
+            <li><strong>5. Continuous utilization</strong> — completing ANC visits, vaccination schedules</li>
+            <li><strong>6. Effective coverage</strong> — service quality sufficient to produce health outcomes</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="detail-section">
+          <h4>Strengths for PIH</h4>
+          <ul class="detail-list">
+            <li>Actionable by design: each bottleneck implies specific interventions</li>
+            <li>Continuum-of-care maps perfectly onto RMNCAH program logic</li>
+            <li>Strong equity lens: disaggregates by wealth, geography, gender</li>
+            <li>Uses routine HMIS data as starting point, reducing primary collection burden</li>
+            <li>Widely used by UNICEF/WHO in all PIH countries</li>
+            <li>Communicable to non-technical audiences</li>
+          </ul>
+        </div>
+        <div class="detail-section" style="margin-top:1rem">
+          <h4>Limitations</h4>
+          <ul class="detail-list cons">
+            <li>Data quality dependency: weak HMIS (Haiti, Sierra Leone) undermines estimates</li>
+            <li>Oversimplifies complex causal pathways; bottlenecks interact</li>
+            <li>Demand-side often underdeveloped in standard BNA applications</li>
+            <li>Requires skilled facilitation to move from bottleneck to root cause</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="d-rhfa" class="detail-panel" style="--panel-accent: var(--rhfa)">
+    <button class="close-btn" onclick="closeDetail('d-rhfa')">close ✕</button>
+    <h3>Rapid Health Facility Assessment (RHFA)</h3>
+    <div class="detail-cols">
+      <div>
+        <div class="detail-section">
+          <h4>Assessment Domains</h4>
+          <ul class="detail-list">
+            <li>Infrastructure &amp; utilities (ANC/delivery rooms, water, electricity, sanitation)</li>
+            <li>Essential equipment (delivery beds, neonatal resuscitation, BP cuffs, cold chain)</li>
+            <li>Essential medicines (oxytocin, MgSO4, misoprostol, antibiotics, vaccines)</li>
+            <li>Human resources (cadres present, RMNCAH training status)</li>
+            <li>Guidelines, protocols &amp; job aids</li>
+            <li>Service statistics (ANC visits, deliveries, immunizations)</li>
+            <li>Optional: direct observation of clinical encounter</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="detail-section">
+          <h4>Strengths for PIH</h4>
+          <ul class="detail-list">
+            <li>2–4 hours per facility: feasible for site committees with limited time</li>
+            <li>Same checklist across Rwanda, Haiti, Sierra Leone, Malawi, Liberia — comparable scores</li>
+            <li>Generates readiness index trackable over time (ideal for monitoring progress)</li>
+            <li>Can be used by non-specialist program staff and clinical supervisors</li>
+            <li>CommCare / KoboToolbox compatible for real-time aggregation</li>
+            <li>Ideal for periodic reassessment (quarterly or biannual)</li>
+          </ul>
+        </div>
+        <div class="detail-section" style="margin-top:1rem">
+          <h4>Limitations</h4>
+          <ul class="detail-list cons">
+            <li>Captures inputs/processes only — not outcomes or quality of care</li>
+            <li>Snapshot: stock status on assessment day ≠ typical day</li>
+            <li>No community voice or health-seeking behavior insight</li>
+            <li>Requires structured follow-up — scores useless without action planning</li>
+            <li>No governance, financing, or policy dimension</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="d-swot" class="detail-panel" style="--panel-accent: var(--swot)">
+    <button class="close-btn" onclick="closeDetail('d-swot')">close ✕</button>
+    <h3>SWOT-Based Participatory Landscape Assessment</h3>
+    <div class="detail-cols">
+      <div>
+        <div class="detail-section">
+          <h4>The Four Analytical Dimensions</h4>
+          <ul class="detail-list">
+            <li><strong>Strengths</strong> — existing assets: CHW networks, community trust, MoH partnership</li>
+            <li><strong>Weaknesses</strong> — internal gaps: staff turnover, weak data, fragmented service delivery</li>
+            <li><strong>Opportunities</strong> — external leverage: GFF funding, mHealth platforms, civil society advocacy</li>
+            <li><strong>Threats</strong> — external risks: political instability, economic shocks, climate disruptions, brain drain</li>
+          </ul>
+        </div>
+        <div class="detail-section" style="margin-top:1rem">
+          <h4>Methods Used</h4>
+          <ul class="detail-list">
+            <li>Focus group discussions (women, mothers, adolescent girls, male partners)</li>
+            <li>Key informant interviews (facility managers, district officers, MoH)</li>
+            <li>Community dialogues and town halls</li>
+            <li>Participatory geographic mapping</li>
+            <li>Most Significant Change storytelling</li>
+            <li>Stakeholder validation workshops</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="detail-section">
+          <h4>Strengths for PIH</h4>
+          <ul class="detail-list">
+            <li>Aligns with PIH's community-centered model and accompaniment philosophy</li>
+            <li>Surfaces social norms, power dynamics, community trust — invisible to checklists</li>
+            <li>Low data dependency: works even in Haiti and Sierra Leone</li>
+            <li>Builds local ownership and implementation committee capacity</li>
+            <li>Flexible and culturally adaptable across PIH country contexts</li>
+          </ul>
+        </div>
+        <div class="detail-section" style="margin-top:1rem">
+          <h4>Limitations</h4>
+          <ul class="detail-list cons">
+            <li>Subjectivity risk if facilitation is not skilled and structured</li>
+            <li>Not quantitative: no indicators or readiness scores for funders</li>
+            <li>Time-intensive: thorough participatory collection takes longer than checklists</li>
+            <li>Synthesis challenge: rich qualitative data → actionable priorities requires capacity</li>
+            <li>May be perceived as less rigorous by technical steering committee members</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="d-pih5s" class="detail-panel" style="--panel-accent: var(--pih5s)">
+    <button class="close-btn" onclick="closeDetail('d-pih5s')">close ✕</button>
+    <h3>PIH 5-S Integrative Framework (Mary's Proposal)</h3>
+    <div class="detail-cols">
+      <div>
+        <div class="detail-section">
+          <h4>The 5 Ss — Proposed Structure</h4>
+          <ul class="detail-list">
+            <li><strong>Staff</strong> — workforce availability, training, supervision, retention</li>
+            <li><strong>Stuff</strong> — medicines, commodities, equipment, supply chain</li>
+            <li><strong>Space</strong> — physical infrastructure, utilities, geographic access</li>
+            <li><strong>Support Structure</strong> — policies, governance, data systems, financing</li>
+            <li><strong>5th S (TBD)</strong> — Sociocultural context? Systems? Community voice?</li>
+          </ul>
+        </div>
+        <div class="detail-section" style="margin-top:1rem">
+          <h4>How It Draws From the 5 Models</h4>
+          <ul class="detail-list">
+            <li>Staff → SAF (HR domain), RHFA (HR checklist), BNA (HR bottleneck)</li>
+            <li>Stuff → SAF, RHFA, BNA (commodity availability)</li>
+            <li>Space → RHFA (infrastructure checklist), SAF (service availability)</li>
+            <li>Support Structure → WHO Building Blocks (governance, financing, HIS)</li>
+            <li>5th S → SWOT Participatory (community voice, context)</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="detail-section">
+          <h4>Potential Advantages</h4>
+          <ul class="detail-list">
+            <li>PIH-owned framework: steering committee controls its scope and depth</li>
+            <li>Intuitive language for community members and non-technical partners</li>
+            <li>Can cherry-pick validated instruments from each of the 5 models</li>
+            <li>Avoids redundancy by mapping domains across models</li>
+            <li>Flexible: add/remove modules by site context</li>
+          </ul>
+        </div>
+        <div class="detail-section" style="margin-top:1rem">
+          <h4>Considerations / Risks</h4>
+          <ul class="detail-list cons">
+            <li>Requires upfront synthesis work by the steering committee</li>
+            <li>Not externally validated — may require additional justification for funders</li>
+            <li>5th S is still undefined — needs committee decision</li>
+            <li>Risk of over-inclusion: "pulling from all 5" can create a very long tool</li>
+            <li>Need to decide: baseline only, or trackable over time?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /view-overview -->
+
+
+<!-- ══ COMPARE ══ -->
+<div id="view-compare" class="view">
+  <p class="section-title">Side-by-Side Comparison</p>
+  <p class="section-desc">Hover a row for context. Dots indicate relative strength on each dimension (1–5 scale).</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th style="color:#7ab89a">SAF</th>
+          <th style="color:#7090b8">WHO Blocks</th>
+          <th style="color:#c87050">BNA</th>
+          <th style="color:#80a060">RHFA</th>
+          <th style="color:#9870b8">SWOT Partic.</th>
+          <th style="color:#e0845a">PIH 5-S</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr title="How well can findings be compared across PIH sites?">
+          <td>Cross-site comparability</td>
+          <td><span class="badge high">High</span></td>
+          <td><span class="badge high">High</span></td>
+          <td><span class="badge high">High</span></td>
+          <td><span class="badge vhigh">Very High</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge high">High</span></td>
+        </tr>
+        <tr title="How quickly and cheaply can the assessment be completed?">
+          <td>Speed &amp; feasibility</td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge low">Low</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge vhigh">Very High</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+        </tr>
+        <tr title="How much does it depend on reliable HMIS / national survey data?">
+          <td>Data requirements</td>
+          <td><span class="badge low">Mod–High</span></td>
+          <td><span class="badge vlow">Very High</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge high">Low</span></td>
+          <td><span class="badge vhigh">Very Low</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+        </tr>
+        <tr title="Does the framework incorporate community and patient voices?">
+          <td>Community voice</td>
+          <td><span class="badge low">Low</span></td>
+          <td><span class="badge low">Low</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge vlow">Very Low</span></td>
+          <td><span class="badge vhigh">Very High</span></td>
+          <td><span class="badge mod">Moderate*</span></td>
+        </tr>
+        <tr title="How directly do findings translate to specific program interventions?">
+          <td>Actionability of findings</td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge vhigh">Very High</span></td>
+          <td><span class="badge high">High</span></td>
+          <td><span class="badge high">High</span></td>
+          <td><span class="badge high">High</span></td>
+        </tr>
+        <tr title="Can the same tool be used in Haiti, Sierra Leone, Rwanda, Malawi, Liberia? (Lesotho in conversation; Malawi/Liberia TBD)">
+          <td>Works in weak-data settings</td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge low">Low</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge high">High</span></td>
+          <td><span class="badge vhigh">Very High</span></td>
+          <td><span class="badge high">High</span></td>
+        </tr>
+        <tr title="How well does it address equity and disparities across population subgroups?">
+          <td>Equity lens</td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge high">High</span></td>
+          <td><span class="badge low">Low</span></td>
+          <td><span class="badge high">High</span></td>
+          <td><span class="badge mod">Moderate*</span></td>
+        </tr>
+        <tr title="Does it cover governance, policy, and financing environments?">
+          <td>Governance / policy coverage</td>
+          <td><span class="badge low">Low</span></td>
+          <td><span class="badge vhigh">Very High</span></td>
+          <td><span class="badge low">Low</span></td>
+          <td><span class="badge vlow">None</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge mod">Moderate*</span></td>
+        </tr>
+        <tr title="How well does it map supply chain, commodities, and essential medicines?">
+          <td>Supply chain / commodity depth</td>
+          <td><span class="badge high">High</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge high">High</span></td>
+          <td><span class="badge vhigh">Very High</span></td>
+          <td><span class="badge low">Low</span></td>
+          <td><span class="badge high">High</span></td>
+        </tr>
+        <tr title="Can results be used to track progress at 6, 12, 18 months?">
+          <td>Longitudinal tracking potential</td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge vhigh">Very High</span></td>
+          <td><span class="badge low">Low</span></td>
+          <td><span class="badge high">High</span></td>
+        </tr>
+        <tr title="Is it recognized by MoH, UNICEF, WHO, GFF, and other PIH partners?">
+          <td>Partner / funder recognition</td>
+          <td><span class="badge vhigh">Very High</span></td>
+          <td><span class="badge vhigh">Very High</span></td>
+          <td><span class="badge high">High</span></td>
+          <td><span class="badge high">High</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge low">Low</span></td>
+        </tr>
+        <tr title="Degree of specialist support needed to implement and analyze">
+          <td>Technical expertise required</td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge vlow">Very High</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge high">Low</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+          <td><span class="badge mod">Moderate</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:0.78rem; color:var(--muted); margin-top:0.75rem; font-family:'IBM Plex Mono', monospace">
+    * PIH 5-S ratings assume community voice and equity modules are included (e.g., via SWOT participatory methods for the 5th S). Hover rows for context.
+  </p>
+</div>
+
+
+<!-- ══ 5-S MAPPING ══ -->
+<div id="view-fives" class="view">
+  <p class="section-title">PIH 5-S Framework Mapping</p>
+  <p class="section-desc">How each of the five assessment models contributes instruments and data to each of Mary's 5 Ss. The 5th S is open for committee decision.</p>
+
+  <div class="fives-grid">
+    <div class="s-card">
+      <div class="s-card-head">
+        <span class="s-letter">S1</span>
+        <span class="s-word">Staff</span>
+      </div>
+      <div class="s-desc">Workforce availability, training, competency (EmONC, PMTCT, IMCI), supervision quality, retention, skill mix, deployment patterns.</div>
+      <div class="s-frameworks">
+        <span class="s-fw" style="background:var(--saf)">SAF: HR domain</span>
+        <span class="s-fw" style="background:var(--rhfa)">RHFA: HR checklist</span>
+        <span class="s-fw" style="background:var(--bna)">BNA: HR bottleneck</span>
+        <span class="s-fw" style="background:var(--who)">WHO: Workforce block</span>
+      </div>
+    </div>
+
+    <div class="s-card">
+      <div class="s-card-head">
+        <span class="s-letter">S2</span>
+        <span class="s-word">Stuff</span>
+      </div>
+      <div class="s-desc">Essential medicines (oxytocin, MgSO4, misoprostol), vaccines, diagnostics, equipment functionality, supply chain integrity, cold chain, stock management.</div>
+      <div class="s-frameworks">
+        <span class="s-fw" style="background:var(--saf)">SAF: Commodities domain</span>
+        <span class="s-fw" style="background:var(--rhfa)">RHFA: Medicines checklist</span>
+        <span class="s-fw" style="background:var(--bna)">BNA: Commodity availability</span>
+        <span class="s-fw" style="background:var(--who)">WHO: Medicines block</span>
+      </div>
+    </div>
+
+    <div class="s-card">
+      <div class="s-card-head">
+        <span class="s-letter">S3</span>
+        <span class="s-word">Space</span>
+      </div>
+      <div class="s-desc">Physical infrastructure (ANC room, delivery room, newborn care area), utilities (water, electricity, sanitation), geographic access, facility-level distribution.</div>
+      <div class="s-frameworks">
+        <span class="s-fw" style="background:var(--rhfa)">RHFA: Infrastructure checklist</span>
+        <span class="s-fw" style="background:var(--saf)">SAF: Infrastructure readiness</span>
+        <span class="s-fw" style="background:var(--bna)">BNA: Geographic accessibility</span>
+        <span class="s-fw" style="background:var(--swot)">SWOT: Participatory mapping</span>
+      </div>
+    </div>
+
+    <div class="s-card">
+      <div class="s-card-head">
+        <span class="s-letter">S4</span>
+        <span class="s-word">Support Structure</span>
+      </div>
+      <div class="s-desc">Clinical protocols &amp; guidelines, HMIS &amp; data systems, health financing, governance, accountability, MoH coordination, national policy environment.</div>
+      <div class="s-frameworks">
+        <span class="s-fw" style="background:var(--who)">WHO: Governance block</span>
+        <span class="s-fw" style="background:var(--who)">WHO: HIS block</span>
+        <span class="s-fw" style="background:var(--who)">WHO: Financing block</span>
+        <span class="s-fw" style="background:var(--saf)">SAF: Guidelines/protocols</span>
+        <span class="s-fw" style="background:var(--bna)">BNA: Continuous utilization</span>
+      </div>
+    </div>
+
+    <div class="s-card" style="border-color: var(--rust); border-style: dashed;">
+      <div class="s-card-head">
+        <span class="s-letter">S5</span>
+        <span class="s-word">5th S — TBD</span>
+      </div>
+      <div class="s-desc" style="color:var(--rust)">The committee needs to define this dimension. Three options proposed below — click to see what each would add.</div>
+      <div style="display:flex; flex-direction:column; gap:0.5rem; margin-top:0.5rem">
+        <div style="cursor:pointer; padding:0.5rem 0.7rem; border:1px solid var(--border); border-radius:2px; font-size:0.82rem; transition:background 0.2s" onclick="toggleS5('systems')" id="s5-systems">
+          <strong style="color:var(--who)">A. Systems</strong> — HMIS, referral networks, QI processes, data feedback loops (draws from WHO Building Blocks, SAF data domain)
+        </div>
+        <div style="cursor:pointer; padding:0.5rem 0.7rem; border:1px solid var(--border); border-radius:2px; font-size:0.82rem; transition:background 0.2s" onclick="toggleS5('socio')" id="s5-socio">
+          <strong style="color:var(--swot)">B. Sociocultural Context</strong> — community trust, social norms, gender dynamics, demand-side barriers (draws from SWOT Participatory, BNA demand-side)
+        </div>
+        <div style="cursor:pointer; padding:0.5rem 0.7rem; border:1px solid var(--border); border-radius:2px; font-size:0.82rem; transition:background 0.2s" onclick="toggleS5('safety')" id="s5-safety">
+          <strong style="color:var(--forest)">C. Safety &amp; Quality</strong> — clinical quality, infection prevention, patient safety systems, QI capacity (draws from SAF observation domain, RHFA direct observation module)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="s5-detail" style="display:none; background:#fff8f0; border:1.5px solid var(--rust); border-radius:2px; padding:1.25rem; font-size:0.88rem; color:var(--slate);">
+    <strong style="font-family:'IBM Plex Mono',monospace; font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--rust)">5th S — Selected Option</strong>
+    <p id="s5-detail-text" style="margin-top:0.5rem"></p>
+  </div>
+</div>
+
+
+<!-- ══ RECOMMENDATIONS ══ -->
+<div id="view-recommend" class="view">
+  <p class="section-title">Pathway Options for the Steering Committee</p>
+  <p class="section-desc">Three approaches for committee consideration, from most comprehensive to most rapid. Sites currently in scope: Rwanda (3 teams), Haiti (1 team), Sierra Leone — Malawi and Liberia TBD. Lesotho not formally included but part of the conversation.</p>
+
+  <div class="rec-grid">
+
+    <div class="rec-option featured">
+      <div class="rec-number">A</div>
+      <div class="rec-label">Recommended · Hybrid Approach</div>
+      <div class="rec-title">PIH 5-S + RHFA Backbone + SWOT 5th S</div>
+      <div class="rec-desc">Use Mary's 5-S framework as the organizing structure. Populate Staff, Stuff, and Space using RHFA instruments (fast, standardized, CommCare-compatible). Use WHO Building Block domains for Support Structure. Add a participatory SWOT module for the 5th S to capture community voice and contextual factors. Pull BNA bottleneck analysis for priority interventions identified in phase 2.</div>
+      <div class="rec-components">
+        <strong>Components</strong>
+        RHFA checklist (Staff + Stuff + Space) · WHO governance/HIS/financing domains (Support Structure) · Participatory FGDs + community mapping (5th S Sociocultural) · BNA waterfall for gap prioritization
+      </div>
+    </div>
+
+    <div class="rec-option">
+      <div class="rec-number">B</div>
+      <div class="rec-label">Option · Rapid Baseline</div>
+      <div class="rec-title">RHFA + Targeted BNA</div>
+      <div class="rec-desc">If time and resources are constrained, lead with RHFA for a rapid, quantitative baseline across confirmed sites. Layer a targeted BNA using existing HMIS/DHS data to identify the top 3 bottlenecks per site. Reserve deeper qualitative or participatory work for a Phase 2 gap assessment. Fastest path to a cross-site dashboard.</div>
+      <div class="rec-components">
+        <strong>Components</strong>
+        RHFA checklist at each site · BNA using routine data · Cross-site readiness scorecard · Bottleneck priority matrix
+      </div>
+    </div>
+
+    <div class="rec-option">
+      <div class="rec-number">C</div>
+      <div class="rec-label">Option · Comprehensive Audit</div>
+      <div class="rec-title">SAF + WHO Building Blocks + SWOT</div>
+      <div class="rec-desc">The most complete assessment: SAF for full facility and community readiness, WHO Building Blocks for governance/financing/policy analysis, and SWOT for community and stakeholder context. Produces the richest evidence base for a multi-year program plan. Most demanding in time, data, and facilitation expertise — best suited if the steering committee has 6–12 months and external technical support.</div>
+      <div class="rec-components">
+        <strong>Components</strong>
+        Full SAF facility + community survey · WHO Building Blocks key informant interviews · Participatory SWOT per site · Integrated gap analysis report
+      </div>
+    </div>
+
+    <div class="rec-option">
+      <div class="rec-number">D</div>
+      <div class="rec-label">Option · Phased Approach</div>
+      <div class="rec-title">RHFA Now → SAF/BNA Later</div>
+      <div class="rec-desc">Phase 1 (months 1–3): Deploy RHFA across all sites to establish a quantitative baseline with minimal burden. Use findings to determine which sites and domains need deeper investigation. Phase 2 (months 4–9): Apply SAF or BNA selectively to the highest-need sites or most critical gaps identified in Phase 1. Allows the committee to adapt the assessment depth to what is found.</div>
+      <div class="rec-components">
+        <strong>Components</strong>
+        Phase 1: RHFA confirmed sites · Phase 2: SAF or BNA for priority sites · Adaptive scope based on Phase 1 findings
+      </div>
+    </div>
+
+  </div>
+
+  <div class="vote-box">
+    <h3>Committee Preference Check</h3>
+    <p>Which pathway is most promising for your context? Select one — results are saved in your browser for this session.</p>
+    <div class="vote-options">
+      <button class="vote-btn" onclick="castVote(this, 'A')">A — 5-S Hybrid</button>
+      <button class="vote-btn" onclick="castVote(this, 'B')">B — RHFA + BNA</button>
+      <button class="vote-btn" onclick="castVote(this, 'C')">C — Comprehensive</button>
+      <button class="vote-btn" onclick="castVote(this, 'D')">D — Phased</button>
+      <button class="vote-btn" onclick="castVote(this, 'Other')">Other / Undecided</button>
+    </div>
+    <div class="vote-result" id="vote-result"></div>
+  </div>
+
+</div><!-- /view-recommend -->
+
+
+<!-- ══ NOTES ══ -->
+<div id="view-notes" class="view">
+  <p class="section-title">Committee Notes</p>
+  <p class="section-desc">Capture discussion points, decisions, and action items from the June 4 meeting. Notes are saved in your browser session.</p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem">
+    <div>
+      <label style="font-family:'IBM Plex Mono',monospace; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:0.4rem">Framework Decision Notes</label>
+      <textarea class="notes-area" id="notes-framework" placeholder="Which framework(s) does the committee want to move forward with? Key discussion points..."></textarea>
+    </div>
+    <div>
+      <label style="font-family:'IBM Plex Mono',monospace; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:0.4rem">5th S — Decision Notes</label>
+      <textarea class="notes-area" id="notes-5s" placeholder="What should the 5th S be? Systems / Sociocultural / Safety / Other?"></textarea>
+    </div>
+    <div>
+      <label style="font-family:'IBM Plex Mono',monospace; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:0.4rem">Other Frameworks to Add to the List</label>
+      <textarea class="notes-area" id="notes-other" placeholder="Additional frameworks team members want to add for steering committee consideration..."></textarea>
+    </div>
+    <div>
+      <label style="font-family:'IBM Plex Mono',monospace; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:0.4rem">Action Items &amp; Next Steps</label>
+      <textarea class="notes-area" id="notes-actions" placeholder="Action items, owners, and deadlines from this meeting..."></textarea>
+    </div>
+  </div>
+
+  <button class="save-btn" onclick="saveNotes()">Save Notes</button>
+  <span class="save-confirm" id="save-confirm">✓ Saved to session</span>
+
+  <div style="margin-top:2rem; background:var(--cream); border:1px solid var(--border); padding:1.25rem; border-radius:2px; font-size:0.85rem; color:var(--muted)">
+    <strong style="font-family:'IBM Plex Mono',monospace; font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; display:block; margin-bottom:0.5rem;">From Mary's Email — Context</strong>
+    Our first task is to identify options — or combinations of options — from which the steering committee can choose. Another option might be to structure the landscape assessment around the 5 Ss (Staff, Stuff, Space, Support Structure) and pull from the five models. Once we decide which are best to move forward (or all of them, or a combination) we will have to create a presentation for the steering committee.
+  </div>
+
+  <div style="margin-top:1.25rem; background:var(--card-bg); border:1px solid var(--border); padding:1.25rem; border-radius:2px; font-size:0.85rem;">
+    <strong style="font-family:'IBM Plex Mono',monospace; font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; display:block; margin-bottom:0.75rem; color:var(--muted)">June 4 Meeting — Raw Notes (unedited)</strong>
+    <ul style="list-style:none; display:flex; flex-direction:column; gap:0.4rem; color:var(--slate);">
+      <li>📍 <strong>Sites:</strong> Rwanda (3 teams, separate); Haiti (1 team for now); Sierra Leone (yes, involved); Malawi (TBD); Liberia (TBD); Lesotho (not formally included but part of conversation); Peru (initially raised, not listed by Mary)</li>
+      <li>📍 <strong>Marc:</strong> Conducted many 1:1 interviews; will support landscape analysis. Nearly all service leaders are very new (many ≤3 years; some 1 year or 6 months).</li>
+      <li>📍 <strong>Staff assessment:</strong> Need knowledge evaluations of staff on the ground. People in training programs can provide data.</li>
+      <li>📍 <strong>New cohort:</strong> Nursing cohort underway with practical leadership/management tools. Next year cohort will include non-nurses. GNEF year-long fellowship also mentioned.</li>
+      <li>📍 <strong>Haiti:</strong> Asking Haiti team to identify who is part of micro-team for capacity building work.</li>
+      <li>📍 <strong>Sierra Leone:</strong> Some changes happening right now.</li>
+      <li>📍 <strong>Lesotho:</strong> 300-bed new facility referenced; not formally in scope but in conversation.</li>
+      <li>📍 <strong>June letter:</strong> Will send letter this month to EDs outlining the framework. Need to figure out membership of teams from each country.</li>
+      <li>📍 <strong>MOH:</strong> All work is for the Ministry; MOH people to be involved. Expand maternal care to include MoH.</li>
+      <li>📍 <strong>Marc / Rwanda:</strong> Ebola situation almost affected Rwanda travel (no cases in Rwanda yet).</li>
+      <li>📍 <strong>PIH principle noted:</strong> "PIH never does anything halfway — all facilities included."</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ 5-S LENS ══ -->
+<div id="view-lens" class="view">
+
+  <div class="lens-intro">
+    <p class="section-title">Which framework covers what you care about?</p>
+    <p class="section-desc">You know the 5 Ss. The five frameworks below are unfamiliar. <strong>Click any S button</strong> to see — instantly — how well each framework covers that part of your work. Then click a framework tile for the full story.</p>
+  </div>
+
+  <!-- ── FRAMEWORK GRID (top) ── -->
+  <div class="hm-grid" id="hm-grid">
+    <div class="hm-fw-tile" id="hmt-saf"   onclick="openFWDetail('saf')">
+      <div class="hmt-bar" id="hmb-saf"></div>
+      <div class="hmt-label">SAF</div>
+      <div class="hmt-sublabel">Situational Analysis</div>
+      <div class="hmt-score" id="hms-saf"></div>
+    </div>
+    <div class="hm-fw-tile" id="hmt-who"   onclick="openFWDetail('who')">
+      <div class="hmt-bar" id="hmb-who"></div>
+      <div class="hmt-label">WHO</div>
+      <div class="hmt-sublabel">Building Blocks</div>
+      <div class="hmt-score" id="hms-who"></div>
+    </div>
+    <div class="hm-fw-tile" id="hmt-bna"   onclick="openFWDetail('bna')">
+      <div class="hmt-bar" id="hmb-bna"></div>
+      <div class="hmt-label">BNA</div>
+      <div class="hmt-sublabel">Bottleneck Analysis</div>
+      <div class="hmt-score" id="hms-bna"></div>
+    </div>
+    <div class="hm-fw-tile" id="hmt-rhfa"  onclick="openFWDetail('rhfa')">
+      <div class="hmt-bar" id="hmb-rhfa"></div>
+      <div class="hmt-label">RHFA</div>
+      <div class="hmt-sublabel">Rapid Facility Check</div>
+      <div class="hmt-score" id="hms-rhfa"></div>
+    </div>
+    <div class="hm-fw-tile" id="hmt-swot"  onclick="openFWDetail('swot')">
+      <div class="hmt-bar" id="hmb-swot"></div>
+      <div class="hmt-label">SWOT</div>
+      <div class="hmt-sublabel">Participatory</div>
+      <div class="hmt-score" id="hms-swot"></div>
+    </div>
+  </div>
+
+  <!-- ── VERDICT BAR ── -->
+  <div class="hm-verdict" id="hm-verdict">
+    <span class="hm-verdict-icon">↑</span>
+    <span id="hm-verdict-text">Select an S below to see which frameworks are strongest for that dimension.</span>
+  </div>
+
+  <!-- ── S BUTTONS (bottom) ── -->
+  <div class="hm-s-row">
+    <button class="hm-s-btn" id="hsb-staff"   onclick="selectS(this,'staff')">
+      <span class="hm-s-num">S1</span>
+      <span class="hm-s-word">Staff</span>
+      <span class="hm-s-sub">Who does the work</span>
+    </button>
+    <button class="hm-s-btn" id="hsb-stuff"   onclick="selectS(this,'stuff')">
+      <span class="hm-s-num">S2</span>
+      <span class="hm-s-word">Stuff</span>
+      <span class="hm-s-sub">Medicines &amp; supplies</span>
+    </button>
+    <button class="hm-s-btn" id="hsb-space"   onclick="selectS(this,'space')">
+      <span class="hm-s-num">S3</span>
+      <span class="hm-s-word">Space</span>
+      <span class="hm-s-sub">Facilities &amp; access</span>
+    </button>
+    <button class="hm-s-btn" id="hsb-support" onclick="selectS(this,'support')">
+      <span class="hm-s-num">S4</span>
+      <span class="hm-s-word">Support Structure</span>
+      <span class="hm-s-sub">Policy, data, governance</span>
+    </button>
+    <button class="hm-s-btn hm-s-btn--dashed" id="hsb-s5" onclick="selectS(this,'s5')">
+      <span class="hm-s-num">S5</span>
+      <span class="hm-s-word">5th S</span>
+      <span class="hm-s-sub">Community &amp; context</span>
+    </button>
+  </div>
+
+  <!-- ── DETAIL DRAWER ── -->
+  <div class="hm-drawer" id="hm-drawer">
+    <div class="hm-drawer-inner">
+      <div class="hm-drawer-top">
+        <div>
+          <div class="hm-drawer-fw" id="hmd-fw"></div>
+          <div class="hm-drawer-s"  id="hmd-s"></div>
+        </div>
+        <button onclick="closeDrawer()" class="hm-close">close ✕</button>
+      </div>
+      <div class="hm-drawer-coverage" id="hmd-coverage"></div>
+      <div class="hm-drawer-body" id="hmd-body"></div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer>
+  PIH RMNCAH Steering Committee Tool · Prepared from Mary's briefing + RMNCAH framework literature · June 2026
+</footer>
+
+<script>
+// ── VIEW SWITCHING ──
+function switchView(id, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── DETAIL PANELS ──
+function toggleDetail(id) {
+  const panel = document.getElementById(id);
+  const isVisible = panel.classList.contains('visible');
+  // close all
+  document.querySelectorAll('.detail-panel').forEach(p => p.classList.remove('visible'));
+  if (!isVisible) {
+    panel.classList.add('visible');
+    setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+}
+function closeDetail(id) {
+  document.getElementById(id).classList.remove('visible');
+}
+
+// ── 5TH S ──
+const s5Texts = {
+  systems: "<strong>Option A — Systems:</strong> Covers HMIS data quality, referral network functionality, QI processes, data feedback loops, and clinical protocol adherence tracking. Draws primarily from the WHO Building Blocks (Health Information Systems block) and the SAF's data & record-keeping domain. Best if the committee wants a technical systems audit that aligns with national MoH planning. Moderate data requirements.",
+  socio: "<strong>Option B — Sociocultural Context:</strong> Captures community trust in health systems, gender dynamics and male partner involvement, social norms around facility delivery, adolescent health-seeking behavior, and demand-side barriers. Draws primarily from the SWOT Participatory model (FGDs, community dialogues, MSC storytelling) and the BNA demand-side determinants. Best if PIH wants to honor its accompaniment philosophy and ensure community voice shapes the gap assessment. Low data requirements.",
+  safety: "<strong>Option C — Safety & Quality:</strong> Assesses infection prevention and control (IPC) practices, patient safety systems, clinical quality improvement capacity, and direct observation of care quality. Draws from SAF's quality-of-care domain (direct observation) and RHFA's optional direct observation module. Best if the committee wants to move directly from landscape to quality improvement planning. Moderate data requirements; adds time to RHFA assessments."
+};
+let s5Current = null;
+function toggleS5(key) {
+  const detail = document.getElementById('s5-detail');
+  const text = document.getElementById('s5-detail-text');
+  // reset styles
+  ['systems','socio','safety'].forEach(k => {
+    document.getElementById('s5-' + k).style.background = '';
+  });
+  if (s5Current === key) {
+    detail.style.display = 'none';
+    s5Current = null;
+  } else {
+    text.innerHTML = s5Texts[key];
+    detail.style.display = 'block';
+    document.getElementById('s5-' + key).style.background = '#fff3e0';
+    s5Current = key;
+    setTimeout(() => detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+}
+
+// ── VOTE ──
+function castVote(btn, option) {
+  document.querySelectorAll('.vote-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const result = document.getElementById('vote-result');
+  const msgs = {
+    'A': 'You selected: Option A — PIH 5-S Hybrid. This combines structure, speed, and community voice.',
+    'B': 'You selected: Option B — RHFA + BNA. Fastest path to a quantitative cross-site baseline.',
+    'C': 'You selected: Option C — Comprehensive Audit. Most rigorous; requires maximum time and capacity.',
+    'D': 'You selected: Option D — Phased Approach. Most adaptive; let Phase 1 findings guide depth.',
+    'Other': 'Marked as Undecided / Other. Capture thoughts in the Committee Notes tab.'
+  };
+  result.textContent = msgs[option];
+  result.classList.add('visible');
+  sessionStorage.setItem('pih_vote', option);
+}
+
+// ── NOTES ──
+function saveNotes() {
+  ['framework','5s','other','actions'].forEach(k => {
+    sessionStorage.setItem('notes_' + k, document.getElementById('notes-' + k).value);
+  });
+  const c = document.getElementById('save-confirm');
+  c.classList.add('show');
+  setTimeout(() => c.classList.remove('show'), 2500);
+}
+function loadNotes() {
+  ['framework','5s','other','actions'].forEach(k => {
+    const v = sessionStorage.getItem('notes_' + k);
+    if (v) document.getElementById('notes-' + k).value = v;
+  });
+  const vote = sessionStorage.getItem('pih_vote');
+  if (vote) {
+    const btns = document.querySelectorAll('.vote-btn');
+    btns.forEach(b => {
+      if (b.textContent.startsWith(vote)) {
+        b.classList.add('selected');
+        document.getElementById('vote-result').textContent = vote + ' previously selected.';
+        document.getElementById('vote-result').classList.add('visible');
+      }
+    });
+  }
+}
+// ── 5-S LENS DATA ──
+const fwColors = { saf:'#2d5a3d', who:'#1a3a5c', bna:'#7b3a1e', rhfa:'#3a4a2a', swot:'#5a2d6e' };
+const fwNames  = { saf:'Situational Analysis Framework (SAF)', who:'WHO Building Blocks', bna:'Bottleneck Analysis (BNA)', rhfa:'Rapid Health Facility Assessment (RHFA)', swot:'SWOT Participatory Assessment' };
+
+const coverageScore = { strong: 3, partial: 2, weak: 1 };
+const coverageLabel = { strong: 'Strong coverage', partial: 'Partial coverage', weak: 'Weak / not covered' };
+
+const lensData = {
+  saf: {
+    plain: 'A detailed report card for each facility — checks whether services exist, staff are trained, medicines are stocked, and communities are using services.',
+    staff:   { coverage:'strong',  summary:'SAF directly assesses staffing: who is present, what cadres (nurses, midwives, CHWs), whether they are trained in key skills like emergency obstetric care, and whether there are gaps in competency. Marc\'s 1:1 interview findings would slot directly into this section.', detail:'SAF asks: How many health workers are rostered and present? Are there trained midwives, nurses, and community health workers? Do staff have current competency in skills like assisted delivery, neonatal resuscitation, or PMTCT? It also captures supervision quality. Because many PIH service leaders are very new (under 3 years, some under 1 year), this domain is especially critical for our landscape.' },
+    stuff:   { coverage:'strong',  summary:'SAF checks which medicines, vaccines, and supplies are available — including stockout history. It directly maps to the tracer commodities PIH uses: oxytocin, magnesium sulfate, antibiotics, contraceptives, vaccines.', detail:'SAF uses a structured inventory to verify what is physically present on the day of assessment, combined with stockout records to understand reliability over time. For maternal health, it checks: oxytocin (for hemorrhage), magnesium sulfate (for eclampsia), misoprostol, IV fluids, blood, and neonatal resuscitation supplies. For child health: vaccines, ORS, zinc, vitamin K. This is a direct, practical S2 assessment.' },
+    space:   { coverage:'strong',  summary:'SAF checks whether physical spaces exist for key services — ANC rooms, delivery rooms, newborn care areas — and whether they have water, electricity, and sanitation.', detail:'SAF assesses physical infrastructure as a readiness factor: Is there a dedicated ANC room? A clean delivery room with a functional delivery bed? A newborn care area with a resuscitation table? Working water for handwashing? Backup electricity for labor and delivery? Functional latrines? This is a comprehensive physical audit of space — exactly what PIH needs before expanding maternal care services.' },
+    support: { coverage:'partial', summary:'SAF covers clinical protocols and HMIS data quality — the "paperwork and data" side of support structure — but does not go deep on financing or governance.', detail:'SAF checks whether national clinical guidelines are posted and used, whether job aids are available, and whether HMIS records are complete and accurate. It partially addresses quality systems through direct observation of care. However, SAF does NOT deeply assess health financing, national policy environments, or MoH governance structures — those require the WHO Building Blocks approach. SAF can tell you whether protocols exist, but not whether the funding or political will exists to implement them.' },
+    s5:      { coverage:'partial', summary:'SAF includes community exit interviews and service utilization data — some demand-side voice — but doesn\'t center the community the way PIH\'s accompaniment model does.', detail:'SAF does include demand-side components: client exit interviews, community surveys, and review of utilization patterns (who is coming, how often, for what). However, it doesn\'t capture deeper contextual factors — social norms, community trust, power dynamics, male partner influence — that PIH knows matter enormously for maternal health in Haiti, Rwanda, and Sierra Leone. For a full 5th S, SAF needs to be complemented with participatory methods.' }
+  },
+  who: {
+    plain: 'The "big picture" lens that assesses the whole health system — policies, money, data systems, and governance — not just the facility. Used by governments and global health funders.',
+    staff:   { coverage:'strong',  summary:'A dedicated "Health Workforce" building block examines workforce density, skill mix, training gaps, retention, and management systems at a systems level.', detail:'The WHO Workforce block asks: Are there enough health workers per population? Are they distributed fairly (rural vs. urban)? Are the right types of workers trained for maternal and child health? Are there systems for supervision and performance management? Are health workers paid enough to stay? Marc\'s 1:1 interviews would feed directly into this block, especially given that many PIH service leaders are very new.' },
+    stuff:   { coverage:'strong',  summary:'A dedicated "Essential Medicines and Technologies" block examines the entire supply chain — not just what\'s in stock today, but how medicines get purchased, distributed, and managed.', detail:'Unlike a simple checklist, the WHO approach looks at the system behind the supplies: procurement processes, distribution logistics, cold chain integrity for vaccines, rational use of medicines, and affordability at the point of care. For PIH sites, stock-outs are often a systems problem (procurement, forecasting, storage) rather than just a facility problem. This block helps understand whether the supply chain itself is reliable.' },
+    space:   { coverage:'partial', summary:'Space and infrastructure appear within the "Service Delivery" block, but not as a detailed facility-by-facility audit. Less granular than SAF or RHFA for physical conditions.', detail:'The WHO framework addresses space and infrastructure indirectly through the Service Delivery block, which looks at whether services are organized and accessible across facility levels. It does not provide the detailed facility-by-facility checklist that SAF or RHFA offer. For assessing specific rooms, equipment, and utilities at each PIH site, the WHO framework alone is insufficient — pair it with RHFA or SAF for that granularity.' },
+    support: { coverage:'strong',  summary:'This is where WHO shines: three of its six blocks directly address support structure — Health Information Systems, Health Financing, and Leadership & Governance.', detail:'<strong>Health Information Systems:</strong> Are HMIS records accurate? Are data used for decisions? Is vital registration functioning?<br><br><strong>Health Financing:</strong> How much is being spent on RMNCAH? Who bears the costs — government, donors, families? Are there financial protection mechanisms?<br><br><strong>Leadership & Governance:</strong> Is there a national RMNCAH policy? Are MoH and PIH coordinated? This block is critical for PIH\'s goal of MoH partnership and the June letter to EDs.' },
+    s5:      { coverage:'weak',    summary:'Very little focus on community voice or social norms. WHO is primarily a policy and systems tool — community engagement is a footnote, not a methodology.', detail:'Community engagement appears as a footnote in the WHO Governance block — it mentions community participation as an ideal, but provides no tools for capturing it. Social norms, cultural barriers, community trust, and demand-side dynamics are essentially invisible in the WHO framework. For PIH\'s 5th S (sociocultural context), WHO Building Blocks must be significantly supplemented with participatory or community-based methods.' }
+  },
+  bna: {
+    plain: 'Thinks of health coverage as a pipeline: if it\'s blocked anywhere — medicines missing, staff absent, community not coming — patients don\'t get care. BNA finds where each pipe is blocked.',
+    staff:   { coverage:'strong',  summary:'"Human Resources / Geographic Accessibility" is one of BNA\'s six determinants. It asks: are trained, motivated staff physically present where they need to be?', detail:'BNA frames Staff as a supply-side bottleneck: Are there enough trained health workers at the facility? Are they present consistently? Is the facility geographically close enough to the population? If staff are absent or undertrained, that\'s a bottleneck blocking all services downstream. For PIH, where many service leaders are very new, BNA would likely flag staff competency as a key bottleneck — connecting directly to the capacity building focus of this initiative.' },
+    stuff:   { coverage:'strong',  summary:'"Commodity Availability" is the very first determinant in the BNA chain — the most upstream blockage. If medicines and supplies aren\'t there, nothing else matters.', detail:'BNA treats Stuff as the foundational supply-side check: Are essential medicines, vaccines, and equipment available at the point of care, reliably and consistently? A stock-out of oxytocin blocks safe delivery care regardless of how well-trained the staff are. BNA is especially powerful for Stuff because it can quantify the problem: "X% of facilities had oxytocin available on assessment day" becomes a trackable coverage indicator over time.' },
+    space:   { coverage:'partial', summary:'Space is partially captured under "Accessibility" — geographic distance, physical access to the facility. But the physical condition of the facility itself is not BNA\'s focus.', detail:'BNA\'s Accessibility determinant asks whether communities can reach the facility — distance, transport costs, road conditions, facility hours. This is spatial, but about access barriers rather than facility conditions. BNA won\'t tell you whether the delivery room has running water or whether neonatal resuscitation equipment is functional. For those physical details, RHFA or SAF are better tools.' },
+    support: { coverage:'partial', summary:'BNA touches on quality and system continuity through its downstream determinants, but governance, financing, and policy are not its focus.', detail:'BNA indirectly touches on Support Structure through Continuous Utilization (do people keep coming back — which depends on quality and reliability?) and Effective Coverage (is the service good enough to actually produce health outcomes?). However, BNA does not systematically address health financing, MoH policy environments, data systems, or governance structures. For PIH\'s Support Structure S, BNA needs to be complemented by WHO Building Blocks.' },
+    s5:      { coverage:'partial', summary:'BNA\'s "Acceptability / Initial Utilization" determinant captures demand-side barriers — social norms, community knowledge, cultural acceptance — stronger than most frameworks but not deeply participatory.', detail:'BNA\'s demand-side determinants ask: Do women and families actually seek care when it is available? What social or cultural norms prevent them? Is there community trust? Are male partners blocking care-seeking? BNA surfaces these as quantitative coverage gaps — "X% of women with access to ANC do not use it" — which is powerful. However, it doesn\'t provide rich qualitative understanding of WHY. For that depth, SWOT participatory methods are needed.' }
+  },
+  rhfa: {
+    plain: 'A fast, standardized checklist a trained PIH staff member completes at any facility in 2–4 hours. Generates a readiness score comparable across all sites and trackable over time.',
+    staff:   { coverage:'strong',  summary:'RHFA directly checks who is present and trained: staff on duty that day, their cadre, and their training status in key skills like emergency obstetric care, IMCI, and PMTCT.', detail:'On a typical RHFA visit, the assessor records: How many nurses and midwives are rostered? How many are present today? Have staff received recent training in BEmONC/CEmONC? PMTCT? IMCI? Nutrition counseling? Is a clinical supervisor available? RHFA captures staffing as a snapshot — not turnover rates or long-term patterns — but gives a concrete, comparable picture across all PIH sites in a single assessment day per facility.' },
+    stuff:   { coverage:'strong',  summary:'RHFA does a physical inventory of tracer medicines and supplies on assessment day — probably the strongest S2 assessment per hour of effort of any of the five frameworks.', detail:'The assessor physically checks whether the following are in stock on assessment day: oxytocin (hemorrhage), magnesium sulfate (eclampsia), misoprostol, ampicillin and gentamicin (antibiotics), IV fluids, blood, antihypertensives, contraceptive methods, vitamin K for newborns, chlorhexidine for cord care, ORS and zinc, and vaccines. This checklist can be loaded into CommCare or KoboToolbox for real-time data submission across all PIH sites.' },
+    space:   { coverage:'strong',  summary:'RHFA\'s most detailed domain is physical infrastructure — rooms, equipment, utilities. This is where RHFA outperforms all other frameworks, room by room and item by item.', detail:'RHFA checks, room by room and item by item: Is there a dedicated ANC room? A functional delivery room with a delivery bed? A newborn care corner with resuscitation equipment (bag-mask, suction, radiant warmer)? A family planning counseling space? Running water at the point of care? Backup electricity for labor and delivery? A functional BP cuff, hemoglobin meter? Ultrasound? Cold chain? This is the most granular Space assessment available — completed in under 4 hours per facility.' },
+    support: { coverage:'weak',    summary:'RHFA barely touches Support Structure. It checks whether protocols are posted and registers are in use, but has no assessment of governance, financing, or data systems.', detail:'RHFA\'s only Support Structure elements are: Are national clinical guidelines posted and visible? Are job aids present? Are patient registers and ANC cards available and in use? A brief review of service statistics. That\'s it. RHFA explicitly does not assess health financing, MoH governance, policy implementation, or HMIS data quality. If PIH wants to understand Support Structure, the WHO Building Blocks framework is needed in addition to RHFA.' },
+    s5:      { coverage:'weak',    summary:'RHFA has almost no community voice. It speaks entirely to the facility — not to the community that uses (or doesn\'t use) that facility.', detail:'RHFA is a facility tool. Its optional "direct observation" module can capture one clinical encounter, but there is no systematic component for community perspectives, demand-side barriers, or sociocultural context. RHFA would tell you that oxytocin is in stock and a midwife is present — but not that the nearest community has low trust in that facility, or that social norms in that catchment area discourage facility delivery. For PIH\'s 5th S, RHFA must be paired with SWOT participatory methods or BNA demand-side analysis.' }
+  },
+  swot: {
+    plain: 'Structured conversations with communities, health workers, and local leaders to understand what\'s working, what isn\'t, what opportunities exist, and what threatens the program. Deeply aligned with PIH\'s accompaniment philosophy.',
+    staff:   { coverage:'partial', summary:'SWOT surfaces staff themes through interviews and focus groups — turnover, morale, leadership gaps — but doesn\'t generate the structured, quantitative staff data that SAF or RHFA produce.', detail:'In a SWOT assessment, staff-related issues naturally emerge: high turnover as a Weakness; strong CHW networks as a Strength; a new training program (like PIH\'s GNEF fellowship or the nursing leadership cohort) as an Opportunity. Marc\'s 1:1 interviews are a classic SWOT-style data collection method. However, SWOT won\'t give you a precise number like "42% of staff have completed EmONC training." It gives themes, perceptions, and context. Pair with RHFA or SAF for the numbers.' },
+    stuff:   { coverage:'weak',    summary:'SWOT rarely addresses medicines and supplies systematically. A stock-out might emerge as a Weakness in a focus group — but SWOT has no inventory or checklist.', detail:'Stuff is SWOT\'s weakest domain. Occasionally, medicine shortages surface in focus group discussions — community members mention "the hospital never has blood" or health workers mention frequent oxytocin stock-outs. But SWOT has no systematic way to assess commodity availability. For S2 (Stuff), RHFA or SAF checklists are far more reliable. SWOT should be used to complement, not replace, a physical inventory.' },
+    space:   { coverage:'partial', summary:'Physical space issues — long distances, poor conditions — often emerge in community discussions. SWOT\'s participatory mapping visualizes geographic access barriers that no checklist captures.', detail:'SWOT\'s participatory mapping is valuable for Space: community members draw maps showing where facilities are, how far they travel, which roads are impassable in rainy season, and which health posts are abandoned. This geographic perspective is something no checklist captures. However, SWOT doesn\'t audit individual facility rooms, equipment, or utilities — for that, RHFA is needed. SWOT contributes the community-level and geographic dimension; RHFA contributes the facility-level dimension.' },
+    support: { coverage:'partial', summary:'SWOT\'s Threats and Opportunities quadrants surface governance and policy dynamics. Key informant interviews with MoH officials — a standard SWOT method — provide the policy picture.', detail:'SWOT captures Support Structure from the outside in: Opportunities might include a new government RMNCAH strategy, GFF funding, or new MoH commitment. Threats might include political instability (relevant in Sierra Leone right now), funding cuts, or governance transitions. Key informant interviews with district health officers and MoH officials provide the policy and governance picture. However, SWOT doesn\'t generate quantitative data on health financing or HMIS quality that the WHO framework does.' },
+    s5:      { coverage:'strong',  summary:'SWOT is irreplaceable here. It is the only framework built from the ground up to center community voice, social norms, and contextual factors — the heart of PIH\'s 5th S and accompaniment philosophy.', detail:'SWOT\'s participatory methods — focus groups with women and mothers, community dialogues, Most Significant Change storytelling, conversations with community leaders and male partners — are designed to surface exactly what the 5th S is about: community trust in PIH facilities, social and cultural norms around facility delivery, demand-side barriers (distance, cost, fear, stigma), and the political and social context that shapes whether interventions succeed. For PIH, whose accompaniment model is built on community relationships, SWOT\'s participatory approach is essential.' }
+  }
+};
+
+const verdicts = {
+  staff:   { best:['saf','who','bna','rhfa'], text:'<strong>SAF, WHO, BNA, and RHFA</strong> all cover Staff well — each from a different angle. SWOT adds qualitative context (morale, leadership culture) but doesn\'t produce numbers.' },
+  stuff:   { best:['saf','who','bna','rhfa'], text:'<strong>SAF, WHO, BNA, and RHFA</strong> are all strong on Stuff. RHFA is the fastest for a physical inventory; WHO looks at the system behind the supplies.' },
+  space:   { best:['saf','rhfa'],             text:'<strong>RHFA and SAF</strong> are the clear leaders on Space — both do detailed, room-by-room physical audits. BNA and SWOT offer partial geographic access perspectives only.' },
+  support: { best:['who'],                    text:'<strong>WHO Building Blocks</strong> stands alone on Support Structure — governance, financing, and data systems are its entire purpose. No other framework comes close.' },
+  s5:      { best:['swot'],                   text:'<strong>SWOT Participatory</strong> is the only framework designed from the ground up for community voice and context — the heart of PIH\'s accompaniment philosophy. BNA adds demand-side numbers.' }
+};
+
+let activeS = null;
+let activeDrawerFW = null;
+const fwKeys = ['saf','who','bna','rhfa','swot'];
+
+function selectS(btn, s) {
+  // toggle off
+  if (activeS === s) {
+    document.querySelectorAll('.hm-s-btn').forEach(b => b.classList.remove('active'));
+    fwKeys.forEach(fw => resetTile(fw));
+    document.getElementById('hm-verdict-text').innerHTML = 'Select an S below to see which frameworks are strongest for that dimension.';
+    activeS = null;
+    closeDrawer();
+    return;
+  }
+  document.querySelectorAll('.hm-s-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeS = s;
+
+  // animate tiles
+  fwKeys.forEach((fw, i) => {
+    const tile = document.getElementById('hmt-' + fw);
+    const bar  = document.getElementById('hmb-' + fw);
+    const score = document.getElementById('hms-' + fw);
+    const cov = lensData[fw][s].coverage;
+    const isTop = verdicts[s].best.includes(fw);
+
+    // staggered transition
+    setTimeout(() => {
+      bar.className = 'hmt-bar ' + cov;
+      score.textContent = coverageLabel[cov];
+      score.className = 'hmt-score ' + cov;
+      if (isTop) {
+        tile.classList.remove('dim');
+        tile.classList.add('lit');
+        tile.style.borderColor = fwColors[fw];
+      } else {
+        tile.classList.remove('lit');
+        tile.classList.add('dim');
+        tile.style.borderColor = '';
+      }
+    }, i * 60);
+  });
+
+  // verdict
+  const vt = document.getElementById('hm-verdict-text');
+  vt.style.opacity = '0';
+  setTimeout(() => {
+    vt.innerHTML = verdicts[s].text;
+    vt.style.opacity = '1';
+  }, 200);
+
+  // if drawer was open for a different S on same FW, update it
+  if (activeDrawerFW) openFWDetail(activeDrawerFW);
+}
+
+function resetTile(fw) {
+  const tile  = document.getElementById('hmt-' + fw);
+  const bar   = document.getElementById('hmb-' + fw);
+  const score = document.getElementById('hms-' + fw);
+  tile.classList.remove('dim','lit');
+  tile.style.borderColor = '';
+  bar.className = 'hmt-bar';
+  score.className = 'hmt-score none';
+  score.textContent = '';
+}
+
+function openFWDetail(fw) {
+  if (!activeS) return; // require an S to be selected first
+  activeDrawerFW = fw;
+  const d = lensData[fw][activeS];
+  const drawer = document.getElementById('hm-drawer');
+  const sLabels = { staff:'S1 — Staff', stuff:'S2 — Stuff', space:'S3 — Space', support:'S4 — Support Structure', s5:'S5 — Community & Context' };
+
+  document.getElementById('hmd-fw').textContent = fwNames[fw];
+  document.getElementById('hmd-fw').style.color = fwColors[fw];
+  document.getElementById('hmd-s').textContent = sLabels[activeS];
+  drawer.style.borderLeftColor = fwColors[fw];
+
+  const covEl = document.getElementById('hmd-coverage');
+  covEl.textContent = coverageLabel[d.coverage];
+  covEl.className = 'hm-drawer-coverage ' + d.coverage;
+
+  document.getElementById('hmd-body').innerHTML = '<p style="margin-bottom:0.75rem;font-size:0.88rem;color:var(--muted);font-style:italic;">' + d.summary + '</p>' + d.detail;
+
+  drawer.classList.add('open');
+  setTimeout(() => drawer.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
+}
+
+function closeDrawer() {
+  document.getElementById('hm-drawer').classList.remove('open');
+  activeDrawerFW = null;
+}
+
+// initialize lens on load
+window.addEventListener('load', () => { loadNotes(); });
+
+
+
+
+</script>
+</body>
+</html>
