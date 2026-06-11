@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RHFA for RMNCAH — PIH Rwanda Assessment Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #1c1c1e;
+  --paper:    #f7f5f0;
+  --muted:    #8a8880;
+  --border:   #e0ddd8;
+  --card:     #ffffff;
+
+  /* per-S colors */
+  --s1: #2a6049;   /* forest green — staff */
+  --s2: #1a4a7a;   /* deep blue — stuff */
+  --s3: #7a3a1e;   /* terracotta — space */
+  --s4: #4a2d7a;   /* violet — systems */
+  --s5: #b84c2e;   /* rust — social */
+
+  --spine-w: 6px;
+  --active-s: var(--s1);
+
+  --radius: 3px;
+  --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── STICKY NAV ── */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--ink);
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+.top-nav::-webkit-scrollbar { display: none; }
+
+.nav-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  padding-right: 1.5rem;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  margin-right: 0.5rem;
+}
+
+.nav-s-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  gap: 0.1rem;
+  min-width: 80px;
+  text-decoration: none;
+}
+.nav-s-btn:hover { background: rgba(255,255,255,0.06); }
+.nav-s-btn.active { border-bottom-color: var(--btn-color); }
+.nav-s-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  transition: color 0.2s;
+}
+.nav-s-word {
+  font-family: 'Fraunces', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.75);
+  transition: color 0.2s;
+}
+.nav-s-btn.active .nav-s-num  { color: var(--btn-color); }
+.nav-s-btn.active .nav-s-word { color: #fff; }
+
+/* ── HEADER ── */
+header {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 3.5rem 2rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: var(--spine-w);
+  background: linear-gradient(90deg, var(--s1) 0%, var(--s2) 25%, var(--s3) 50%, var(--s4) 75%, var(--s5) 100%);
+}
+.header-inner { max-width: 860px; margin: 0 auto; }
+.header-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.75rem;
+}
+header h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+}
+header h1 em {
+  font-style: italic;
+  font-weight: 300;
+  color: rgba(255,255,255,0.55);
+}
+.header-sub {
+  font-size: 0.92rem;
+  color: rgba(255,255,255,0.55);
+  max-width: 580px;
+  line-height: 1.65;
+}
+
+/* ── MAIN LAYOUT ── */
+.page-body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1.5rem 5rem;
+  position: relative;
+}
+
+/* THE SPINE */
+.spine {
+  position: absolute;
+  left: 1.5rem;
+  top: 0;
+  bottom: 0;
+  width: var(--spine-w);
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.spine-fill {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  background: var(--active-s);
+  transition: height 0.6s cubic-bezier(0.4,0,0.2,1), background 0.4s;
+  height: 0%;
+}
+
+.content-col {
+  padding-left: 2.5rem;
+}
+
+/* ── COVERAGE SUMMARY ── */
+.summary-block {
+  margin-top: 2rem;
+  margin-bottom: 2.5rem;
+}
+.collapsible-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+  border-radius: var(--radius);
+  user-select: none;
+  transition: background 0.2s;
+}
+.collapsible-head:hover { background: #2c2c2e; }
+.collapsible-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.collapsible-arrow {
+  font-size: 0.9rem;
+  transition: transform 0.3s;
+  opacity: 0.6;
+}
+.collapsible-head.open .collapsible-arrow { transform: rotate(180deg); }
+.collapsible-body {
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+  max-height: 0;
+}
+.collapsible-body.open { max-height: 800px; }
+.collapsible-inner {
+  padding: 1.25rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+/* Summary table */
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.summary-table th {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 2px solid var(--border);
+}
+.summary-table td {
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.summary-table tr:last-child td { border-bottom: none; }
+.summary-table tr:hover td { background: #faf8f5; }
+.s-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+.s-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.cov-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.55rem;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.cov-strong  { background: #d4edda; color: #1a5c2a; }
+.cov-weak    { background: #f8d7da; color: #7a1a1a; }
+.rwanda-note { font-size: 0.8rem; color: var(--muted); font-style: italic; }
+
+/* ── S SECTIONS ── */
+.s-section {
+  margin-bottom: 2.5rem;
+  scroll-margin-top: 80px;
+}
+
+.s-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 1.5rem 1.5rem 1.25rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--s-color);
+  border-radius: var(--radius);
+  position: relative;
+}
+.s-big {
+  font-family: 'Fraunces', serif;
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--s-color);
+  line-height: 1;
+  flex-shrink: 0;
+  min-width: 52px;
+}
+.s-header-text {}
+.s-name {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.2rem;
+}
+.s-sub {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+.s-coverage-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.rhfa-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.65rem;
+  border-radius: 20px;
+  border: 1.5px solid currentColor;
+}
+.rhfa-strong { color: #1a5c2a; background: #d4edda; }
+.rhfa-weak   { color: #7a1a1a; background: #f8d7da; }
+.supplement-note {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ── QUESTION ROWS ── */
+.questions-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.q-row {
+  display: grid;
+  grid-template-columns: 24px 1fr 1fr auto;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.q-row:last-child { border-bottom: none; }
+.q-row:hover { background: #faf8f5; }
+.q-row.is-extra { display: none; }
+.q-row.is-extra.visible { display: grid; }
+
+.q-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--s-color);
+  padding: 1rem 0 1rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 1.05rem;
+  opacity: 0.7;
+}
+.q-question {
+  padding: 0.9rem 0.75rem;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.q-answer {
+  padding: 0.9rem 0.75rem;
+  font-size: 0.82rem;
+  color: #4a5568;
+  line-height: 1.55;
+  border-left: 1px solid var(--border);
+  font-style: italic;
+}
+.q-source {
+  padding: 0.9rem 0.75rem 0.9rem 0;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 1rem;
+}
+
+.source-tag {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.5rem;
+  border-radius: 20px;
+  white-space: nowrap;
+  border: 1.5px solid;
+}
+.src-rhfa   { color: #1a5c2a; border-color: #1a5c2a; background: #f0faf4; }
+.src-saf    { color: #7a3a1e; border-color: #7a3a1e; background: #fdf3ef; }
+.src-who    { color: #1a3a5c; border-color: #1a3a5c; background: #eff4fb; }
+.src-bna    { color: #5c3a00; border-color: #5c3a00; background: #fdf7ef; }
+.src-swot   { color: #4a2d7a; border-color: #4a2d7a; background: #f5f0fb; }
+
+/* Column headers */
+.q-header {
+  display: grid;
+  grid-template-columns: 24px 1fr 1fr auto;
+  gap: 0;
+  background: #f2f0eb;
+  border-bottom: 1px solid var(--border);
+  padding: 0;
+}
+.q-header-cell {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0.5rem 0.75rem;
+}
+.q-header-cell:first-child { padding-left: 1rem; }
+.q-header-cell:last-child { padding-right: 0.75rem; white-space: nowrap; }
+
+/* Show more button */
+.show-more-row {
+  padding: 0.75rem 1rem;
+  background: #faf8f5;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+}
+.show-more-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--s-color);
+  background: none;
+  border: 1.5px solid var(--s-color);
+  padding: 0.4rem 1.2rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+}
+.show-more-btn:hover { background: var(--s-color); color: white; }
+
+/* Supplement divider within expanded section */
+.q-supplement-divider {
+  display: none;
+  grid-column: 1 / -1;
+  padding: 0.45rem 1rem;
+  background: #f5f2ec;
+  border-top: 1px dashed var(--border);
+  border-bottom: 1px dashed var(--border);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.q-supplement-divider.visible { display: block; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.35);
+  text-align: center;
+  padding: 1.25rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .q-row, .q-header {
+    grid-template-columns: 20px 1fr auto;
+  }
+  .q-answer, .q-header-cell:nth-child(3) { display: none; }
+  .spine { display: none; }
+  .content-col { padding-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ STICKY NAV ══ -->
+<nav class="top-nav" id="top-nav">
+  <div class="nav-logo">RHFA · RMNCAH</div>
+  <a href="#s1" class="nav-s-btn active" style="--btn-color:var(--s1)" data-s="s1">
+    <span class="nav-s-num">S1</span>
+    <span class="nav-s-word">Staff</span>
+  </a>
+  <a href="#s2" class="nav-s-btn" style="--btn-color:var(--s2)" data-s="s2">
+    <span class="nav-s-num">S2</span>
+    <span class="nav-s-word">Stuff</span>
+  </a>
+  <a href="#s3" class="nav-s-btn" style="--btn-color:var(--s3)" data-s="s3">
+    <span class="nav-s-num">S3</span>
+    <span class="nav-s-word">Space</span>
+  </a>
+  <a href="#s4" class="nav-s-btn" style="--btn-color:var(--s4)" data-s="s4">
+    <span class="nav-s-num">S4</span>
+    <span class="nav-s-word">Systems</span>
+  </a>
+  <a href="#s5" class="nav-s-btn" style="--btn-color:var(--s5)" data-s="s5">
+    <span class="nav-s-num">S5</span>
+    <span class="nav-s-word">Social Support</span>
+  </a>
+</nav>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <div class="header-inner">
+    <div class="header-eyebrow">Partners in Health · RMNCAH Landscape Assessment</div>
+    <h1>RHFA <em>through the</em><br>5-S Lens</h1>
+    <p class="header-sub">A Rapid Health Facility Assessment for maternal and child health — organized around the 5 Ss. Where RHFA is weak, tools from SAF, WHO Building Blocks, BNA, and SWOT fill the gap. Sample answers drawn from PIH Rwanda.</p>
+  </div>
+</header>
+
+<!-- ══ MAIN ══ -->
+<div class="page-body">
+  <div class="spine"><div class="spine-fill" id="spine-fill"></div></div>
+  <div class="content-col">
+
+    <!-- LEGEND -->
+    <div style="margin-top:1.75rem; margin-bottom:0; padding:0.9rem 1.25rem; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); display:flex; flex-wrap:wrap; gap:0.6rem 1.25rem; align-items:center;">
+      <span style="font-size:0.62rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-right:0.25rem; white-space:nowrap;">Source Key</span>
+      <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;"><span class="source-tag src-rhfa" style="font-size:0.6rem;">RHFA</span> Rapid Health Facility Assessment</span>
+      <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;"><span class="source-tag src-saf" style="font-size:0.6rem;">SAF</span> Situational Analysis Framework</span>
+      <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;"><span class="source-tag src-who" style="font-size:0.6rem;">WHO</span> WHO Health Systems Building Blocks</span>
+      <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;"><span class="source-tag src-bna" style="font-size:0.6rem;">BNA</span> Bottleneck Analysis (Tanahashi Model)</span>
+      <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;"><span class="source-tag src-swot" style="font-size:0.6rem;">SWOT</span> SWOT-Based Participatory Assessment</span>
+    </div>
+
+    <!-- COVERAGE SUMMARY -->
+    <div class="summary-block">
+      <div class="collapsible-head open" onclick="toggleCollapsible(this)" id="summary-head">
+        <span class="collapsible-title">Coverage Summary — RHFA across the 5 Ss</span>
+        <span class="collapsible-arrow">▼</span>
+      </div>
+      <div class="collapsible-body open" id="summary-body">
+        <div class="collapsible-inner">
+          <table class="summary-table">
+            <thead>
+              <tr>
+                <th>S</th>
+                <th>RHFA Coverage</th>
+                <th>Primary Supplement(s)</th>
+                <th>Rwanda Snapshot</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="s-chip"><span class="s-dot" style="background:var(--s1)"></span>S1 — Staff</span></td>
+                <td><span class="cov-badge cov-strong">Strong</span></td>
+                <td style="color:var(--muted);font-style:italic;">Not needed</td>
+                <td class="rwanda-note">62% of staff under 2 years in role; BEmONC certified but last training 14 months ago</td>
+              </tr>
+              <tr>
+                <td><span class="s-chip"><span class="s-dot" style="background:var(--s2)"></span>S2 — Stuff</span></td>
+                <td><span class="cov-badge cov-strong">Strong</span></td>
+                <td style="color:var(--muted);font-style:italic;">Not needed</td>
+                <td class="rwanda-note">Generally stocked; chlorhexidine and oral pills currently out; zinc stocked out 11 days</td>
+              </tr>
+              <tr>
+                <td><span class="s-chip"><span class="s-dot" style="background:var(--s3)"></span>S3 — Space</span></td>
+                <td><span class="cov-badge cov-strong">Strong</span></td>
+                <td style="color:var(--muted);font-style:italic;">Not needed</td>
+                <td class="rwanda-note">Physical space adequate; radiant warmer non-functional, water intermittent</td>
+              </tr>
+              <tr>
+                <td><span class="s-chip"><span class="s-dot" style="background:var(--s4)"></span>S4 — Systems</span></td>
+                <td><span class="cov-badge cov-weak">Weak</span></td>
+                <td>WHO Building Blocks (primary) &amp; SAF (QI, death reviews)</td>
+                <td class="rwanda-note">Strong MoH integration; data quality and partograph use need work</td>
+              </tr>
+              <tr>
+                <td><span class="s-chip"><span class="s-dot" style="background:var(--s5)"></span>S5 — Social Support</span></td>
+                <td><span class="cov-badge cov-weak">Weak</span></td>
+                <td>SWOT Participatory (primary) &amp; BNA (demand-side quantification)</td>
+                <td class="rwanda-note">Very high facility delivery rate (94%); adolescent access and TBA preference are gaps</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ S1 — STAFF ══ -->
+    <section class="s-section" id="s1" style="--s-color:var(--s1)">
+      <div class="s-header">
+        <div class="s-big">S1</div>
+        <div class="s-header-text">
+          <div class="s-name">Staff</div>
+          <div class="s-sub">Who is doing the work — workforce presence, training, competency &amp; supervision</div>
+          <div class="s-coverage-row">
+            <span class="rhfa-badge rhfa-strong">RHFA: Strong</span>
+          </div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <div class="q-header">
+          <div class="q-header-cell">#</div>
+          <div class="q-header-cell">Assessment Question</div>
+          <div class="q-header-cell">Sample Answer — PIH Rwanda</div>
+          <div class="q-header-cell">Source</div>
+        </div>
+        <!-- core 3 -->
+        <div class="q-row">
+          <div class="q-num">1</div>
+          <div class="q-question">How many nurses/midwives are rostered for this facility? How many were present yesterday?</div>
+          <div class="q-answer">8 rostered; 6 present (2 on leave)</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">2</div>
+          <div class="q-question">Is at least one staff member trained in Basic Emergency Obstetric &amp; Newborn Care (BEmONC)?</div>
+          <div class="q-answer">Yes — 3 staff certified; last training 14 months ago</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">3</div>
+          <div class="q-question">Is at least one staff member trained in Integrated Management of Childhood Illness (IMCI)?</div>
+          <div class="q-answer">Yes — 2 nurses certified</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <!-- extra rows -->
+        <div class="q-row is-extra" data-group="s1">
+          <div class="q-num">4</div>
+          <div class="q-question">Has any staff received PMTCT training in the last 2 years?</div>
+          <div class="q-answer">Yes — 4 of 8 staff trained</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s1">
+          <div class="q-num">5</div>
+          <div class="q-question">Is a clinical supervisor present at least once per week?</div>
+          <div class="q-answer">Yes — district clinical supervisor visits Tuesdays</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s1">
+          <div class="q-num">6</div>
+          <div class="q-question">Is there a written staff duty roster posted?</div>
+          <div class="q-answer">Yes — posted in nurses' station</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-supplement-divider is-extra" data-group="s1">Possible Supplements — not required when RHFA is used; include if deeper workforce analysis is needed</div>
+        <div class="q-row is-extra" data-group="s1">
+          <div class="q-num">7</div>
+          <div class="q-question">What is the staff turnover rate in the past 12 months?</div>
+          <div class="q-answer">3 of 8 staff replaced; 2 current staff have been here under 6 months</div>
+          <div class="q-source"><span class="source-tag src-saf">SAF</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s1">
+          <div class="q-num">8</div>
+          <div class="q-question">Are CHWs formally linked to this facility and receiving regular supervision?</div>
+          <div class="q-answer">Yes — 12 Abaganashobakazi CHWs linked; monthly supervision meetings held</div>
+          <div class="q-source"><span class="source-tag src-saf">SAF</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s1">
+          <div class="q-num">9</div>
+          <div class="q-question">What proportion of the workforce has been in their current role for less than 2 years?</div>
+          <div class="q-answer">5 of 8 staff (62%) — including the facility in-charge</div>
+          <div class="q-source"><span class="source-tag src-who">WHO</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s1">
+          <div class="q-num">10</div>
+          <div class="q-question">Are there documented performance reviews or competency assessments for clinical staff?</div>
+          <div class="q-answer">No formal competency assessment tool in use; informal supervision only</div>
+          <div class="q-source"><span class="source-tag src-who">WHO</span></div>
+        </div>
+        <div class="show-more-row">
+          <button class="show-more-btn" onclick="toggleExtra(this,'s1')" style="--s-color:var(--s1)">Show 7 more questions ↓</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ S2 — STUFF ══ -->
+    <section class="s-section" id="s2" style="--s-color:var(--s2)">
+      <div class="s-header">
+        <div class="s-big">S2</div>
+        <div class="s-header-text">
+          <div class="s-name">Stuff</div>
+          <div class="s-sub">Medicines, vaccines, equipment &amp; supplies — availability and supply chain reliability</div>
+          <div class="s-coverage-row">
+            <span class="rhfa-badge rhfa-strong">RHFA: Strong</span>
+          </div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <div class="q-header">
+          <div class="q-header-cell">#</div>
+          <div class="q-header-cell">Assessment Question</div>
+          <div class="q-header-cell">Sample Answer — PIH Rwanda</div>
+          <div class="q-header-cell">Source</div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">1</div>
+          <div class="q-question">Is oxytocin in stock today? Was there a stockout in the last 3 months?</div>
+          <div class="q-answer">In stock today; one 4-day stockout 6 weeks ago</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">2</div>
+          <div class="q-question">Is a neonatal bag-mask resuscitator present and functional?</div>
+          <div class="q-answer">Yes — 1 present, functional, clean</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">3</div>
+          <div class="q-question">Are BCG, polio, pentavalent, and measles vaccines in stock with a functional cold chain?</div>
+          <div class="q-answer">Yes — all EPI vaccines in stock; solar refrigerator functional</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s2">
+          <div class="q-num">4</div>
+          <div class="q-question">Is magnesium sulfate (MgSO4) in stock today?</div>
+          <div class="q-answer">Yes — 12 vials available</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s2">
+          <div class="q-num">5</div>
+          <div class="q-question">Is misoprostol in stock today?</div>
+          <div class="q-answer">Yes</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s2">
+          <div class="q-num">6</div>
+          <div class="q-question">Are IV fluids available?</div>
+          <div class="q-answer">Yes — Ringer's lactate, 8 bags</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s2">
+          <div class="q-num">7</div>
+          <div class="q-question">Are ORS and zinc available for diarrhea management?</div>
+          <div class="q-answer">ORS in stock; zinc stocked out for 11 days</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s2">
+          <div class="q-num">8</div>
+          <div class="q-question">Is chlorhexidine 7.1% available for newborn cord care?</div>
+          <div class="q-answer">No — stocked out; staff using alcohol swabs as substitute</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s2">
+          <div class="q-num">9</div>
+          <div class="q-question">Are at least 2 modern contraceptive methods available today?</div>
+          <div class="q-answer">Yes — injectable (Depo) and implants available; oral pills currently stocked out</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-supplement-divider is-extra" data-group="s2">Possible Supplements — not required when RHFA is used; include if supply chain system analysis is needed</div>
+        <div class="q-row is-extra" data-group="s2">
+          <div class="q-num">10</div>
+          <div class="q-question">How frequently do stockouts occur across tracer medicines, and what is the average duration?</div>
+          <div class="q-answer">Average 2–3 stockouts/quarter; average duration 5–9 days</div>
+          <div class="q-source"><span class="source-tag src-saf">SAF</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s2">
+          <div class="q-num">11</div>
+          <div class="q-question">Is there a functioning commodity forecasting and resupply process at district level?</div>
+          <div class="q-answer">Partially — monthly reports submitted to district pharmacy but resupply lag averages 2 weeks</div>
+          <div class="q-source"><span class="source-tag src-who">WHO</span></div>
+        </div>
+        <div class="show-more-row">
+          <button class="show-more-btn" onclick="toggleExtra(this,'s2')" style="--s-color:var(--s2)">Show 8 more questions ↓</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ S3 — SPACE ══ -->
+    <section class="s-section" id="s3" style="--s-color:var(--s3)">
+      <div class="s-header">
+        <div class="s-big">S3</div>
+        <div class="s-header-text">
+          <div class="s-name">Space</div>
+          <div class="s-sub">Physical infrastructure, utilities &amp; geographic access to care</div>
+          <div class="s-coverage-row">
+            <span class="rhfa-badge rhfa-strong">RHFA: Strong</span>
+          </div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <div class="q-header">
+          <div class="q-header-cell">#</div>
+          <div class="q-header-cell">Assessment Question</div>
+          <div class="q-header-cell">Sample Answer — PIH Rwanda</div>
+          <div class="q-header-cell">Source</div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">1</div>
+          <div class="q-question">Is there a dedicated, private space for antenatal care consultations?</div>
+          <div class="q-answer">Yes — dedicated room with door; curtain present</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">2</div>
+          <div class="q-question">Is there a functional delivery room with a clean delivery bed?</div>
+          <div class="q-answer">Yes — 2 delivery beds; 1 mattress cover torn</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">3</div>
+          <div class="q-question">Is clean running water available at the point of care (delivery room, ANC room)?</div>
+          <div class="q-answer">Intermittent — piped water unreliable; tippy tap at delivery room entrance</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s3">
+          <div class="q-num">4</div>
+          <div class="q-question">Is there a designated newborn care area with a resuscitation surface and warmth source?</div>
+          <div class="q-answer">Yes — resuscitation table present; radiant warmer non-functional (awaiting part)</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s3">
+          <div class="q-num">5</div>
+          <div class="q-question">Is there reliable electricity in the delivery room?</div>
+          <div class="q-answer">Yes — solar backup; grid power available most days</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s3">
+          <div class="q-num">6</div>
+          <div class="q-question">Are functional, clean latrines available for patients?</div>
+          <div class="q-answer">Yes — 2 latrines; 1 non-functional</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s3">
+          <div class="q-num">7</div>
+          <div class="q-question">Is there a functional sterilization/autoclave area?</div>
+          <div class="q-answer">Yes — autoclave functional; last serviced 4 months ago</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-supplement-divider is-extra" data-group="s3">Possible Supplements — not required when RHFA is used; include if geographic &amp; community access analysis is needed</div>
+        <div class="q-row is-extra" data-group="s3">
+          <div class="q-num">8</div>
+          <div class="q-question">What is the average travel time from the furthest community in the catchment area?</div>
+          <div class="q-answer">~90 min on foot from most distant village; motorcycle taxi available but costly</div>
+          <div class="q-source"><span class="source-tag src-bna">BNA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s3">
+          <div class="q-num">9</div>
+          <div class="q-question">What proportion of women cite transport cost or distance as a barrier to facility delivery?</div>
+          <div class="q-answer">~35% in most recent community survey (PIH/MoH 2023 data)</div>
+          <div class="q-source"><span class="source-tag src-bna">BNA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s3">
+          <div class="q-num">10</div>
+          <div class="q-question">Are there seasonal access barriers (flooding, road conditions) that affect facility reach?</div>
+          <div class="q-answer">Yes — one road to a northern village impassable during rainy season (March–May)</div>
+          <div class="q-source"><span class="source-tag src-swot">SWOT</span></div>
+        </div>
+        <div class="show-more-row">
+          <button class="show-more-btn" onclick="toggleExtra(this,'s3')" style="--s-color:var(--s3)">Show 7 more questions ↓</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ S4 — SYSTEMS ══ -->
+    <section class="s-section" id="s4" style="--s-color:var(--s4)">
+      <div class="s-header">
+        <div class="s-big">S4</div>
+        <div class="s-header-text">
+          <div class="s-name">Systems</div>
+          <div class="s-sub">Clinical protocols, data systems, governance, financing &amp; MoH coordination</div>
+          <div class="s-coverage-row">
+            <span class="rhfa-badge rhfa-weak">RHFA: Weak</span>
+            <span class="supplement-note">Heavily supplemented — WHO Building Blocks (primary) &amp; SAF (QI, death reviews)</span>
+          </div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <div class="q-header">
+          <div class="q-header-cell">#</div>
+          <div class="q-header-cell">Assessment Question</div>
+          <div class="q-header-cell">Sample Answer — PIH Rwanda</div>
+          <div class="q-header-cell">Source</div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">1</div>
+          <div class="q-question">Are national ANC and delivery clinical guidelines posted and visible in care areas?</div>
+          <div class="q-answer">Yes — Rwanda MoH protocols posted in ANC room and delivery room</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">2</div>
+          <div class="q-question">Are partograph forms available and being used for labor monitoring?</div>
+          <div class="q-answer">Available — used inconsistently; ~60% of delivery records reviewed had completed partographs</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">3</div>
+          <div class="q-question">Is HMIS data submitted to the district on time every month?</div>
+          <div class="q-answer">Yes — submitted on time 10 of last 12 months</div>
+          <div class="q-source"><span class="source-tag src-who">WHO</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s4">
+          <div class="q-num">4</div>
+          <div class="q-question">Are ANC, delivery, and immunization registers complete and up to date?</div>
+          <div class="q-answer">ANC and immunization registers complete; delivery register has gaps in outcome column</div>
+          <div class="q-source"><span class="source-tag src-rhfa">RHFA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s4">
+          <div class="q-num">5</div>
+          <div class="q-question">Are data used locally — is there a displayed data board showing monthly trends?</div>
+          <div class="q-answer">Yes — PIH-supported data wall present; updated monthly by data clerk</div>
+          <div class="q-source"><span class="source-tag src-who">WHO</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s4">
+          <div class="q-num">6</div>
+          <div class="q-question">Is there a functioning referral system to a higher-level facility for obstetric emergencies?</div>
+          <div class="q-answer">Yes — Kirehe District Hospital is referral point; ambulance available but fuel supply inconsistent</div>
+          <div class="q-source"><span class="source-tag src-who">WHO</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s4">
+          <div class="q-num">7</div>
+          <div class="q-question">Is there a current national/district RMNCAH policy or strategy in force?</div>
+          <div class="q-answer">Yes — Rwanda RMNCAH Strategic Plan 2024–2028 in place</div>
+          <div class="q-source"><span class="source-tag src-who">WHO</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s4">
+          <div class="q-num">8</div>
+          <div class="q-question">Is there a formal MoH–PIH coordination mechanism at district or national level?</div>
+          <div class="q-answer">Yes — PIH embedded in MoH structures; joint district health management team meetings monthly</div>
+          <div class="q-source"><span class="source-tag src-who">WHO</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s4">
+          <div class="q-num">9</div>
+          <div class="q-question">Is there a QI team or improvement process at this facility?</div>
+          <div class="q-answer">Yes — PIH-supported QI committee meets monthly; currently working on partograph completion rates</div>
+          <div class="q-source"><span class="source-tag src-saf">SAF</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s4">
+          <div class="q-num">10</div>
+          <div class="q-question">Is there a maternal and perinatal death review process in place?</div>
+          <div class="q-answer">Yes — mandatory in Rwanda; reviews conducted but documentation incomplete in 2 of last 6 cases</div>
+          <div class="q-source"><span class="source-tag src-saf">SAF</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s4">
+          <div class="q-num">11</div>
+          <div class="q-question">Are health worker salaries paid on time and in full?</div>
+          <div class="q-answer">Government &amp; PIH-contracted staff: on time. CHW stipends: 1–2 month delays common</div>
+          <div class="q-source"><span class="source-tag src-who">WHO</span></div>
+        </div>
+        <div class="show-more-row">
+          <button class="show-more-btn" onclick="toggleExtra(this,'s4')" style="--s-color:var(--s4)">Show 8 more questions ↓</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ S5 — SOCIAL SUPPORT ══ -->
+    <section class="s-section" id="s5" style="--s-color:var(--s5)">
+      <div class="s-header">
+        <div class="s-big">S5</div>
+        <div class="s-header-text">
+          <div class="s-name">Social Support</div>
+          <div class="s-sub">Community voice, social norms, demand-side barriers &amp; accompaniment context</div>
+          <div class="s-coverage-row">
+            <span class="rhfa-badge rhfa-weak">RHFA: Weak</span>
+            <span class="supplement-note">Heavily supplemented — SWOT Participatory (primary) &amp; BNA (demand-side quantification)</span>
+          </div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <div class="q-header">
+          <div class="q-header-cell">#</div>
+          <div class="q-header-cell">Assessment Question</div>
+          <div class="q-header-cell">Sample Answer — PIH Rwanda</div>
+          <div class="q-header-cell">Source</div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">1</div>
+          <div class="q-question">What proportion of women in this catchment area delivered at a health facility last year?</div>
+          <div class="q-answer">94% facility delivery rate (consistent with Rwanda national average)</div>
+          <div class="q-source"><span class="source-tag src-bna">BNA</span></div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">2</div>
+          <div class="q-question">What are the most common reasons women give for not attending ANC or delivering at a facility?</div>
+          <div class="q-answer">Cost of transport, fear of C-section, preference for traditional birth attendant among older women</div>
+          <div class="q-source"><span class="source-tag src-bna">BNA</span></div>
+        </div>
+        <div class="q-row">
+          <div class="q-num">3</div>
+          <div class="q-question">What community-level strengths support maternal health in this catchment area?</div>
+          <div class="q-answer">Strong CHW network; active ubudehe savings groups; high community trust in PIH built over 20 years</div>
+          <div class="q-source"><span class="source-tag src-swot">SWOT</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s5">
+          <div class="q-num">4</div>
+          <div class="q-question">At what point in pregnancy do women typically first seek ANC in this community?</div>
+          <div class="q-answer">Median first ANC at 16–18 weeks; Rwanda target is before 12 weeks — gap identified</div>
+          <div class="q-source"><span class="source-tag src-bna">BNA</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s5">
+          <div class="q-num">5</div>
+          <div class="q-question">Are male partners, mothers-in-law, or community leaders supportive of facility delivery?</div>
+          <div class="q-answer">Generally supportive; male engagement program active through Abaganashobakazi CHW network</div>
+          <div class="q-source"><span class="source-tag src-swot">SWOT</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s5">
+          <div class="q-num">6</div>
+          <div class="q-question">What social or cultural norms create barriers to accessing maternity care in this community?</div>
+          <div class="q-answer">Some women prefer TBAs in remote villages; adolescent girls face stigma around unmarried pregnancy and delay seeking ANC</div>
+          <div class="q-source"><span class="source-tag src-swot">SWOT</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s5">
+          <div class="q-num">7</div>
+          <div class="q-question">Are there community groups that support women in accessing care?</div>
+          <div class="q-answer">Yes — maternity waiting home at facility; PIH-supported women's groups in 3 villages; birth companion program active</div>
+          <div class="q-source"><span class="source-tag src-swot">SWOT</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s5">
+          <div class="q-num">8</div>
+          <div class="q-question">Is there a formal community health committee linked to this facility? Is it active?</div>
+          <div class="q-answer">Yes — meets quarterly; includes community and local government representatives</div>
+          <div class="q-source"><span class="source-tag src-saf">SAF</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s5">
+          <div class="q-num">9</div>
+          <div class="q-question">What external threats currently affect this community's access to care?</div>
+          <div class="q-answer">Eastern DRC instability creates periodic displacement into catchment; some CHW outmigration to Kigali for economic reasons</div>
+          <div class="q-source"><span class="source-tag src-swot">SWOT</span></div>
+        </div>
+        <div class="q-row is-extra" data-group="s5">
+          <div class="q-num">10</div>
+          <div class="q-question">What opportunities exist to strengthen community-level RMNCAH support?</div>
+          <div class="q-answer">GFF co-investment active in Rwanda; new PIH nursing leadership cohort includes local supervisors; district government increasing RMNCAH budget</div>
+          <div class="q-source"><span class="source-tag src-swot">SWOT</span></div>
+        </div>
+        <div class="show-more-row">
+          <button class="show-more-btn" onclick="toggleExtra(this,'s5')" style="--s-color:var(--s5)">Show 7 more questions ↓</button>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /content-col -->
+</div><!-- /page-body -->
+
+<footer>
+  PIH Rwanda · RMNCAH Landscape Assessment · RHFA + 5-S Framework · June 2026
+</footer>
+
+<script>
+// ── COLLAPSIBLE SUMMARY ──
+function toggleCollapsible(head) {
+  const body = document.getElementById('summary-body');
+  head.classList.toggle('open');
+  body.classList.toggle('open');
+}
+// init open
+document.getElementById('summary-body').classList.add('open');
+document.getElementById('summary-head').classList.add('open');
+
+// ── SHOW MORE / LESS ──
+function toggleExtra(btn, group) {
+  const rows = document.querySelectorAll(`.q-row.is-extra[data-group="${group}"]`);
+  const dividers = document.querySelectorAll(`.q-supplement-divider.is-extra[data-group="${group}"]`);
+  const isOpen = btn.dataset.open === '1';
+  rows.forEach(r => r.classList.toggle('visible', !isOpen));
+  dividers.forEach(d => d.classList.toggle('visible', !isOpen));
+  btn.dataset.open = isOpen ? '0' : '1';
+  const count = rows.length;
+  btn.textContent = isOpen
+    ? `Show ${count} more questions ↓`
+    : `Hide extra questions ↑`;
+}
+
+// ── SPINE SCROLL PROGRESS ──
+const spineFill = document.getElementById('spine-fill');
+const sections = ['s1','s2','s3','s4','s5'];
+const sColors = { s1:'var(--s1)', s2:'var(--s2)', s3:'var(--s3)', s4:'var(--s4)', s5:'var(--s5)' };
+
+function updateSpine() {
+  const body = document.querySelector('.page-body');
+  const bodyTop = body.getBoundingClientRect().top + window.scrollY;
+  const bodyH = body.offsetHeight;
+  const scrolled = window.scrollY + window.innerHeight * 0.5 - bodyTop;
+  const pct = Math.min(100, Math.max(0, (scrolled / bodyH) * 100));
+  spineFill.style.height = pct + '%';
+
+  // which section is in view
+  let activeS = 's1';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.5) activeS = id;
+  });
+  spineFill.style.background = sColors[activeS];
+  document.documentElement.style.setProperty('--active-s', sColors[activeS]);
+
+  // nav active state
+  document.querySelectorAll('.nav-s-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.s === activeS);
+  });
+}
+
+window.addEventListener('scroll', updateSpine, { passive: true });
+updateSpine();
+</script>
+</body>
+</html>
