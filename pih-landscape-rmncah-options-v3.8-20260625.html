@@ -1,0 +1,2678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RMNCAH Landscape Assessment — Framework Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #1c1c1e;
+  --paper:    #f7f5f0;
+  --muted:    #8a8880;
+  --border:   #e0ddd8;
+  --card:     #ffffff;
+  --s1: #2a6049;
+  --s2: #1a4a7a;
+  --s3: #7a3a1e;
+  --s4: #4a2d7a;
+  --s5: #b84c2e;
+  --spine-w: 6px;
+  --active-s: var(--s1);
+  --radius: 3px;
+  --v-color: #1a4a7a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: var(--paper); color: var(--ink); font-size: 15px; line-height: 1.6; }
+
+/* ── VERSION SWITCHER BAR ── */
+.version-bar {
+  position: sticky; top: 0; z-index: 300;
+  background: var(--ink);
+  padding: 0.9rem 1.5rem 0;
+}
+.version-bar-inner { max-width: 860px; margin: 0 auto; }
+.version-bar-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem; font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.6rem;
+}
+.version-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.version-tab {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem; font-weight: 600;
+  padding: 0.55rem 1rem;
+  background: rgba(255,255,255,0.06);
+  border: none; border-radius: 4px 4px 0 0;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer; transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+}
+.version-tab:hover { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.9); }
+.version-tab.active {
+  background: var(--paper);
+  color: var(--ink);
+  border-bottom-color: var(--tab-color);
+}
+.version-tab-tag {
+  display: block;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-top: 0.1rem;
+}
+
+/* ── SUB NAV (S buttons) ── */
+.top-nav {
+  position: sticky; top: 48px; z-index: 200;
+  background: #2c2c2e;
+  padding: 0 1.5rem;
+  display: flex; align-items: stretch; gap: 0;
+  overflow-x: auto; scrollbar-width: none;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+.top-nav::-webkit-scrollbar { display: none; }
+.nav-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 0.78rem; font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.04em; white-space: nowrap;
+  display: flex; align-items: center;
+  padding-right: 1.25rem;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  margin-right: 0.5rem;
+}
+.nav-s-btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0.6rem 1rem; border: none; background: transparent; cursor: pointer;
+  border-bottom: 3px solid transparent; transition: all 0.2s; gap: 0.1rem;
+  min-width: 76px; text-decoration: none;
+}
+.nav-s-btn:hover { background: rgba(255,255,255,0.06); }
+.nav-s-btn.active { border-bottom-color: var(--btn-color); }
+.nav-s-num { font-size: 0.56rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); transition: color 0.2s; }
+.nav-s-word { font-family: 'Fraunces', serif; font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.75); transition: color 0.2s; }
+.nav-s-btn.active .nav-s-num  { color: var(--btn-color); }
+.nav-s-btn.active .nav-s-word { color: #fff; }
+
+/* ── HEADER ── */
+header {
+  background: var(--ink); color: var(--paper);
+  padding: 2.75rem 2rem 2.5rem;
+  position: relative; overflow: hidden;
+}
+header::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: var(--spine-w);
+  background: linear-gradient(90deg, var(--s1) 0%, var(--s2) 25%, var(--s3) 50%, var(--s4) 75%, var(--s5) 100%);
+}
+.header-inner { max-width: 860px; margin: 0 auto; }
+.header-eyebrow { font-size: 0.66rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.6rem; }
+header h1 { font-family: 'Fraunces', serif; font-size: clamp(1.7rem, 4.2vw, 2.6rem); font-weight: 900; line-height: 1.12; margin-bottom: 0.6rem; }
+header h1 em { font-style: italic; font-weight: 300; color: rgba(255,255,255,0.55); }
+.header-sub { font-size: 0.88rem; color: rgba(255,255,255,0.55); max-width: 600px; line-height: 1.6; }
+.header-verdict {
+  margin-top: 0.9rem; padding: 0.55rem 0.9rem;
+  background: rgba(255,255,255,0.07); border-left: 3px solid var(--tab-color, var(--s5));
+  border-radius: 2px; font-size: 0.8rem; color: rgba(255,255,255,0.75); max-width: 600px;
+}
+.header-verdict strong { color: #fff; }
+
+/* ── MAIN LAYOUT ── */
+.page-body { max-width: 860px; margin: 0 auto; padding: 0 1.5rem 5rem; position: relative; }
+.spine { position: absolute; left: 1.5rem; top: 0; bottom: 0; width: var(--spine-w); background: var(--border); border-radius: 3px; overflow: hidden; pointer-events: none; }
+.spine-fill { position: absolute; top: 0; left: 0; right: 0; background: var(--active-s); transition: height 0.6s cubic-bezier(0.4,0,0.2,1), background 0.4s; height: 0%; }
+.content-col { padding-left: 2.5rem; }
+
+/* ── LEGEND ── */
+.legend-box {
+  margin-top: 1.75rem; padding: 0.9rem 1.25rem;
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  display: flex; flex-wrap: wrap; gap: 0.6rem 1.25rem; align-items: center;
+}
+.legend-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-right: 0.25rem; white-space: nowrap; }
+
+/* ── COVERAGE SUMMARY ── */
+.summary-block { margin-top: 1.25rem; margin-bottom: 2.5rem; }
+.collapsible-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 1.25rem; background: var(--ink); color: var(--paper);
+  cursor: pointer; border-radius: var(--radius); user-select: none; transition: background 0.2s;
+}
+.collapsible-head:hover { background: #2c2c2e; }
+.collapsible-title { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; }
+.collapsible-arrow { font-size: 0.9rem; transition: transform 0.3s; opacity: 0.6; }
+.collapsible-head.open .collapsible-arrow { transform: rotate(180deg); }
+.collapsible-body { overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); max-height: 0; }
+.collapsible-body.open { max-height: 900px; }
+.collapsible-inner { padding: 1.25rem; background: var(--card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); }
+
+.summary-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.summary-table th { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--border); }
+.summary-table td { padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+.summary-table tr:last-child td { border-bottom: none; }
+.summary-table tr:hover td { background: #faf8f5; }
+.s-chip { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 600; font-size: 0.82rem; }
+.s-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.cov-badge { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.18rem 0.55rem; border-radius: 20px; white-space: nowrap; }
+.cov-strong  { background: #d4edda; color: #1a5c2a; }
+.cov-partial { background: #fff3cd; color: #7a5800; }
+.cov-weak    { background: #f8d7da; color: #7a1a1a; }
+.rwanda-note { font-size: 0.8rem; color: var(--muted); font-style: italic; }
+
+/* ── VERSION SUMMARY PANEL ── */
+.version-summary {
+  background: var(--card); border: 1px solid var(--border); border-left: 5px solid var(--tab-color);
+  border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-top: 1.25rem; margin-bottom: 0;
+}
+.version-summary-title { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.4rem; }
+.version-summary-text { font-size: 0.87rem; color: var(--muted); margin-bottom: 0.75rem; }
+.version-pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.82rem; }
+@media (max-width: 600px) { .version-pros-cons { grid-template-columns: 1fr; } }
+.vpc-col-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.35rem; }
+.vpc-list { list-style: none; }
+.vpc-list li { padding: 0.2rem 0 0.2rem 1rem; position: relative; color: var(--ink); }
+.vpc-list.pro li::before { content: '+'; position: absolute; left: 0; color: #1a5c2a; font-weight: 700; }
+.vpc-list.con li::before { content: '–'; position: absolute; left: 0; color: #7a1a1a; font-weight: 700; }
+.best-for { margin-top: 0.75rem; font-size: 0.82rem; color: var(--ink); padding-top: 0.6rem; border-top: 1px dashed var(--border); }
+.best-for strong { color: var(--tab-color); }
+
+/* ── S SECTIONS ── */
+.s-section { margin-bottom: 2.5rem; scroll-margin-top: 110px; }
+.s-header {
+  display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem;
+  padding: 1.5rem 1.5rem 1.25rem; background: var(--card); border: 1px solid var(--border);
+  border-left: 5px solid var(--s-color); border-radius: var(--radius); position: relative;
+}
+.s-big { font-family: 'Fraunces', serif; font-size: 3rem; font-weight: 900; color: var(--s-color); line-height: 1; flex-shrink: 0; min-width: 52px; }
+.s-name { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 700; line-height: 1.15; margin-bottom: 0.2rem; }
+.s-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.6rem; }
+.s-coverage-row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.cov-tag-badge { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.65rem; border-radius: 20px; border: 1.5px solid currentColor; }
+.cov-tag-strong  { color: #1a5c2a; background: #d4edda; }
+.cov-tag-partial { color: #7a5800; background: #fff3cd; }
+.cov-tag-weak    { color: #7a1a1a; background: #f8d7da; }
+.supplement-note { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+
+/* ── QUESTION ROWS ── */
+.questions-wrap { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.q-row { display: grid; grid-template-columns: 24px 1fr 1fr auto; gap: 0; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+.q-row:last-child { border-bottom: none; }
+.q-row:hover { background: #faf8f5; }
+.q-row.is-extra { display: none; }
+.q-row.is-extra.visible { display: grid; }
+.q-num { font-size: 0.65rem; font-weight: 700; color: var(--s-color); padding: 1.05rem 0 1rem 1rem; display: flex; align-items: flex-start; opacity: 0.7; }
+.q-question { padding: 0.9rem 0.75rem; font-size: 0.86rem; line-height: 1.55; color: var(--ink); }
+.q-answer { padding: 0.9rem 0.75rem; font-size: 0.82rem; color: #4a5568; line-height: 1.55; border-left: 1px solid var(--border); font-style: italic; }
+.q-source { padding: 1rem 0.75rem 0.9rem 0; display: flex; align-items: flex-start; }
+.source-tag { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; padding: 0.18rem 0.5rem; border-radius: 20px; white-space: nowrap; border: 1.5px solid; }
+.src-who    { color: #1a3a5c; border-color: #1a3a5c; background: #eff4fb; }
+.src-saf    { color: #7a3a1e; border-color: #7a3a1e; background: #fdf3ef; }
+.src-rhfa   { color: #1a5c2a; border-color: #1a5c2a; background: #f0faf4; }
+.src-bna    { color: #5c3a00; border-color: #5c3a00; background: #fdf7ef; }
+.src-swot   { color: #4a2d7a; border-color: #4a2d7a; background: #f5f0fb; }
+
+.q-header { display: grid; grid-template-columns: 24px 1fr 1fr auto; gap: 0; background: #f2f0eb; border-bottom: 1px solid var(--border); }
+.q-header-cell { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 0.5rem 0.75rem; }
+.q-header-cell:first-child { padding-left: 1rem; }
+.q-header-cell:last-child { padding-right: 0.75rem; white-space: nowrap; }
+
+.q-supplement-divider { display: none; grid-column: 1 / -1; padding: 0.45rem 1rem; background: #f5f2ec; border-top: 1px dashed var(--border); border-bottom: 1px dashed var(--border); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); }
+.q-supplement-divider.visible { display: block; }
+
+.show-more-row { padding: 0.75rem 1rem; background: #faf8f5; border-top: 1px solid var(--border); display: flex; justify-content: center; }
+.show-more-btn { font-size: 0.78rem; font-weight: 600; color: var(--s-color); background: none; border: 1.5px solid var(--s-color); padding: 0.4rem 1.2rem; border-radius: 20px; cursor: pointer; transition: all 0.2s; letter-spacing: 0.04em; }
+.show-more-btn:hover { background: var(--s-color); color: white; }
+
+/* ── EMPTY / THIN NOTE for single-framework weak sections ── */
+.thin-note {
+  margin-top: 0.75rem; padding: 0.7rem 1rem;
+  background: #fdf3ef; border: 1px dashed #c0392b; border-radius: var(--radius);
+  font-size: 0.8rem; color: #7a1a1a;
+}
+
+/* ── QUESTION TABLE & DRAWERS ── */
+.q-acc-table { width: 100%; border-collapse: collapse; }
+.q-acc-header th {
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+  padding: 0.5rem 0.75rem; text-align: left;
+  background: #f2f0eb; border-bottom: 1px solid var(--border);
+}
+.q-acc-th-num   { width: 32px; padding-left: 1rem !important; }
+.q-acc-th-source { width: 70px; }
+.q-acc-th-expand { width: 40px; }
+.q-acc-row { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+.q-acc-row:hover { background: #faf8f5; }
+.q-acc-num {
+  font-size: 0.7rem; font-weight: 700; color: var(--s-color);
+  padding: 0.85rem 0.5rem 0.85rem 1rem;
+  vertical-align: middle; opacity: 0.75; white-space: nowrap;
+}
+.q-acc-topic { padding: 0.85rem 0.75rem; vertical-align: middle; }
+.topic-plain { font-size: 0.88rem; font-weight: 600; color: var(--ink); line-height: 1.4; }
+.q-acc-source { padding: 0.85rem 0.5rem; vertical-align: middle; text-align: center; }
+.src-label {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.07em;
+  text-transform: uppercase; padding: 0.2rem 0.5rem;
+  border-radius: 20px; white-space: nowrap; border: 1.5px solid; cursor: default;
+}
+.src-label.src-who    { color: #1a3a5c; border-color: #1a3a5c; background: #eff4fb; }
+.src-label.src-rhfa   { color: #1a5c2a; border-color: #1a5c2a; background: #f0faf4; }
+.src-label.src-saf    { color: #7a3a1e; border-color: #7a3a1e; background: #fdf3ef; }
+.src-label.src-bna    { color: #5c3a00; border-color: #5c3a00; background: #fdf7ef; }
+.src-label.src-swot   { color: #4a2d7a; border-color: #4a2d7a; background: #f5f0fb; }
+.q-acc-expand { padding: 0.6rem 0.5rem; vertical-align: middle; text-align: center; }
+.expand-btn {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1.5px solid var(--s-color); background: none; color: var(--s-color);
+  font-size: 1rem; line-height: 1; cursor: pointer; font-weight: 700;
+  transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center;
+}
+.expand-btn:hover { background: var(--s-color); color: white; }
+.expand-btn.open  { background: var(--s-color); color: white; }
+.row-drawer td { padding: 0; border-bottom: 1px solid var(--border); }
+.drawer-inner {
+  display: grid; grid-template-columns: 1fr 220px;
+  background: #f9f7f3; border-top: 2px solid var(--s-color);
+}
+.drawer-left { padding: 1rem 1rem 1rem 1.25rem; border-right: 1px solid var(--border); }
+.drawer-question { font-size: 0.86rem; color: var(--ink); line-height: 1.65; margin-bottom: 0.6rem; font-style: italic; }
+.drawer-subitem  { font-size: 0.8rem; color: var(--muted); padding: 0.18rem 0 0.18rem 0.5rem; line-height: 1.5; }
+.drawer-right    { padding: 1rem; display: flex; align-items: flex-start; }
+.drawer-source-link {
+  font-size: 0.75rem; color: #1a3a5c; line-height: 1.5;
+  text-decoration: underline; word-break: break-word;
+}
+.drawer-source-link:hover { color: var(--rust); }
+
+footer { background: var(--ink); color: rgba(255,255,255,0.35); text-align: center; padding: 1.25rem; font-size: 0.68rem; letter-spacing: 0.08em; }
+
+@media (max-width: 640px) {
+  .q-row, .q-header { grid-template-columns: 20px 1fr auto; }
+  .q-answer, .q-header-cell:nth-child(3) { display: none; }
+  .spine { display: none; }
+  .content-col { padding-left: 0; }
+}
+
+/* version visibility */
+.version-panel { display: none; }
+.version-panel.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ══ VERSION SWITCHER ══ -->
+<div class="version-bar">
+  <div class="version-bar-inner">
+    <div class="version-bar-label">Compare Framework Options — click to switch</div>
+    <div class="version-tabs">
+      <button class="version-tab active" data-v="v1" onclick="switchVersion('v1', this)" style="--tab-color:#1a4a7a">Option 1<span class="version-tab-tag">WHOBB hybrid</span></button>
+      <button class="version-tab" data-v="v2" onclick="switchVersion('v2', this)" style="--tab-color:#7a3a1e">Option 2<span class="version-tab-tag">SAF hybrid</span></button>
+      <button class="version-tab" data-v="v3" onclick="switchVersion('v3', this)" style="--tab-color:#1a4a7a">Option 3<span class="version-tab-tag">WHOBB alone</span></button>
+      <button class="version-tab" data-v="v4" onclick="switchVersion('v4', this)" style="--tab-color:#4a2d7a">Option 4<span class="version-tab-tag">SWOT alone</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SUB NAV (S buttons, shared across versions) ══ -->
+<nav class="top-nav">
+  <div class="nav-logo">5-S Nav</div>
+  <a href="#s1" class="nav-s-btn active" style="--btn-color:var(--s1)" data-s="s1"><span class="nav-s-num">S1</span><span class="nav-s-word">Staff</span></a>
+  <a href="#s2" class="nav-s-btn" style="--btn-color:var(--s2)" data-s="s2"><span class="nav-s-num">S2</span><span class="nav-s-word">Stuff</span></a>
+  <a href="#s3" class="nav-s-btn" style="--btn-color:var(--s3)" data-s="s3"><span class="nav-s-num">S3</span><span class="nav-s-word">Space</span></a>
+  <a href="#s4" class="nav-s-btn" style="--btn-color:var(--s4)" data-s="s4"><span class="nav-s-num">S4</span><span class="nav-s-word">Systems</span></a>
+  <a href="#s5" class="nav-s-btn" style="--btn-color:var(--s5)" data-s="s5"><span class="nav-s-num">S5</span><span class="nav-s-word">Social Support</span></a>
+</nav>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- VERSION 1: WHO Building Blocks hybrid -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="version-panel active" id="panel-v1" style="--tab-color:#1a4a7a">
+
+<header>
+  <div class="header-inner">
+    <div class="header-eyebrow">Option 1 of 4 · Partners in Health · RMNCAH Landscape Assessment</div>
+    <h1>WHO Building Blocks <em>backbone</em></h1>
+    <p class="header-sub">Evaluates how strong the RMNCAH system is in each country. Unit of analysis: the health system. WHOBB's six building blocks map onto the 5 Ss, with RHFA grounding Space and SWOT capturing Social Support.</p>
+    <div class="header-verdict"><strong>Best for:</strong> donor-quality, cross-country system comparison.</div>
+  </div>
+</header>
+
+<div class="page-body">
+  <div class="spine"><div class="spine-fill" id="spine-fill-v1"></div></div>
+  <div class="content-col">
+
+    <div class="legend-box">
+      <span class="legend-label">Source Key</span>
+      <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;"><span class="source-tag src-who" style="font-size:0.6rem;">WHO</span> WHO Health Systems Building Blocks</span>
+      <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;"><span class="source-tag src-rhfa" style="font-size:0.6rem;">RHFA</span> Rapid Health Facility Assessment (SARA)</span>
+      <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;"><span class="source-tag src-swot" style="font-size:0.6rem;">SWOT</span> SWOT-Based Participatory Assessment</span>
+    </div>
+
+    <div class="version-summary">
+      <div class="version-summary-title">Why this structure</div>
+      <div class="version-summary-text">WHOBB is the backbone because it most strongly evaluates Systems and lends itself to cross-country comparison. Facility readiness (RHFA/SARA) grounds Space in concrete numbers, and SWOT brings in Social Support through participatory methods — the one dimension WHOBB cannot reach on its own.</div>
+      <div class="version-pros-cons">
+        <div>
+          <div class="vpc-col-label">Strengths</div>
+          <ul class="vpc-list pro">
+            <li>National-level systems assessment</li>
+            <li>Facility-level validation via RHFA</li>
+            <li>Strong cross-country comparability</li>
+          </ul>
+        </div>
+        <div>
+          <div class="vpc-col-label">Limitations</div>
+          <ul class="vpc-list con">
+            <li>May not explain why outcomes are poor despite adequate system capacity</li>
+            <li>Requires technical expertise for governance/financing</li>
+            <li>Findings are macro — harder to action at program level</li>
+            <li>Requires high-level data (national health accounts, census) not always available site-level</li>
+          </ul>
+        </div>
+      </div>
+      <div class="best-for">Best for: <strong>a donor-quality landscape assessment that compares countries consistently.</strong></div>
+    </div>
+
+    <div class="summary-block">
+      <div class="collapsible-head open" onclick="toggleCollapsible(this,'v1')" id="summary-head-v1">
+        <span class="collapsible-title">Coverage Summary — WHOBB Hybrid across the 5 Ss</span>
+        <span class="collapsible-arrow">▼</span>
+      </div>
+      <div class="collapsible-body open" id="summary-body-v1">
+        <div class="collapsible-inner">
+          <table class="summary-table">
+            <thead><tr><th>S</th><th>Mapping</th><th>Coverage</th><th>Rwanda Snapshot</th></tr></thead>
+            <tbody>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s1)"></span>S1 — Staff</span></td><td>WHOBB Health Workforce</td><td><span class="cov-badge cov-strong">Strong</span></td><td class="rwanda-note">62% of staff under 2 years in role</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s2)"></span>S2 — Stuff</span></td><td>WHOBB Essential Medicines &amp; Technologies</td><td><span class="cov-badge cov-strong">Strong</span></td><td class="rwanda-note">Resupply lag ~2 weeks; chlorhexidine, oral pills out</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s3)"></span>S3 — Space</span></td><td>RHFA Facility Readiness (SARA)</td><td><span class="cov-badge cov-strong">Strong</span></td><td class="rwanda-note">Radiant warmer down; water intermittent</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s4)"></span>S4 — Systems</span></td><td>WHOBB Governance + HIS + Financing</td><td><span class="cov-badge cov-strong">Strong</span></td><td class="rwanda-note">Strong MoH integration; data wall in active use</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s5)"></span>S5 — Social Support</span></td><td>SWOT Participatory Methods</td><td><span class="cov-badge cov-partial">Partial</span></td><td class="rwanda-note">94% facility delivery; adolescent + TBA-preference gaps</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+            <section class="s-section" id="s1-v1" style="--s-color:var(--s1)">
+      <div class="s-header">
+        <div class="s-big">S1</div>
+        <div class="s-header-text">
+          <div class="s-name">Staff</div>
+          <div class="s-sub">WHOBB Health Workforce — density, training pipelines, retention, supervision</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-strong">WHOBB: Strong</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v1-s1-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Types and number of RMNCAH staff</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO/UNFPA/UNICEF/AMDD, Monitoring Emergency Obstetric Care (2009)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s1-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s1-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">How many providers in each cadre are assigned to RMNCAH services at this facility, and how many are on duty today?</p>
+<p class="drawer-subitem">→ Obstetrician / medical officer</p>
+<p class="drawer-subitem">→ Midwife</p>
+<p class="drawer-subitem">→ Nurse</p>
+<p class="drawer-subitem">→ Anaesthetist</p>
+<p class="drawer-subitem">→ Child-health / paediatric provider</p>
+<p class="drawer-subitem">→ Community health worker (CHW)</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/publications/i/item/9789241547734" target="_blank" rel="noopener">WHO/UNFPA/UNICEF/AMDD, Monitoring Emergency Obstetric Care (2009)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s1-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Emergency Cover</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO/UNFPA/UNICEF/AMDD, Monitoring Emergency Obstetric Care (2009)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s1-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s1-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is at least one provider able to perform all seven basic emergency obstetric and newborn care signal functions available on site at all hours?</p>
+<p class="drawer-subitem">→ Parenteral antibiotics</p>
+<p class="drawer-subitem">→ Parenteral uterotonics (e.g., oxytocin)</p>
+<p class="drawer-subitem">→ Parenteral anticonvulsants (e.g., magnesium sulfate)</p>
+<p class="drawer-subitem">→ Manual removal of placenta</p>
+<p class="drawer-subitem">→ Removal of retained products</p>
+<p class="drawer-subitem">→ Assisted vaginal delivery</p>
+<p class="drawer-subitem">→ Basic neonatal resuscitation</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/publications/i/item/9789241547734" target="_blank" rel="noopener">WHO/UNFPA/UNICEF/AMDD, Monitoring Emergency Obstetric Care (2009)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s1-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Competency Training</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO Harmonized Health Facility Assessment (HHFA)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s1-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s1-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Have maternity and newborn staff completed refresher or in-service training in the past year? In which areas?</p>
+<p class="drawer-subitem">→ Emergency obstetric care (BEmONC/CEmONC)</p>
+<p class="drawer-subitem">→ Newborn resuscitation (Helping Babies Breathe)</p>
+<p class="drawer-subitem">→ IMCI (childhood illness)</p>
+<p class="drawer-subitem">→ Family planning / contraceptive technology</p>
+<p class="drawer-subitem">→ Respectful maternity care</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/data/data-collection-tools/harmonized-health-facility-assessment/introduction" target="_blank" rel="noopener">WHO Harmonized Health Facility Assessment (HHFA)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s1-3">
+          <td class="q-acc-num">4</td>
+          <td class="q-acc-topic"><span class="topic-plain">Supervision &amp; Mentorship</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Monitoring the Building Blocks of Health Systems (2010)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s1-3', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s1-3" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is there a functioning supportive-supervision and clinical-mentorship system for RMNCAH staff?</p>
+<p class="drawer-subitem">→ Frequency of supervisory visits (monthly / quarterly / rarely)</p>
+<p class="drawer-subitem">→ Visits include bedside observation or case review</p>
+<p class="drawer-subitem">→ Date of last visit</p>
+<p class="drawer-subitem">→ Written feedback / action points recorded</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/handle/10665/258734" target="_blank" rel="noopener">WHO, Monitoring the Building Blocks of Health Systems (2010)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+            <section class="s-section" id="s2-v1" style="--s-color:var(--s2)">
+      <div class="s-header">
+        <div class="s-big">S2</div>
+        <div class="s-header-text">
+          <div class="s-name">Stuff</div>
+          <div class="s-sub">WHOBB Essential Medicines & Technologies — supply chain integrity and reliability</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-strong">WHOBB: Strong</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v1-s2-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Essential maternal &amp; newborn medicines</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO Harmonized Health Facility Assessment (HHFA)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s2-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s2-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Are the following tracer medicines in stock and within expiry today?</p>
+<p class="drawer-subitem">→ Oxytocin (stored at 2–8°C)</p>
+<p class="drawer-subitem">→ Magnesium sulfate</p>
+<p class="drawer-subitem">→ Injectable antibiotics</p>
+<p class="drawer-subitem">→ Antenatal corticosteroids (e.g., dexamethasone)</p>
+<p class="drawer-subitem">→ Chlorhexidine (cord care)</p>
+<p class="drawer-subitem">→ Misoprostol</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/data/data-collection-tools/harmonized-health-facility-assessment/introduction" target="_blank" rel="noopener">WHO Harmonized Health Facility Assessment (HHFA)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s2-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Vaccines, contraceptives &amp; cold chain</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO Harmonized Health Facility Assessment (HHFA)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s2-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s2-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Are routine childhood vaccines and modern contraceptive methods consistently available, and is the cold chain functioning?</p>
+<p class="drawer-subitem">→ Routine EPI vaccines (BCG, OPV/IPV, pentavalent, measles)</p>
+<p class="drawer-subitem">→ Range of modern contraceptives (pills, injectables, implants, IUD, condoms)</p>
+<p class="drawer-subitem">→ Functioning refrigerator with in-range temperature log</p>
+<p class="drawer-subitem">→ Backup power for the cold chain</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/data/data-collection-tools/harmonized-health-facility-assessment/introduction" target="_blank" rel="noopener">WHO Harmonized Health Facility Assessment (HHFA)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s2-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Essential equipment functional</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO Harmonized Health Facility Assessment (HHFA)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s2-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s2-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is the essential equipment for maternal and newborn care present and functional?</p>
+<p class="drawer-subitem">→ Newborn resuscitation set (bag-and-mask, suction)</p>
+<p class="drawer-subitem">→ Radiant warmer / heat source</p>
+<p class="drawer-subitem">→ Delivery bed</p>
+<p class="drawer-subitem">→ Blood-pressure device</p>
+<p class="drawer-subitem">→ Infant and adult weighing scales</p>
+<p class="drawer-subitem">→ Sterilizer / autoclave</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/data/data-collection-tools/harmonized-health-facility-assessment/introduction" target="_blank" rel="noopener">WHO Harmonized Health Facility Assessment (HHFA)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s2-3">
+          <td class="q-acc-num">4</td>
+          <td class="q-acc-topic"><span class="topic-plain">Supply Chain Reliability</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Monitoring the Building Blocks of Health Systems (2010)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s2-3', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s2-3" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Has any essential RMNCAH commodity been out of stock in the past three months, and how reliable is resupply?</p>
+<p class="drawer-subitem">→ Which commodities stocked out (from stock cards)</p>
+<p class="drawer-subitem">→ Number of stock-out days per commodity</p>
+<p class="drawer-subitem">→ Typical resupply lead time</p>
+<p class="drawer-subitem">→ Borrowing or substitution occurred</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/handle/10665/258734" target="_blank" rel="noopener">WHO, Monitoring the Building Blocks of Health Systems (2010)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+            <section class="s-section" id="s3-v1" style="--s-color:var(--s3)">
+      <div class="s-header">
+        <div class="s-big">S3</div>
+        <div class="s-header-text">
+          <div class="s-name">Space</div>
+          <div class="s-sub">Facility readiness — dedicated areas, hygiene, utilities & waste disposal</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-strong">RHFA: Strong</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v1-s3-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Dedicated Service Areas</span></td>
+          <td class="q-acc-source"><span class="src-label src-rhfa" title="Rapid Health Facility Assessment (R-HFA), MEASURE Evaluation">RHFA</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s3-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s3-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Does the facility have dedicated, private areas for each stage of RMNCAH care?</p>
+<p class="drawer-subitem">→ Antenatal care room</p>
+<p class="drawer-subitem">→ Labour &amp; delivery room (private)</p>
+<p class="drawer-subitem">→ Newborn / kangaroo-mother-care area</p>
+<p class="drawer-subitem">→ Postnatal area</p>
+<p class="drawer-subitem">→ Adolescent-friendly space</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3459971/" target="_blank" rel="noopener">Rapid Health Facility Assessment (R-HFA), MEASURE Evaluation</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s3-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Hygiene</span></td>
+          <td class="q-acc-source"><span class="src-label src-rhfa" title="Rapid Health Facility Assessment (R-HFA), MEASURE Evaluation">RHFA</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s3-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s3-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is there a reliable water source on the premises and functional hand-hygiene points in the maternity area?</p>
+<p class="drawer-subitem">→ Improved water source on site (piped / borehole / protected)</p>
+<p class="drawer-subitem">→ Water available at points of care today</p>
+<p class="drawer-subitem">→ Functional handwashing stations with soap or alcohol rub</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3459971/" target="_blank" rel="noopener">Rapid Health Facility Assessment (R-HFA), MEASURE Evaluation</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s3-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Electricity &amp; Back Up</span></td>
+          <td class="q-acc-source"><span class="src-label src-rhfa" title="Rapid Health Facility Assessment (R-HFA), MEASURE Evaluation">RHFA</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s3-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s3-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is electricity available with a functioning backup source for the delivery and newborn areas?</p>
+<p class="drawer-subitem">→ Mains electricity present</p>
+<p class="drawer-subitem">→ Functioning backup (generator / solar) with fuel or charge</p>
+<p class="drawer-subitem">→ Adequate lighting in the delivery area</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3459971/" target="_blank" rel="noopener">Rapid Health Facility Assessment (R-HFA), MEASURE Evaluation</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s3-3">
+          <td class="q-acc-num">4</td>
+          <td class="q-acc-topic"><span class="topic-plain">Sanitation &amp; Waste Disposal</span></td>
+          <td class="q-acc-source"><span class="src-label src-rhfa" title="Rapid Health Facility Assessment (R-HFA), MEASURE Evaluation">RHFA</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s3-3', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s3-3" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Are there functional client toilets and a safe waste-disposal system?</p>
+<p class="drawer-subitem">→ Functional, private, sex-separated toilets</p>
+<p class="drawer-subitem">→ Accessible to clients (including disability access)</p>
+<p class="drawer-subitem">→ Sharps containers in use at points of care</p>
+<p class="drawer-subitem">→ Safe segregation and final disposal of clinical waste</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3459971/" target="_blank" rel="noopener">Rapid Health Facility Assessment (R-HFA), MEASURE Evaluation</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+            <section class="s-section" id="s4-v1" style="--s-color:var(--s4)">
+      <div class="s-header">
+        <div class="s-big">S4</div>
+        <div class="s-header-text">
+          <div class="s-name">Systems</div>
+          <div class="s-sub">WHOBB Governance, Health Information Systems & Financing</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-strong">WHOBB: Strong</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v1-s4-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Use of Clinical Guidelines</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO Harmonized Health Facility Assessment (HHFA)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s4-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s4-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Are current national RMNCAH clinical guidelines and job aids available and used at the point of care?</p>
+<p class="drawer-subitem">→ ANC guidelines</p>
+<p class="drawer-subitem">→ Childbirth / labour management (e.g., partograph)</p>
+<p class="drawer-subitem">→ Newborn care / resuscitation</p>
+<p class="drawer-subitem">→ IMCI</p>
+<p class="drawer-subitem">→ Family planning</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/data/data-collection-tools/harmonized-health-facility-assessment/introduction" target="_blank" rel="noopener">WHO Harmonized Health Facility Assessment (HHFA)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s4-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Financing &amp; Client Costs</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Monitoring the Building Blocks of Health Systems (2010)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s4-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s4-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">How are RMNCAH services financed, and what does the client pay out of pocket?</p>
+<p class="drawer-subitem">→ Financing source (government, PBF, insurance, user fees, donor)</p>
+<p class="drawer-subitem">→ Funded RMNCAH budget line (yes/no) and its share</p>
+<p class="drawer-subitem">→ ANC / delivery / newborn services free at point of use?</p>
+<p class="drawer-subitem">→ Informal payments reported?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/handle/10665/258734" target="_blank" rel="noopener">WHO, Monitoring the Building Blocks of Health Systems (2010)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s4-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Emergency Referral System</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO/UNFPA/UNICEF/AMDD, Monitoring Emergency Obstetric Care (2009)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s4-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s4-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is there a functioning referral system for obstetric and newborn emergencies?</p>
+<p class="drawer-subitem">→ Reliable communication to receiving facility (phone / radio)</p>
+<p class="drawer-subitem">→ Transport available (ambulance or arrangement)</p>
+<p class="drawer-subitem">→ Identified receiving comprehensive-EmONC facility</p>
+<p class="drawer-subitem">→ Referral register maintained</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/publications/i/item/9789241547734" target="_blank" rel="noopener">WHO/UNFPA/UNICEF/AMDD, Monitoring Emergency Obstetric Care (2009)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+            <section class="s-section" id="s5-v1" style="--s-color:var(--s5)">
+      <div class="s-header">
+        <div class="s-big">S5</div>
+        <div class="s-header-text">
+          <div class="s-name">Social Support</div>
+          <div class="s-sub">SWOT Participatory Methods — focus groups, interviews, community context</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-partial">SWOT: Partial within hybrid</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v1-s5-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Social Support Strengths</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s5-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s5-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What community resources currently support RMNCAH service utilization?</p>
+<p class="drawer-question">What community engagement mechanisms are working well?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s5-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Social Support Weaknesses</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s5-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s5-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What social, cultural, gender, or economic barriers limit access to RMNCAH services?</p>
+<p class="drawer-question">Which populations experience the greatest barriers?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s5-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Social Support Opportunities</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s5-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s5-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What opportunities exist to improve community engagement and demand for RMNCAH services?</p>
+<p class="drawer-question">Are there community organizations, leaders, or networks that could support RMNCAH goals?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v1-s5-3">
+          <td class="q-acc-num">4</td>
+          <td class="q-acc-topic"><span class="topic-plain">Social Support Threats</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v1-s5-3', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v1-s5-3" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What social or cultural factors could reduce utilization of RMNCAH services?</p>
+<p class="drawer-question">What emerging challenges could increase barriers to care?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="thin-note">Note: as a hybrid component, SWOT here is intentionally limited to a few targeted questions — not a full participatory exercise. Depth depends on facilitation time invested by the country team.</div>
+    </section>
+
+  </div>
+</div>
+<footer>PIH · RMNCAH Landscape Assessment · Option 1: WHO Building Blocks Hybrid · June 2026</footer>
+</div><!-- /panel-v1 -->
+
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- VERSION 2: SAF hybrid -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="version-panel" id="panel-v2" style="--tab-color:#7a3a1e">
+
+<header>
+  <div class="header-inner">
+    <div class="header-eyebrow">Option 2 of 4 · Partners in Health · RMNCAH Landscape Assessment</div>
+    <h1>SAF <em>backbone</em></h1>
+    <p class="header-sub">Answers what the RMNCAH situation is today and what's driving it. Unit of analysis: the RMNCAH service environment. Strong in translating findings directly into intervention.</p>
+    <div class="header-verdict"><strong>Best for:</strong> program planning and investment decisions grounded in current-state data.</div>
+  </div>
+</header>
+
+<div class="page-body">
+  <div class="spine"><div class="spine-fill" id="spine-fill-v2"></div></div>
+  <div class="content-col">
+
+    <div class="legend-box">
+      <span class="legend-label">Source Key</span>
+      <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;"><span class="source-tag src-saf" style="font-size:0.6rem;">SAF</span> Situational Analysis Framework</span>
+      <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;"><span class="source-tag src-who" style="font-size:0.6rem;">WHO</span> WHO Building Blocks (minimal — governance &amp; financing only)</span>
+      <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;"><span class="source-tag src-swot" style="font-size:0.6rem;">SWOT</span> SWOT-Based Participatory Assessment</span>
+    </div>
+
+    <div class="version-summary">
+      <div class="version-summary-title">Why this structure</div>
+      <div class="version-summary-text">SAF assesses both whether capacities exist and how available they are in practice — covering service availability, infrastructure readiness, human resources, commodities, protocols, data quality, and demand and utilization in a single pass. A minimal WHOBB layer covers governance and financing only, since SAF alone can't reach those domains. SWOT brings in Social Support.</div>
+      <div class="version-pros-cons">
+        <div>
+          <div class="vpc-col-label">Strengths</div>
+          <ul class="vpc-list pro">
+            <li>Strong translation to intervention</li>
+            <li>Covers service availability, infrastructure, HR, commodities, protocols, data, quality, and demand in one pass</li>
+          </ul>
+        </div>
+        <div>
+          <div class="vpc-col-label">Limitations</div>
+          <ul class="vpc-list con">
+            <li>More of a "snapshot" of current state</li>
+            <li>Resource-intensive; requires high data availability</li>
+            <li>Requires technical expertise to assess governance and financing</li>
+          </ul>
+        </div>
+      </div>
+      <div class="best-for">Best for: <strong>understanding the current RMNCAH situation and what's driving it.</strong> Probably the strongest RMNCAH-specific option.</div>
+    </div>
+
+    <div class="summary-block">
+      <div class="collapsible-head open" onclick="toggleCollapsible(this,'v2')" id="summary-head-v2">
+        <span class="collapsible-title">Coverage Summary — SAF Hybrid across the 5 Ss</span>
+        <span class="collapsible-arrow">▼</span>
+      </div>
+      <div class="collapsible-body open" id="summary-body-v2">
+        <div class="collapsible-inner">
+          <table class="summary-table">
+            <thead><tr><th>S</th><th>Mapping</th><th>Coverage</th><th>Rwanda Snapshot</th></tr></thead>
+            <tbody>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s1)"></span>S1 — Staff</span></td><td>SAF Human Resources + Quality of Care</td><td><span class="cov-badge cov-strong">Strong</span></td><td class="rwanda-note">3 of 8 staff replaced in past year</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s2)"></span>S2 — Stuff</span></td><td>SAF Commodities &amp; Medicines + Service Availability</td><td><span class="cov-badge cov-strong">Strong</span></td><td class="rwanda-note">2–3 stockouts/quarter; avg. duration 5–9 days</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s3)"></span>S3 — Space</span></td><td>SAF Infrastructure Readiness</td><td><span class="cov-badge cov-strong">Strong</span></td><td class="rwanda-note">Radiant warmer down; water intermittent</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s4)"></span>S4 — Systems</span></td><td>SAF Protocols/Data + minimal WHOBB Governance/Financing</td><td><span class="cov-badge cov-strong">Strong</span></td><td class="rwanda-note">~60% partograph completion; budget allocation rising</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s5)"></span>S5 — Social Support</span></td><td>SAF Demand &amp; Utilization + SWOT</td><td><span class="cov-badge cov-partial">Partial</span></td><td class="rwanda-note">94% facility delivery; ANC initiation gap</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+                <section class="s-section" id="s1-v2" style="--s-color:var(--s1)">
+      <div class="s-header">
+        <div class="s-big">S1</div>
+        <div class="s-header-text">
+          <div class="s-name">Staff</div>
+          <div class="s-sub">SAF Human Resources + Quality of Care</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-strong">SAF: Strong</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v2-s1-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Types of Staff</span></td>
+          <td class="q-acc-source"><span class="src-label src-saf" title="Population Council Situation Analysis Provider Interview">SAF</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s1-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s1-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">How many of the following providers are assigned to work full time at this MCH/FP section? How many are on duty today?</p>
+<p class="drawer-subitem">→ Medical Doctor</p>
+<p class="drawer-subitem">→ Nurse</p>
+<p class="drawer-subitem">→ Nurse-Midwife</p>
+<p class="drawer-subitem">→ CBD</p>
+<p class="drawer-subitem">→ MCH Assistant</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://knowledgecommons.popcouncil.org/cgi/viewcontent.cgi?article=1978&context=departments_sbsr-rh" target="_blank" rel="noopener">Population Council Situation Analysis Provider Interview</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v2-s1-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Services Provided by Staff</span></td>
+          <td class="q-acc-source"><span class="src-label src-saf" title="Population Council Situation Analysis Provider Interview">SAF</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s1-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s1-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">I’d like to ask you about services you provide to clients at this facility. Do you yourself provide any of the following to clients at this health facility?</p>
+<p class="drawer-subitem">→ Family planning</p>
+<p class="drawer-subitem">→ Antenatal care</p>
+<p class="drawer-subitem">→ Maternity care/delivery services</p>
+<p class="drawer-subitem">→ Postnatal care</p>
+<p class="drawer-subitem">→ HIV/AIDS counseling/IEC</p>
+<p class="drawer-subitem">→ HIV/AIDS testing</p>
+<p class="drawer-subitem">→ Other STD counseling/IEC</p>
+<p class="drawer-subitem">→ Other STD diagnosis</p>
+<p class="drawer-subitem">→ Other STD treatment</p>
+<p class="drawer-subitem">→ Child immunization</p>
+<p class="drawer-subitem">→ Child growth monitoring</p>
+<p class="drawer-subitem">→ Infertility consultation</p>
+<p class="drawer-subitem">→ Oral rehydration therapy</p>
+<p class="drawer-subitem">→ Treatment of incomplete abortion</p>
+<p class="drawer-subitem">→ Nutrition counseling</p>
+<p class="drawer-subitem">→ Curative services - client</p>
+<p class="drawer-subitem">→ Curative services - child</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://knowledgecommons.popcouncil.org/cgi/viewcontent.cgi?article=1978&context=departments_sbsr-rh" target="_blank" rel="noopener">Population Council Situation Analysis Provider Interview</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v2-s1-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Staff Basic Training</span></td>
+          <td class="q-acc-source"><span class="src-label src-saf" title="Population Council Situation Analysis Provider Interview">SAF</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s1-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s1-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Did your basic training cover any of the following? Have you ever had refresher training in any of the following?</p>
+<p class="drawer-subitem">→ Family planning</p>
+<p class="drawer-subitem">→ Antenatal care</p>
+<p class="drawer-subitem">→ Maternity care/delivery services</p>
+<p class="drawer-subitem">→ Postnatal care</p>
+<p class="drawer-subitem">→ Child immunization</p>
+<p class="drawer-subitem">→ Child growth monitoring</p>
+<p class="drawer-subitem">→ Infertility consultation</p>
+<p class="drawer-subitem">→ Oral rehydration therapy</p>
+<p class="drawer-subitem">→ Treatment of incomplete abortion</p>
+<p class="drawer-subitem">→ Nutrition counseling</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://knowledgecommons.popcouncil.org/cgi/viewcontent.cgi?article=1978&context=departments_sbsr-rh" target="_blank" rel="noopener">Population Council Situation Analysis Provider Interview</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+                <section class="s-section" id="s2-v2" style="--s-color:var(--s2)">
+      <div class="s-header">
+        <div class="s-big">S2</div>
+        <div class="s-header-text">
+          <div class="s-name">Stuff</div>
+          <div class="s-sub">SAF Commodities & Medicines + Service Availability</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-strong">SAF: Strong</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v2-s2-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Available Medical Equipment</span></td>
+          <td class="q-acc-source"><span class="src-label src-saf" title="Population Council Situation Analysis Equipment and Commodities Inventory">SAF</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s2-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s2-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Tick if the following types of equipment are available and working in the MCH/FP unit, and/or stockroom for MCH/FP services.</p>
+<p class="drawer-subitem">→ Sterilizing equipment in MCH/FP unit</p>
+<p class="drawer-subitem">→ Sterilizing equipment outside MCH/FP unit (shared)</p>
+<p class="drawer-subitem">→ Angle poise/gynecology lamps/torch</p>
+<p class="drawer-subitem">→ Blood pressure machines</p>
+<p class="drawer-subitem">→ Adult weighing scale</p>
+<p class="drawer-subitem">→ Child weighing scales</p>
+<p class="drawer-subitem">→ Scissors</p>
+<p class="drawer-subitem">→ Antiseptic lotions</p>
+<p class="drawer-subitem">→ Stethoscopes</p>
+<p class="drawer-subitem">→ Refrigerator for EPI (immunization)</p>
+<p class="drawer-subitem">→ Examination couch</p>
+<p class="drawer-subitem">→ Thermometer</p>
+<p class="drawer-subitem">→ Needles</p>
+<p class="drawer-subitem">→ Syringes</p>
+<p class="drawer-subitem">→ Microscope</p>
+<p class="drawer-subitem">→ Cotton wool</p>
+<p class="drawer-subitem">→ Gauze</p>
+<p class="drawer-subitem">→ Dettol</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://knowledgecommons.popcouncil.org/cgi/viewcontent.cgi?article=1978&context=departments_sbsr-rh" target="_blank" rel="noopener">Population Council Situation Analysis Equipment and Commodities Inventory</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v2-s2-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Available Immunizations</span></td>
+          <td class="q-acc-source"><span class="src-label src-saf" title="Population Council Situation Analysis Equipment and Commodities Inventory">SAF</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s2-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s2-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Does this health facility usually provide the following immunization services? Has the drug for the immunization ever been out of stock at this health facility in the last 6 months?</p>
+<p class="drawer-subitem">→ BCG</p>
+<p class="drawer-subitem">→ Polio</p>
+<p class="drawer-subitem">→ DPT</p>
+<p class="drawer-subitem">→ Measles</p>
+<p class="drawer-subitem">→ Hepatitis B</p>
+<p class="drawer-subitem">→ Tetanus for ANC clients</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://knowledgecommons.popcouncil.org/cgi/viewcontent.cgi?article=1978&context=departments_sbsr-rh" target="_blank" rel="noopener">Population Council Situation Analysis Equipment and Commodities Inventory</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v2-s2-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Available Contraceptives</span></td>
+          <td class="q-acc-source"><span class="src-label src-saf" title="Population Council Situation Analysis Equipment and Commodities Inventory">SAF</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s2-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s2-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Does the MCH/FP unit usually provide each of the following contraceptive methods? Is it available today? Has there been any stock-out in the last six months?</p>
+<p class="drawer-subitem">→ Combined pill</p>
+<p class="drawer-subitem">→ Progestin-only pill</p>
+<p class="drawer-subitem">→ IUD</p>
+<p class="drawer-subitem">→ Injectable</p>
+<p class="drawer-subitem">→ NORPLANT</p>
+<p class="drawer-subitem">→ Condom</p>
+<p class="drawer-subitem">→ Diaphragm</p>
+<p class="drawer-subitem">→ Spermicide</p>
+<p class="drawer-subitem">→ Other</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://knowledgecommons.popcouncil.org/cgi/viewcontent.cgi?article=1978&context=departments_sbsr-rh" target="_blank" rel="noopener">Population Council Situation Analysis Equipment and Commodities Inventory</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+                <section class="s-section" id="s3-v2" style="--s-color:var(--s3)">
+      <div class="s-header">
+        <div class="s-big">S3</div>
+        <div class="s-header-text">
+          <div class="s-name">Space</div>
+          <div class="s-sub">SAF Infrastructure Readiness + Service Availability</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-strong">SAF: Strong</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v2-s3-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Facility Infrastructure</span></td>
+          <td class="q-acc-source"><span class="src-label src-saf" title="Population Council Situation Analysis Infrastructure Assessment">SAF</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s3-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s3-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">On the day of the visit, does the MCH/FP unit have the following?</p>
+<p class="drawer-subitem">→ Piped running water</p>
+<p class="drawer-subitem">→ Electricity</p>
+<p class="drawer-subitem">→ Working toilets/latrines available for clients</p>
+<p class="drawer-subitem">→ Sufficient seating for clients</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://knowledgecommons.popcouncil.org/cgi/viewcontent.cgi?article=1978&context=departments_sbsr-rh" target="_blank" rel="noopener">Population Council Situation Analysis Infrastructure Assessment</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v2-s3-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Facility Conditions</span></td>
+          <td class="q-acc-source"><span class="src-label src-saf" title="Population Council Situation Analysis Infrastructure Assessment">SAF</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s3-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s3-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Are the following conditions present in the examination area?</p>
+<p class="drawer-subitem">→ Auditory privacy</p>
+<p class="drawer-subitem">→ Visual privacy</p>
+<p class="drawer-subitem">→ Cleanliness (floor swept and mopped at the start of the day, no dust on windowsills or tables)</p>
+<p class="drawer-subitem">→ Adequate light (functioning electric light or sufficient natural light)</p>
+<p class="drawer-subitem">→ Adequate water (sufficient quantity of clean water for washing hands and equipment)</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://knowledgecommons.popcouncil.org/cgi/viewcontent.cgi?article=1978&context=departments_sbsr-rh" target="_blank" rel="noopener">Population Council Situation Analysis Infrastructure Assessment</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v2-s3-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Service Layout &amp; Client Flow</span></td>
+          <td class="q-acc-source"><span class="src-label src-saf" title="Population Council Situation Analysis Infrastructure Assessment">SAF</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s3-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s3-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">On the day of the visit, observe how the MCH/FP unit is organized. Are the following present?</p>
+<p class="drawer-subitem">→ A clear, logical client pathway from reception → waiting → consultation → service/treatment (no backtracking)</p>
+<p class="drawer-subitem">→ Designated waiting area within sight of service staff</p>
+<p class="drawer-subitem">→ Separate, clearly identified areas for consultation, examination, and procedures</p>
+<p class="drawer-subitem">→ Service points (ANC, FP, immunization, delivery) arranged to minimize client crossing and congestion</p>
+<p class="drawer-subitem">→ Unobstructed access to the delivery/emergency area</p>
+<p class="drawer-subitem">→ Adequate circulation space for a stretcher or wheelchair</p>
+<p class="drawer-subitem">→ Signage directing clients to key service points</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://knowledgecommons.popcouncil.org/cgi/viewcontent.cgi?article=1978&context=departments_sbsr-rh" target="_blank" rel="noopener">Population Council Situation Analysis Infrastructure Assessment</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+                <section class="s-section" id="s4-v2" style="--s-color:var(--s4)">
+      <div class="s-header">
+        <div class="s-big">S4</div>
+        <div class="s-header-text">
+          <div class="s-name">Systems</div>
+          <div class="s-sub">SAF Clinical Protocols + Data & Record-Keeping, plus minimal WHOBB Governance/Financing</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-strong">SAF + WHO (minimal): Strong</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v2-s4-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Record Keeping</span></td>
+          <td class="q-acc-source"><span class="src-label src-saf" title="Population Council Situation Analysis Record-Keeping and Reporting Assessment">SAF</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s4-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s4-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is there a common daily activity register for all the MCH-FP services provided by this health facility?</p>
+<p class="drawer-subitem">→ Yes, for all services</p>
+<p class="drawer-subitem">→ Yes, for some of the services</p>
+<p class="drawer-subitem">→ Separate register for each of the services</p>
+<p class="drawer-subitem">→ No daily activity register for any of the services</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://knowledgecommons.popcouncil.org/cgi/viewcontent.cgi?article=1978&context=departments_sbsr-rh" target="_blank" rel="noopener">Population Council Situation Analysis Record-Keeping and Reporting Assessment</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v2-s4-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Use of Clinical Guidelines</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO Harmonized Health Facility Assessment (HHFA)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s4-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s4-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Are current national RMNCAH clinical guidelines and job aids available and used at the point of care?</p>
+<p class="drawer-subitem">→ ANC guidelines</p>
+<p class="drawer-subitem">→ Childbirth / labour management (e.g., partograph)</p>
+<p class="drawer-subitem">→ Newborn care / resuscitation</p>
+<p class="drawer-subitem">→ IMCI</p>
+<p class="drawer-subitem">→ Family planning</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/data/data-collection-tools/harmonized-health-facility-assessment/introduction" target="_blank" rel="noopener">WHO Harmonized Health Facility Assessment (HHFA)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v2-s4-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Financing &amp; Client Costs</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Monitoring the Building Blocks of Health Systems (2010)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s4-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s4-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">How are RMNCAH services financed, and what does the client pay out of pocket?</p>
+<p class="drawer-subitem">→ Financing source (government, PBF, insurance, user fees, donor)</p>
+<p class="drawer-subitem">→ Funded RMNCAH budget line (yes/no) and its share</p>
+<p class="drawer-subitem">→ ANC / delivery / newborn services free at point of use?</p>
+<p class="drawer-subitem">→ Informal payments reported?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/handle/10665/258734" target="_blank" rel="noopener">WHO, Monitoring the Building Blocks of Health Systems (2010)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+            <section class="s-section" id="s5-v2" style="--s-color:var(--s5)">
+      <div class="s-header">
+        <div class="s-big">S5</div>
+        <div class="s-header-text">
+          <div class="s-name">Social Support</div>
+          <div class="s-sub">SAF Demand & Utilization + SWOT Participatory Methods</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-partial">SAF + SWOT: Partial</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v2-s5-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Social Support Strengths</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s5-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s5-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What community resources currently support RMNCAH service utilization?</p>
+<p class="drawer-question">What community engagement mechanisms are working well?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v2-s5-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Social Support Weaknesses</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s5-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s5-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What social, cultural, gender, or economic barriers limit access to RMNCAH services?</p>
+<p class="drawer-question">Which populations experience the greatest barriers?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v2-s5-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Social Support Opportunities</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s5-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s5-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What opportunities exist to improve community engagement and demand for RMNCAH services?</p>
+<p class="drawer-question">Are there community organizations, leaders, or networks that could support RMNCAH goals?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v2-s5-3">
+          <td class="q-acc-num">4</td>
+          <td class="q-acc-topic"><span class="topic-plain">Social Support Threats</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v2-s5-3', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v2-s5-3" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What social or cultural factors could reduce utilization of RMNCAH services?</p>
+<p class="drawer-question">What emerging challenges could increase barriers to care?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="thin-note">Note: as a hybrid component, SWOT here is intentionally limited to a few targeted questions — not a full participatory exercise. Depth depends on facilitation time invested by the country team.</div>
+    </section>
+
+  </div>
+</div>
+<footer>PIH · RMNCAH Landscape Assessment · Option 2: SAF Hybrid · June 2026</footer>
+</div><!-- /panel-v2 -->
+
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- VERSION 3: WHO Building Blocks ALONE (clean) -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="version-panel" id="panel-v3" style="--tab-color:#1a4a7a">
+
+<header>
+  <div class="header-inner">
+    <div class="header-eyebrow">Option 3 of 4 · Partners in Health · RMNCAH Landscape Assessment</div>
+    <h1>WHO Building Blocks <em>alone</em></h1>
+    <p class="header-sub">A clean, single-framework option. No supplements from SAF, BNA, or SWOT — this is WHOBB's six building blocks applied directly to the 5 Ss, showing what you get (and what's missing) without any hybrid layering.</p>
+    <div class="header-verdict"><strong>Best for:</strong> teams prioritizing simplicity and standardization, where thinner coverage of Space and Social Support is an acceptable tradeoff.</div>
+  </div>
+</header>
+
+<div class="page-body">
+  <div class="spine"><div class="spine-fill" id="spine-fill-v3"></div></div>
+  <div class="content-col">
+
+    <div class="legend-box">
+      <span class="legend-label">Source Key</span>
+      <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;"><span class="source-tag src-who" style="font-size:0.6rem;">WHO</span> WHO Health Systems Building Blocks — the only source used in this option</span>
+    </div>
+
+    <div class="version-summary">
+      <div class="version-summary-title">Why this structure</div>
+      <div class="version-summary-text">Presented as a "clean" comparison point: a single, internationally standardized framework with no hybrid layering. WHOBB's six blocks (service delivery, workforce, HIS, medicines/technologies, financing, governance) already map reasonably well to 4 of the 5 Ss — but Space and Social Support are visibly thinner here than in the hybrid options, since WHOBB was never designed to assess physical facility conditions or community voice in detail.</div>
+      <div class="version-pros-cons">
+        <div>
+          <div class="vpc-col-label">Strengths</div>
+          <ul class="vpc-list pro">
+            <li>Single framework — easiest to train teams on and explain to MoH</li>
+            <li>Globally standardized; strong cross-country comparability</li>
+            <li>No need to coordinate multiple tools or methodologies</li>
+          </ul>
+        </div>
+        <div>
+          <div class="vpc-col-label">Limitations</div>
+          <ul class="vpc-list con">
+            <li>Space coverage is shallow — no facility-level physical detail</li>
+            <li>Social Support is essentially a gap — community voice is a footnote, not a method</li>
+            <li>Requires technical expertise for governance/financing analysis</li>
+          </ul>
+        </div>
+      </div>
+      <div class="best-for">Best for: <strong>simplicity and standardization, if the team accepts thinner coverage of Space and Social Support.</strong></div>
+    </div>
+
+    <div class="summary-block">
+      <div class="collapsible-head open" onclick="toggleCollapsible(this,'v3')" id="summary-head-v3">
+        <span class="collapsible-title">Coverage Summary — WHOBB Alone across the 5 Ss</span>
+        <span class="collapsible-arrow">▼</span>
+      </div>
+      <div class="collapsible-body open" id="summary-body-v3">
+        <div class="collapsible-inner">
+          <table class="summary-table">
+            <thead><tr><th>S</th><th>Mapping</th><th>Coverage</th><th>Rwanda Snapshot</th></tr></thead>
+            <tbody>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s1)"></span>S1 — Staff</span></td><td>WHOBB Health Workforce</td><td><span class="cov-badge cov-strong">Strong</span></td><td class="rwanda-note">62% of staff under 2 years in role</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s2)"></span>S2 — Stuff</span></td><td>WHOBB Essential Medicines &amp; Technologies</td><td><span class="cov-badge cov-strong">Strong</span></td><td class="rwanda-note">Supply chain partially functional; resupply lag ~2 weeks</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s3)"></span>S3 — Space</span></td><td>WHOBB Service Delivery (indirect only)</td><td><span class="cov-badge cov-weak">Weak</span></td><td class="rwanda-note">No facility-level detail — only service network organization</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s4)"></span>S4 — Systems</span></td><td>WHOBB Governance + HIS + Financing</td><td><span class="cov-badge cov-strong">Strong</span></td><td class="rwanda-note">Strong MoH integration</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s5)"></span>S5 — Social Support</span></td><td>WHOBB Governance (community participation mentioned only as an ideal)</td><td><span class="cov-badge cov-weak">Weak</span></td><td class="rwanda-note">No structured method for community voice</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+            <section class="s-section" id="s1-v3" style="--s-color:var(--s1)">
+      <div class="s-header">
+        <div class="s-big">S1</div>
+        <div class="s-header-text">
+          <div class="s-name">Staff</div>
+          <div class="s-sub">WHOBB Health Workforce</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-strong">WHOBB: Strong</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v3-s1-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Types and number of RMNCAH staff</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO/UNFPA/UNICEF/AMDD, Monitoring Emergency Obstetric Care (2009)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s1-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s1-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">How many providers in each cadre are assigned to RMNCAH services at this facility, and how many are on duty today?</p>
+<p class="drawer-subitem">→ Obstetrician / medical officer</p>
+<p class="drawer-subitem">→ Midwife</p>
+<p class="drawer-subitem">→ Nurse</p>
+<p class="drawer-subitem">→ Anaesthetist</p>
+<p class="drawer-subitem">→ Child-health / paediatric provider</p>
+<p class="drawer-subitem">→ Community health worker (CHW)</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/publications/i/item/9789241547734" target="_blank" rel="noopener">WHO/UNFPA/UNICEF/AMDD, Monitoring Emergency Obstetric Care (2009)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v3-s1-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Emergency Cover</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO/UNFPA/UNICEF/AMDD, Monitoring Emergency Obstetric Care (2009)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s1-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s1-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is at least one provider able to perform all seven basic emergency obstetric and newborn care signal functions available on site at all hours?</p>
+<p class="drawer-subitem">→ Parenteral antibiotics</p>
+<p class="drawer-subitem">→ Parenteral uterotonics (e.g., oxytocin)</p>
+<p class="drawer-subitem">→ Parenteral anticonvulsants (e.g., magnesium sulfate)</p>
+<p class="drawer-subitem">→ Manual removal of placenta</p>
+<p class="drawer-subitem">→ Removal of retained products</p>
+<p class="drawer-subitem">→ Assisted vaginal delivery</p>
+<p class="drawer-subitem">→ Basic neonatal resuscitation</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/publications/i/item/9789241547734" target="_blank" rel="noopener">WHO/UNFPA/UNICEF/AMDD, Monitoring Emergency Obstetric Care (2009)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v3-s1-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Competency Training</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO Harmonized Health Facility Assessment (HHFA)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s1-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s1-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Have maternity and newborn staff completed refresher or in-service training in the past year? In which areas?</p>
+<p class="drawer-subitem">→ Emergency obstetric care (BEmONC/CEmONC)</p>
+<p class="drawer-subitem">→ Newborn resuscitation (Helping Babies Breathe)</p>
+<p class="drawer-subitem">→ IMCI (childhood illness)</p>
+<p class="drawer-subitem">→ Family planning / contraceptive technology</p>
+<p class="drawer-subitem">→ Respectful maternity care</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/data/data-collection-tools/harmonized-health-facility-assessment/introduction" target="_blank" rel="noopener">WHO Harmonized Health Facility Assessment (HHFA)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v3-s1-3">
+          <td class="q-acc-num">4</td>
+          <td class="q-acc-topic"><span class="topic-plain">Supervision &amp; Mentorship</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Monitoring the Building Blocks of Health Systems (2010)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s1-3', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s1-3" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is there a functioning supportive-supervision and clinical-mentorship system for RMNCAH staff?</p>
+<p class="drawer-subitem">→ Frequency of supervisory visits (monthly / quarterly / rarely)</p>
+<p class="drawer-subitem">→ Visits include bedside observation or case review</p>
+<p class="drawer-subitem">→ Date of last visit</p>
+<p class="drawer-subitem">→ Written feedback / action points recorded</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/handle/10665/258734" target="_blank" rel="noopener">WHO, Monitoring the Building Blocks of Health Systems (2010)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+            <section class="s-section" id="s2-v3" style="--s-color:var(--s2)">
+      <div class="s-header">
+        <div class="s-big">S2</div>
+        <div class="s-header-text">
+          <div class="s-name">Stuff</div>
+          <div class="s-sub">WHOBB Essential Medicines & Technologies</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-strong">WHOBB: Strong</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v3-s2-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Essential maternal &amp; newborn medicines</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO Harmonized Health Facility Assessment (HHFA)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s2-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s2-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Are the following tracer medicines in stock and within expiry today?</p>
+<p class="drawer-subitem">→ Oxytocin (stored at 2–8°C)</p>
+<p class="drawer-subitem">→ Magnesium sulfate</p>
+<p class="drawer-subitem">→ Injectable antibiotics</p>
+<p class="drawer-subitem">→ Antenatal corticosteroids (e.g., dexamethasone)</p>
+<p class="drawer-subitem">→ Chlorhexidine (cord care)</p>
+<p class="drawer-subitem">→ Misoprostol</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/data/data-collection-tools/harmonized-health-facility-assessment/introduction" target="_blank" rel="noopener">WHO Harmonized Health Facility Assessment (HHFA)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v3-s2-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Vaccines, contraceptives &amp; cold chain</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO Harmonized Health Facility Assessment (HHFA)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s2-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s2-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Are routine childhood vaccines and modern contraceptive methods consistently available, and is the cold chain functioning?</p>
+<p class="drawer-subitem">→ Routine EPI vaccines (BCG, OPV/IPV, pentavalent, measles)</p>
+<p class="drawer-subitem">→ Range of modern contraceptives (pills, injectables, implants, IUD, condoms)</p>
+<p class="drawer-subitem">→ Functioning refrigerator with in-range temperature log</p>
+<p class="drawer-subitem">→ Backup power for the cold chain</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/data/data-collection-tools/harmonized-health-facility-assessment/introduction" target="_blank" rel="noopener">WHO Harmonized Health Facility Assessment (HHFA)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v3-s2-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Essential equipment functional</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO Harmonized Health Facility Assessment (HHFA)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s2-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s2-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is the essential equipment for maternal and newborn care present and functional?</p>
+<p class="drawer-subitem">→ Newborn resuscitation set (bag-and-mask, suction)</p>
+<p class="drawer-subitem">→ Radiant warmer / heat source</p>
+<p class="drawer-subitem">→ Delivery bed</p>
+<p class="drawer-subitem">→ Blood-pressure device</p>
+<p class="drawer-subitem">→ Infant and adult weighing scales</p>
+<p class="drawer-subitem">→ Sterilizer / autoclave</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/data/data-collection-tools/harmonized-health-facility-assessment/introduction" target="_blank" rel="noopener">WHO Harmonized Health Facility Assessment (HHFA)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v3-s2-3">
+          <td class="q-acc-num">4</td>
+          <td class="q-acc-topic"><span class="topic-plain">Supply Chain Reliability</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Monitoring the Building Blocks of Health Systems (2010)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s2-3', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s2-3" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Has any essential RMNCAH commodity been out of stock in the past three months, and how reliable is resupply?</p>
+<p class="drawer-subitem">→ Which commodities stocked out (from stock cards)</p>
+<p class="drawer-subitem">→ Number of stock-out days per commodity</p>
+<p class="drawer-subitem">→ Typical resupply lead time</p>
+<p class="drawer-subitem">→ Borrowing or substitution occurred</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/handle/10665/258734" target="_blank" rel="noopener">WHO, Monitoring the Building Blocks of Health Systems (2010)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+                    <section class="s-section" id="s3-v3" style="--s-color:var(--s3)">
+      <div class="s-header">
+        <div class="s-big">S3</div>
+        <div class="s-header-text">
+          <div class="s-name">Space</div>
+          <div class="s-sub">WHOBB Service Delivery — only indirect coverage</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-weak">WHOBB: Weak</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v3-s3-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Geographic Coverage</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Monitoring the Building Blocks of Health Systems (2010)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s3-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s3-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is the number and distribution of facilities offering RMNCAH services adequate for the population serviced?</p>
+<p class="drawer-subitem">→ Facilities per 10,000 population in catchment/district</p>
+<p class="drawer-subitem">→ Share of population within a defined travel time</p>
+<p class="drawer-subitem">→ Distribution of delivery-capable sites (urban vs rural)</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/handle/10665/258734" target="_blank" rel="noopener">WHO, Monitoring the Building Blocks of Health Systems (2010)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v3-s3-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Capital Investment</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Monitoring the Building Blocks of Health Systems (2010)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s3-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s3-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is there a capital budget and financing mechanism for building and upgrading RMNCAH service areas?</p>
+<p class="drawer-subitem">→ Share of health spending on infrastructure (capex)</p>
+<p class="drawer-subitem">→ Funding source (government / donor / PPP)</p>
+<p class="drawer-subitem">→ Planned upgrades in medium / long-term plan</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/handle/10665/258734" target="_blank" rel="noopener">WHO, Monitoring the Building Blocks of Health Systems (2010)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v3-s3-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Infrastructure Maintenance</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Monitoring the Building Blocks of Health Systems (2010)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s3-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s3-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is there a system for maintaining buildings, water, power, and sanitation?</p>
+<p class="drawer-subitem">→ Facility asset/infrastructure inventory</p>
+<p class="drawer-subitem">→ Preventive-maintenance schedule</p>
+<p class="drawer-subitem">→ Mean repair turnaround for power and water outages</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/handle/10665/258734" target="_blank" rel="noopener">WHO, Monitoring the Building Blocks of Health Systems (2010)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v3-s3-3">
+          <td class="q-acc-num">4</td>
+          <td class="q-acc-topic"><span class="topic-plain">Infrastructure Norms</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Monitoring the Building Blocks of Health Systems (2010)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s3-3', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s3-3" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Are there national standards defining required infrastructure by facility level, and a licensing/accreditation system enforcing them?</p>
+<p class="drawer-subitem">→ National infrastructure norms by facility tier (rooms, water, power, beds)</p>
+<p class="drawer-subitem">→ Licensing/accreditation body and process</p>
+<p class="drawer-subitem">→ Share of facilities meeting standards</p>
+<p class="drawer-subitem">→ Enforcement/sanctions for non-compliance</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/handle/10665/258734" target="_blank" rel="noopener">WHO, Monitoring the Building Blocks of Health Systems (2010)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="thin-note">WHOBB alone cannot answer questions about specific rooms, equipment, water, or electricity at a given facility — this is the clearest gap in this single-framework option. For example, there would be no way to know whether a delivery room has a functioning resuscitation setup.</div>
+    </section>
+
+            <section class="s-section" id="s4-v3" style="--s-color:var(--s4)">
+      <div class="s-header">
+        <div class="s-big">S4</div>
+        <div class="s-header-text">
+          <div class="s-name">Systems</div>
+          <div class="s-sub">WHOBB Governance, Health Information Systems & Financing</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-strong">WHOBB: Strong</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v3-s4-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Use of Clinical Guidelines</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO Harmonized Health Facility Assessment (HHFA)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s4-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s4-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Are current national RMNCAH clinical guidelines and job aids available and used at the point of care?</p>
+<p class="drawer-subitem">→ ANC guidelines</p>
+<p class="drawer-subitem">→ Childbirth / labour management (e.g., partograph)</p>
+<p class="drawer-subitem">→ Newborn care / resuscitation</p>
+<p class="drawer-subitem">→ IMCI</p>
+<p class="drawer-subitem">→ Family planning</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/data/data-collection-tools/harmonized-health-facility-assessment/introduction" target="_blank" rel="noopener">WHO Harmonized Health Facility Assessment (HHFA)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v3-s4-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Financing &amp; Client Costs</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Monitoring the Building Blocks of Health Systems (2010)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s4-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s4-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">How are RMNCAH services financed, and what does the client pay out of pocket?</p>
+<p class="drawer-subitem">→ Financing source (government, PBF, insurance, user fees, donor)</p>
+<p class="drawer-subitem">→ Funded RMNCAH budget line (yes/no) and its share</p>
+<p class="drawer-subitem">→ ANC / delivery / newborn services free at point of use?</p>
+<p class="drawer-subitem">→ Informal payments reported?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/handle/10665/258734" target="_blank" rel="noopener">WHO, Monitoring the Building Blocks of Health Systems (2010)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v3-s4-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Emergency Referral System</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO/UNFPA/UNICEF/AMDD, Monitoring Emergency Obstetric Care (2009)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s4-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s4-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Is there a functioning referral system for obstetric and newborn emergencies?</p>
+<p class="drawer-subitem">→ Reliable communication to receiving facility (phone / radio)</p>
+<p class="drawer-subitem">→ Transport available (ambulance or arrangement)</p>
+<p class="drawer-subitem">→ Identified receiving comprehensive-EmONC facility</p>
+<p class="drawer-subitem">→ Referral register maintained</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/publications/i/item/9789241547734" target="_blank" rel="noopener">WHO/UNFPA/UNICEF/AMDD, Monitoring Emergency Obstetric Care (2009)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+            <section class="s-section" id="s5-v3" style="--s-color:var(--s5)">
+      <div class="s-header">
+        <div class="s-big">S5</div>
+        <div class="s-header-text">
+          <div class="s-name">Social Support</div>
+          <div class="s-sub">WHOBB Governance — community participation mentioned only as an ideal</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-weak">WHOBB: Weak</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v3-s5-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Community Barriers</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Standards for Improving Quality of Maternal and Newborn Care in Health Facilities (2016)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s5-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s5-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What are the leading community barriers to timely care-seeking for pregnant women, newborns, and children (as named by community members and frontline workers)?</p>
+<p class="drawer-subitem">→ Financial</p>
+<p class="drawer-subitem">→ Geographical</p>
+<p class="drawer-subitem">→ Transport</p>
+<p class="drawer-subitem">→ Social-norm</p>
+<p class="drawer-subitem">→ Stigma-related</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://apps.who.int/iris/handle/10665/249155" target="_blank" rel="noopener">WHO, Standards for Improving Quality of Maternal and Newborn Care in Health Facilities (2016)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v3-s5-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Patient Experience</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Standards for Improving Quality of Maternal and Newborn Care in Health Facilities (2016)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s5-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s5-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">How do women and families describe their experience of care?</p>
+<p class="drawer-subitem">→ Respectful treatment</p>
+<p class="drawer-subitem">→ Clear communication</p>
+<p class="drawer-subitem">→ Companionship</p>
+<p class="drawer-subitem">→ Trust in the facility</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://apps.who.int/iris/handle/10665/249155" target="_blank" rel="noopener">WHO, Standards for Improving Quality of Maternal and Newborn Care in Health Facilities (2016)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v3-s5-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Social Supports</span></td>
+          <td class="q-acc-source"><span class="src-label src-who" title="WHO, Toolkit for adaptation of the WHO recommendations for a positive pregnancy and postnatal experience (2025)">WHO</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v3-s5-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v3-s5-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Does the program provide concrete social support to overcome access barriers?</p>
+<p class="drawer-subitem">→ Transport</p>
+<p class="drawer-subitem">→ Maternity waiting homes</p>
+<p class="drawer-subitem">→ Food or nutrition support</p>
+<p class="drawer-subitem">→ Fee waivers for the poorest</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://www.who.int/publications/i/item/9789240105164" target="_blank" rel="noopener">WHO, Toolkit for adaptation of the WHO recommendations for a positive pregnancy and postnatal experience (2025)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="thin-note">This is the single thinnest point in the WHOBB-alone option. There is no WHOBB method for understanding why women do or don't seek care, what community trust looks like, or what social norms are in play — only a governance-level mention that community participation should exist in principle. This option would reveal little about Social Support beyond what already shows up indirectly in utilization statistics elsewhere in the system data.</div>
+    </section>
+
+  </div>
+</div>
+<footer>PIH · RMNCAH Landscape Assessment · Option 3: WHO Building Blocks Alone · June 2026</footer>
+</div><!-- /panel-v3 -->
+
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- VERSION 4: SWOT ALONE (clean, cautionary) -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="version-panel" id="panel-v4" style="--tab-color:#4a2d7a">
+
+<header>
+  <div class="header-inner">
+    <div class="header-eyebrow">Option 4 of 4 · Partners in Health · RMNCAH Landscape Assessment</div>
+    <h1>SWOT <em>alone</em></h1>
+    <p class="header-sub">A clean, single-framework option using only participatory methods — interviews, focus groups, workshops. No supplements from WHOBB, SAF, or BNA. Presented to show what's gained in engagement and what's lost in standardization and rigor.</p>
+    <div class="header-verdict"><strong>Best for:</strong> strategic planning and partnership development where stakeholder engagement and contextual nuance are the top priority.</div>
+  </div>
+</header>
+
+<div class="page-body">
+  <div class="spine"><div class="spine-fill" id="spine-fill-v4"></div></div>
+  <div class="content-col">
+
+    <div class="legend-box">
+      <span class="legend-label">Source Key</span>
+      <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;"><span class="source-tag src-swot" style="font-size:0.6rem;">SWOT</span> SWOT-Based Participatory Assessment — the only source used in this option</span>
+    </div>
+
+    <div class="version-summary">
+      <div class="version-summary-title">Why this structure</div>
+      <div class="version-summary-text">A single-framework option built entirely on participatory methods — interviews, focus groups, and workshops. SWOT relies principally on qualitative data, and how thoroughly it touches each of the 5 Ss depends on who is consulted and what surfaces in conversation. Comparing findings across countries or facilities is harder without a standardized way to quantify them, and an identified weakness may not always point to its underlying cause.</div>
+      <div class="version-pros-cons">
+        <div>
+          <div class="vpc-col-label">Strengths</div>
+          <ul class="vpc-list pro">
+            <li>Highly engaging for country teams, ministries, and partners</li>
+            <li>Captures political realities, stakeholder priorities, and implementation feasibility</li>
+            <li>Strongest possible coverage of Social Support specifically</li>
+          </ul>
+        </div>
+        <div>
+          <div class="vpc-col-label">Limitations</div>
+          <ul class="vpc-list con">
+            <li>Less standardized across countries — hard to compare apples to apples</li>
+            <li>Outcomes classified via group decision-making vary depending on who is in the room</li>
+            <li>May identify a weakness without identifying its underlying cause</li>
+            <li>Weak quantitative grounding for Staff, Stuff, Space, and Systems</li>
+          </ul>
+        </div>
+      </div>
+      <div class="best-for">Best for: <strong>strategic planning and partnership development</strong>, where capturing political realities and stakeholder priorities matters more than standardized, quantifiable comparison.</div>
+    </div>
+
+    <div class="summary-block">
+      <div class="collapsible-head open" onclick="toggleCollapsible(this,'v4')" id="summary-head-v4">
+        <span class="collapsible-title">Coverage Summary — SWOT Alone across the 5 Ss</span>
+        <span class="collapsible-arrow">▼</span>
+      </div>
+      <div class="collapsible-body open" id="summary-body-v4">
+        <div class="collapsible-inner">
+          <table class="summary-table">
+            <thead><tr><th>S</th><th>Mapping</th><th>Coverage</th><th>Rwanda Snapshot</th></tr></thead>
+            <tbody>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s1)"></span>S1 — Staff</span></td><td>SWOT themes from interviews/focus groups</td><td><span class="cov-badge cov-weak">Weak</span></td><td class="rwanda-note">Turnover surfaces as a theme, not a number</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s2)"></span>S2 — Stuff</span></td><td>SWOT themes — occasional, unsystematic</td><td><span class="cov-badge cov-weak">Weak</span></td><td class="rwanda-note">Stock-outs mentioned anecdotally if at all</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s3)"></span>S3 — Space</span></td><td>SWOT participatory mapping</td><td><span class="cov-badge cov-weak">Weak</span></td><td class="rwanda-note">Geographic barriers surface; physical conditions don't</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s4)"></span>S4 — Systems</span></td><td>SWOT Threats/Opportunities, key informant interviews</td><td><span class="cov-badge cov-weak">Weak</span></td><td class="rwanda-note">Policy context surfaces; no HMIS or financing data</td></tr>
+              <tr><td><span class="s-chip"><span class="s-dot" style="background:var(--s5)"></span>S5 — Social Support</span></td><td>SWOT Participatory Methods — full method</td><td><span class="cov-badge cov-strong">Strong</span></td><td class="rwanda-note">The one S where SWOT alone genuinely excels</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+            <section class="s-section" id="s1-v4" style="--s-color:var(--s1)">
+      <div class="s-header">
+        <div class="s-big">S1</div>
+        <div class="s-header-text">
+          <div class="s-name">Staff</div>
+          <div class="s-sub">Themes surfaced through interviews and focus groups — not a structured staffing audit</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-weak">SWOT: Weak</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v4-s1-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Workforce Strengths</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s1-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s1-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What strengths exist in the current RMNCAH workforce?</p>
+<p class="drawer-question">Which workforce cadres are performing particularly well?</p>
+<p class="drawer-question">What workforce practices should be maintained or expanded?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s1-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Workforce Weaknesses</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s1-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s1-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What workforce challenges most limit RMNCAH service delivery?</p>
+<p class="drawer-question">Where are the most significant staffing shortages?</p>
+<p class="drawer-question">What workforce competencies require strengthening?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s1-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Workforce Opportunities</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s1-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s1-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What opportunities exist to improve the workforce capacity?</p>
+<p class="drawer-question">Are there upcoming training initiatives, partnerships, or investments that could strengthen RMNCAH staffing?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s1-3">
+          <td class="q-acc-num">4</td>
+          <td class="q-acc-topic"><span class="topic-plain">Workforce Threats</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s1-3', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s1-3" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What factors threaten workforce retention or performance?</p>
+<p class="drawer-question">Are there risks of staff attrition, burnout, or migration?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="thin-note">No number for how many staff are rostered, present, or trained — SWOT gives perceptions and themes, not a headcount or competency rate. This is the kind of color that turnover rates or training records (SAF, WHOBB) would normally provide, and is the reason a pure SWOT approach is hard to act on directly for workforce planning.</div>
+    </section>
+
+            <section class="s-section" id="s2-v4" style="--s-color:var(--s2)">
+      <div class="s-header">
+        <div class="s-big">S2</div>
+        <div class="s-header-text">
+          <div class="s-name">Stuff</div>
+          <div class="s-sub">Occasional, unsystematic mentions in qualitative data — SWOT's weakest domain</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-weak">SWOT: Weak</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v4-s2-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Commodities and Supplies Strengths</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s2-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s2-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Which RMNCAH commodities and supplies are consistently available?</p>
+<p class="drawer-question">What aspects of the supply chain function well?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s2-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Commodities and Supplies Weaknesses</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s2-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s2-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Which commodities are most frequently unavailable?</p>
+<p class="drawer-question">What supply chain weaknesses affect service delivery?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s2-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Commodities and Supplies Opportunities</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s2-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s2-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What opportunities exist to improve procurement or supply management?</p>
+<p class="drawer-question">Are there partners or initiatives that could strengthen commodity availability?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s2-3">
+          <td class="q-acc-num">4</td>
+          <td class="q-acc-topic"><span class="topic-plain">Commodities and Supplies Threats</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s2-3', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s2-3" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What external factors threaten availability of medicines or equipment?</p>
+<p class="drawer-question">Are there funding, procurement, or logistics risks that could disrupt supply?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="thin-note">SWOT has no inventory or checklist mechanism. Whether a stockout gets mentioned at all depends entirely on whether it happened to come up in conversation — there is no way to know if oxytocin, MgSO4, or chlorhexidine are reliably stocked without a structured tool like SAF.</div>
+    </section>
+
+            <section class="s-section" id="s3-v4" style="--s-color:var(--s3)">
+      <div class="s-header">
+        <div class="s-big">S3</div>
+        <div class="s-header-text">
+          <div class="s-name">Space</div>
+          <div class="s-sub">Participatory mapping captures geography; physical facility conditions go unassessed</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-weak">SWOT: Weak</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v4-s3-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Facility Strengths</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s3-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s3-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">Which facilities provide an environment that supports high-quality RMNCAH care?</p>
+<p class="drawer-question">What infrastructure assets should be preserved or replicated?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s3-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Facility Weaknesses</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s3-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s3-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What infrastructure limitations affect service delivery?</p>
+<p class="drawer-question">Which facilities have inadequate space, utilities, or equipment?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s3-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Facility Opportunities</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s3-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s3-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What opportunities exist to expand or improve RMNCAH infrastructure?</p>
+<p class="drawer-question">Are facility upgrades or capital investments planned?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s3-3">
+          <td class="q-acc-num">4</td>
+          <td class="q-acc-topic"><span class="topic-plain">Facility Threats</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s3-3', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s3-3" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What risks threaten the functionality of RMNCAH facilities?</p>
+<p class="drawer-question">Are there infrastructure, environmental, or security concerns?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="thin-note">No information here about whether the delivery room has running water, electricity, or functioning equipment — participatory mapping is good at geography but says nothing about facility conditions, which is a meaningful gap for a maternal health assessment.</div>
+    </section>
+
+            <section class="s-section" id="s4-v4" style="--s-color:var(--s4)">
+      <div class="s-header">
+        <div class="s-big">S4</div>
+        <div class="s-header-text">
+          <div class="s-name">Systems</div>
+          <div class="s-sub">Threats/Opportunities themes and key informant interviews — no quantitative system data</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-weak">SWOT: Weak</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v4-s4-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">System Strengths</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s4-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s4-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What aspects of RMNCAH governance function well?</p>
+<p class="drawer-question">Which policies, coordination mechanisms, or information systems support effective implementation?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s4-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">System Weaknesses</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s4-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s4-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What system-level barriers limit RMNCAH performance?</p>
+<p class="drawer-question">Where are decision-making, financing, coordination, or accountability weakest?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s4-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">System Opportunities</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s4-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s4-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What policy or financing opportunities could strengthen RMNCAH services?</p>
+<p class="drawer-question">Are there reforms underway that could improve system performance?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s4-3">
+          <td class="q-acc-num">4</td>
+          <td class="q-acc-topic"><span class="topic-plain">System Threats</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s4-3', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s4-3" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What external factors could undermine RMNCAH governance or financing?</p>
+<p class="drawer-question">Are there political, economic, or institutional risks that threaten sustainability?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="thin-note">No HMIS data quality figures, no budget allocation percentages, no referral system performance data — SWOT surfaces what officials choose to say in an interview, not what the data shows. Whether this is enough depends entirely on who was in the room and how candid they were.</div>
+    </section>
+
+            <section class="s-section" id="s5-v4" style="--s-color:var(--s5)">
+      <div class="s-header">
+        <div class="s-big">S5</div>
+        <div class="s-header-text">
+          <div class="s-name">Social Support</div>
+          <div class="s-sub">SWOT's home turf — the one S where this single-framework option is genuinely strong</div>
+          <div class="s-coverage-row"><span class="cov-tag-badge cov-tag-strong">SWOT: Strong</span></div>
+        </div>
+      </div>
+      <div class="questions-wrap">
+        <table class="q-acc-table">
+          <thead>
+            <tr class="q-acc-header">
+              <th class="q-acc-th-num">#</th>
+              <th class="q-acc-th-topic">Example Question Topic</th>
+              <th class="q-acc-th-source">Source</th>
+              <th class="q-acc-th-expand"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="q-acc-row" data-row="row-v4-s5-0">
+          <td class="q-acc-num">1</td>
+          <td class="q-acc-topic"><span class="topic-plain">Social Support Strengths</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s5-0', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s5-0" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What community resources currently support RMNCAH service utilization?</p>
+<p class="drawer-question">What community engagement mechanisms are working well?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s5-1">
+          <td class="q-acc-num">2</td>
+          <td class="q-acc-topic"><span class="topic-plain">Social Support Weaknesses</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s5-1', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s5-1" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What social, cultural, gender, or economic barriers limit access to RMNCAH services?</p>
+<p class="drawer-question">Which populations experience the greatest barriers?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s5-2">
+          <td class="q-acc-num">3</td>
+          <td class="q-acc-topic"><span class="topic-plain">Social Support Opportunities</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s5-2', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s5-2" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What opportunities exist to improve community engagement and demand for RMNCAH services?</p>
+<p class="drawer-question">Are there community organizations, leaders, or networks that could support RMNCAH goals?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="q-acc-row" data-row="row-v4-s5-3">
+          <td class="q-acc-num">4</td>
+          <td class="q-acc-topic"><span class="topic-plain">Social Support Threats</span></td>
+          <td class="q-acc-source"><span class="src-label src-swot" title="WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)">SWOT</span></td>
+          <td class="q-acc-expand"><button class="expand-btn" onclick="toggleRow('row-v4-s5-3', this)" aria-label="Expand row">+</button></td>
+        </tr>
+<tr class="row-drawer" id="row-v4-s5-3" style="display:none">
+          <td></td>
+          <td colspan="2">
+            <div class="drawer-inner">
+              <div class="drawer-left"><p class="drawer-question">What social or cultural factors could reduce utilization of RMNCAH services?</p>
+<p class="drawer-question">What emerging challenges could increase barriers to care?</p></div>
+              <div class="drawer-right"><a class="drawer-source-link" href="https://iris.who.int/bitstream/handle/10665/44503/9789241500975_eng.pdf" target="_blank" rel="noopener">WHO District Planning Tool for Maternal and Newborn Health Strategy Implementation (SWOT Exercise)</a></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="thin-note">Even here, a weakness like 'low facility delivery rates' might be identified by a group without anyone in the room knowing the real underlying cause is a staffing shortage or quality concern — so even SWOT's strongest domain still benefits from being paired with structured data.</div>
+    </section>
+
+  </div>
+</div>
+<footer>PIH · RMNCAH Landscape Assessment · Option 4: SWOT Alone · June 2026</footer>
+</div><!-- /panel-v4 -->
+
+
+<script>
+// ── VERSION SWITCHING ──
+const versionColors = { v1:'#1a4a7a', v2:'#7a3a1e', v3:'#1a4a7a', v4:'#4a2d7a' };
+
+function switchVersion(v, btn) {
+  document.querySelectorAll('.version-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.version-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + v).classList.add('active');
+  btn.classList.add('active');
+  document.documentElement.style.setProperty('--v-color', versionColors[v]);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // re-init spine for the now-visible panel
+  setTimeout(() => updateSpine(v), 100);
+}
+
+// ── COLLAPSIBLE SUMMARY (per version) ──
+function toggleCollapsible(head, v) {
+  const body = document.getElementById('summary-body-' + v);
+  head.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+// ── SHOW MORE / LESS ──
+function toggleExtra(btn, group) {
+  const rows = document.querySelectorAll(`.q-row.is-extra[data-group="${group}"]`);
+  const dividers = document.querySelectorAll(`.q-supplement-divider.is-extra[data-group="${group}"]`);
+  const isOpen = btn.dataset.open === '1';
+  rows.forEach(r => r.classList.toggle('visible', !isOpen));
+  dividers.forEach(d => d.classList.toggle('visible', !isOpen));
+  btn.dataset.open = isOpen ? '0' : '1';
+  const count = rows.length;
+  btn.textContent = isOpen ? `Show ${count} more questions ↓` : `Hide extra questions ↑`;
+}
+
+// ── SPINE SCROLL PROGRESS (per active version) ──
+const sColors = { s1:'var(--s1)', s2:'var(--s2)', s3:'var(--s3)', s4:'var(--s4)', s5:'var(--s5)' };
+
+function updateSpine(activeVersion) {
+  const v = activeVersion || document.querySelector('.version-panel.active').id.replace('panel-', '');
+  const panel = document.getElementById('panel-' + v);
+  if (!panel) return;
+  const body = panel.querySelector('.page-body');
+  const spineFill = panel.querySelector('.spine-fill');
+  if (!body || !spineFill) return;
+  const bodyTop = body.getBoundingClientRect().top + window.scrollY;
+  const bodyH = body.offsetHeight;
+  const scrolled = window.scrollY + window.innerHeight * 0.5 - bodyTop;
+  const pct = Math.min(100, Math.max(0, (scrolled / bodyH) * 100));
+  spineFill.style.height = pct + '%';
+
+  let activeS = 's1';
+  ['s1','s2','s3','s4','s5'].forEach(id => {
+    const el = panel.querySelector('#' + id + '-' + v);
+    if (!el) return;
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.5) activeS = id;
+  });
+  spineFill.style.background = sColors[activeS];
+
+  document.querySelectorAll('.nav-s-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.s === activeS);
+  });
+}
+
+window.addEventListener('scroll', () => updateSpine(), { passive: true });
+
+// Fix nav anchor links to scroll within active version's section ids
+document.querySelectorAll('.nav-s-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const s = btn.dataset.s;
+    const v = document.querySelector('.version-panel.active').id.replace('panel-', '');
+    const target = document.getElementById(s + '-' + v);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+updateSpine('v1');
+
+// ── ROW EXPAND ──
+function toggleRow(id, btn) {
+  const drawer = document.getElementById(id);
+  const isOpen = drawer.style.display !== 'none';
+  drawer.style.display = isOpen ? 'none' : 'table-row';
+  btn.textContent = isOpen ? '+' : '−';
+  btn.classList.toggle('open', !isOpen);
+}
+
+</script>
+</body>
+</html>
